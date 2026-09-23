@@ -19,29 +19,22 @@ A second way to visit the exhibition on the same URL: a museum floor plan with t
 - Room pages reuse the existing room `<article>` elements (and the epilogue section for the cinema) by cloning them into one `<dialog>`. Content lives in one place.
 - New files: `map.css` (plan and room page), `map.js` (plan, dialog, history, delight). Shared behaviour stays in `main.js`; the Palembang print toggle becomes delegated so clones work.
 
-## The plan
+## The maquette (revised 23 September 2026)
 
-- Museum printed-plan style: paper background, maroon walls (gold in dark mode), door gaps with swing arcs, compass, legend.
-- Built as a CSS grid of real `<button>` elements (not an image), portrait, fits a 390 x 844 phone without zoom.
+The flat grid plan was rejected as ugly (spreadsheet-like, clashing patterns, no photos). Replaced by an architectural paper maquette in CSS 3D.
 
-```
-"palembang  cinema    ooc"
-"palembang  corridor  ooc"
-"palembang  corridor  bappenas"
-"jawa       corridor  bappenas"
-"jawa       corridor  peranakan"
-"bugis      corridor  projection"
-"bugis      lobby     woven"
-                entrance
-```
-
-- Left column is Wing I Adat, right column is Wing II Non-Adat, labelled above the plan. Each room floor carries its theme: plaid band, jasmine dots, gold songket lines, textile stripes, dark with glyphs, Peranakan tiles, pavement with Halte sign, amber night, cinema seat rows.
-- Desktop: header and legend on the left, plan on the right sized to the viewport height.
+- Roofless cream paper building in an orthographic axonometric view (`rotateX` tilt, `rotateZ` spin), no perspective. Lobby and entrance at the front, Wing I Adat (01 to 03) on the left, Wing II Non-Adat (04 to 08) on the right, cinema at the back of the central hall.
+- Photos are the only strong colour: each room's back wall carries two framed thumbnails and its right wall one. Floors carry a faint theme tint. Projection (dark, glowing script), Out of Character (amber lamp light) and the cinema (lit screen) are the dark rooms.
+- Labels are screen-facing tags pinned above each room with a leader line, so text stays crisp.
+- Unit size is computed from the container so the whole building fits the phone width; labels keep fixed pixel sizes.
+- Tapping a room flies the camera into it (2D zoom on a camera wrapper plus a flatter tilt, about 650 ms), then the room page fades in. Closing flies back out. Desktop: the model tilts slightly with the pointer.
+- A plain two-wing room list sits under the model for anyone who prefers text, screen readers and old browsers.
+- Wall photos use 360 px thumbnails.
 
 ## Room page
 
 - Full-screen `<dialog>` with a fixed header (`← Map`, room number) and a footer with previous and next rooms in walking order: Bugis, Jawa, Palembang, Woven, Projection, Peranakan, Bappenas, Out of Character, Cinema.
-- Opens with a View Transition morphing the tapped room into the page; fallback is a fade and rise. Reduced motion: plain fade.
+- Opens after the camera flight with a fade and rise. Reduced motion: no flight, plain fade.
 - Esc and Back close it; focus returns to the room on the plan.
 
 ## Delight

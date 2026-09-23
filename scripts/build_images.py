@@ -86,6 +86,7 @@ def build_photos():
     manifest = {}
     for name, src in PHOTO_SOURCES.items():
         im = ImageOps.exif_transpose(Image.open(src)).convert("RGB")
+        save_webp(im, out / f"{name}-360.webp", 360, 72)
         save_webp(im, out / f"{name}-800.webp", 800, 78)
         w, h = save_webp(im, out / f"{name}-1600.webp", 1600, 80)
         manifest[name] = [w, h]
