@@ -1,0 +1,482 @@
+<!doctype html>
+<!-- Claude Code handoff: read ../Product.md before modifying this production HTML. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#5d1225">
+  <meta name="description" content="A digital photo exhibition of Dita and Rafli's prewedding stories.">
+  <title>Prewedding of Dita dan Rafli</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%235d1225'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='serif' font-size='24' fill='%23d7b47b'%3ED%26R%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --maroon: #5d1225;
+      --maroon-deep: #380b17;
+      --gold: #b58a4f;
+      --gold-light: #d7b47b;
+      --ivory: #f5efe5;
+      --paper: #fbf8f2;
+      --ink: #241c1b;
+      --muted: #746968;
+      --line: rgba(91, 54, 39, .2);
+      --serif: "Italiana", Georgia, serif;
+      --sans: "DM Sans", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    .topbar {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px clamp(20px, 4vw, 64px);
+      color: #fff;
+      mix-blend-mode: difference;
+      pointer-events: none;
+    }
+    .topbar span {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 88px 24px 64px;
+      color: var(--ivory);
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 22%, rgba(215, 180, 123, .22), transparent 30%),
+        linear-gradient(145deg, var(--maroon), var(--maroon-deep));
+      overflow: hidden;
+    }
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: min(58vw, 680px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(215, 180, 123, .24);
+      border-radius: 50%;
+    }
+    .hero::before { transform: translate(-45vw, -40vh); }
+    .hero::after { transform: translate(45vw, 44vh); }
+    .hero-inner { position: relative; z-index: 1; max-width: 980px; }
+    .monogram {
+      width: clamp(118px, 18vw, 170px);
+      aspect-ratio: 1;
+      margin: 0 auto 30px;
+      overflow: hidden;
+      border-radius: 50%;
+      border: 1px solid rgba(215, 180, 123, .55);
+      background: #fff;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .24);
+    }
+    .monogram img { width: 100%; height: 100%; object-fit: cover; }
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--gold-light);
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 900px;
+      margin: 0 auto;
+      font-family: var(--serif);
+      font-size: clamp(3.2rem, 9vw, 7.6rem);
+      font-weight: 400;
+      line-height: .95;
+      letter-spacing: -.035em;
+    }
+    .hero-intro {
+      max-width: 520px;
+      margin: 28px auto 0;
+      color: rgba(255, 255, 255, .72);
+      font-size: clamp(1rem, 1.6vw, 1.1rem);
+    }
+    .scroll-cue {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,.62);
+      font-size: .7rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .scroll-cue::before { content: ""; width: 34px; height: 1px; background: currentColor; }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr);
+      gap: clamp(36px, 8vw, 120px);
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: clamp(90px, 12vw, 160px) clamp(24px, 5vw, 72px);
+      border-bottom: 1px solid var(--line);
+    }
+    .intro h2,
+    .chapter-title,
+    .exhibit h3,
+    .film h2 {
+      font-family: var(--serif);
+      font-weight: 400;
+    }
+    .intro h2 {
+      margin: 0;
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      line-height: 1;
+    }
+    .intro-copy { color: var(--muted); }
+    .intro-copy p { margin: 0 0 18px; }
+
+    .chapter {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: clamp(82px, 11vw, 150px) clamp(24px, 5vw, 72px) 30px;
+    }
+    .chapter-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 14px;
+      color: var(--maroon);
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .chapter-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+    .chapter-title {
+      max-width: 750px;
+      margin: 0;
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: .98;
+    }
+
+    .exhibit {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr);
+      gap: clamp(42px, 8vw, 110px);
+      align-items: center;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: clamp(58px, 8vw, 110px) clamp(24px, 5vw, 72px);
+    }
+    .exhibit.reverse .artwork { order: 2; }
+    .exhibit.reverse .caption { order: 1; }
+    .artwork {
+      position: relative;
+      overflow: hidden;
+      background: #e9e1d6;
+      box-shadow: 0 30px 70px rgba(45, 22, 18, .13);
+    }
+    .artwork::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(255, 255, 255, .55);
+      pointer-events: none;
+    }
+    .artwork img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      transition: transform .8s cubic-bezier(.2,.7,.2,1);
+    }
+    .exhibit:hover .artwork img { transform: scale(1.025); }
+    .index {
+      display: block;
+      margin-bottom: 28px;
+      color: var(--gold);
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .exhibit h3 {
+      margin: 0 0 24px;
+      font-size: clamp(2.5rem, 5vw, 4.8rem);
+      line-height: 1;
+    }
+    .caption p { margin: 0 0 18px; color: var(--muted); }
+    .credit { font-size: .82rem; color: #928685 !important; }
+    .view-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 14px;
+      padding: 13px 0 9px;
+      border-bottom: 1px solid var(--gold);
+      color: var(--maroon);
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .13em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .view-link::after { content: "↗"; font-size: 1rem; transition: transform .2s ease; }
+    .view-link:hover::after { transform: translate(3px, -3px); }
+    .view-link:focus-visible { outline: 3px solid var(--gold-light); outline-offset: 6px; }
+
+    .interlude {
+      margin: clamp(70px, 10vw, 130px) 0;
+      padding: clamp(74px, 11vw, 140px) 24px;
+      color: var(--ivory);
+      text-align: center;
+      background: var(--maroon);
+    }
+    .interlude blockquote {
+      max-width: 940px;
+      margin: 0 auto;
+      font-family: var(--serif);
+      font-size: clamp(2.3rem, 5.8vw, 5.4rem);
+      line-height: 1.08;
+    }
+
+    .film {
+      position: relative;
+      min-height: 70svh;
+      display: grid;
+      place-items: center;
+      margin-top: clamp(70px, 11vw, 140px);
+      padding: 96px 24px;
+      color: #fff;
+      text-align: center;
+      background:
+        linear-gradient(rgba(30, 9, 15, .58), rgba(30, 9, 15, .84)),
+        url("assets/midcentury.jpg") center 45% / cover;
+    }
+    .film-inner { max-width: 760px; }
+    .film h2 { margin: 0 0 18px; font-size: clamp(3.4rem, 8vw, 7rem); line-height: 1; }
+    .film p { max-width: 520px; margin: 0 auto 32px; color: rgba(255,255,255,.76); }
+    .film .view-link { color: #fff; border-color: var(--gold-light); }
+    footer {
+      padding: 34px 24px;
+      color: rgba(255,255,255,.68);
+      text-align: center;
+      background: var(--maroon-deep);
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 800px) {
+      .topbar { padding: 16px 18px; }
+      .topbar span:last-child { display: none; }
+      .hero { padding-inline: 20px; }
+      .intro { grid-template-columns: 1fr; }
+      .exhibit { grid-template-columns: 1fr; gap: 36px; }
+      .exhibit.reverse .artwork,
+      .exhibit.reverse .caption { order: initial; }
+      .caption { padding: 0 4px; }
+      .artwork img { max-height: 76svh; }
+      .index { margin-bottom: 18px; }
+      .chapter { padding-bottom: 8px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .artwork img { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar" aria-hidden="true">
+    <span>Dita &amp; Rafli</span>
+    <span>Digital Photo Exhibition</span>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="main-title">
+      <div class="hero-inner reveal">
+        <div class="monogram">
+          <img src="https://lh3.googleusercontent.com/d/1oU00qLnMYi6Vakx9DOzMJk2Rez5v38Ek=w1000" alt="Dita and Rafli monogram">
+        </div>
+        <p class="eyebrow">A digital photo exhibition</p>
+        <h1 id="main-title">Prewedding of Dita dan Rafli</h1>
+        <p class="hero-intro">Eight visual stories about where we come from, how we met, and the worlds we wanted to explore together.</p>
+      </div>
+      <span class="scroll-cue">Enter exhibition</span>
+    </section>
+
+    <section class="intro reveal">
+      <h2>Our story,<br>in eight rooms.</h2>
+      <div class="intro-copy">
+        <p>Each collection holds a different part of us: the cultures carried through our families, the ordinary place where our story began, and the ideas we chose to explore simply because they felt like us.</p>
+        <p>Select any collection to enter its full album.</p>
+      </div>
+    </section>
+
+    <header class="chapter reveal">
+      <p class="chapter-label">Chapter I · Heritage</p>
+      <h2 class="chapter-title">The roots we carry.</h2>
+    </header>
+
+    <article class="exhibit reveal">
+      <figure class="artwork"><img src="assets/bugis.jpg" alt="Rafli in Bugis-Makassar traditional attire" loading="lazy"></figure>
+      <div class="caption">
+        <span class="index">Exhibit 01 · Bugis-Makassar</span>
+        <h3>Rafli's Roots</h3>
+        <p>This series returns to Rafli's Bugis-Makassar roots. The attire, textiles, and gestures carry a heritage passed through family, presented here not as something distant, but as a living part of who he is today.</p>
+        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgDd1_KJTqcHTJS6udsKtA0hASVXK0JJr3grCJVy9A4Nn1Y?e=4aBprS" target="_blank" rel="noopener noreferrer">View collection</a>
+      </div>
+    </article>
+
+    <article class="exhibit reverse reveal">
+      <figure class="artwork"><img src="assets/jawa.jpg" alt="Dita and Rafli in Javanese traditional attire" loading="lazy"></figure>
+      <div class="caption">
+        <span class="index">Exhibit 02 · Jawa</span>
+        <h3>From Her Mother</h3>
+        <p>Dita's Javanese roots come from her mother's side of the family. This collection honours that inheritance through the quiet elegance of Javanese dress, its details, and the sense of grace carried across generations.</p>
+        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgChawxCVLXoRJNTb3Hc2v_JAbyWfv0ssYr9_r9GdQLKFGA?e=yiXMC1" target="_blank" rel="noopener noreferrer">View collection</a>
+      </div>
+    </article>
+
+    <article class="exhibit reveal">
+      <figure class="artwork"><img src="assets/palembang.jpg" alt="Dita and Rafli in Palembang traditional attire" loading="lazy"></figure>
+      <div class="caption">
+        <span class="index">Exhibit 03 · Palembang</span>
+        <h3>From Her Father</h3>
+        <p>Through her father's side, Dita carries Palembang roots. Rich gold, structured silhouettes, and ceremonial detail become a portrait of that lineage and a tribute to the heritage at the heart of her family.</p>
+        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgA6XKFXWqUBQIsKHjMyckVDAcH4ePiMx-l0IgbpabRVYts?e=27UhpN" target="_blank" rel="noopener noreferrer">View collection</a>
+      </div>
+    </article>
+
+    <div class="interlude reveal">
+      <blockquote>Different traditions do not need to look the same to belong together.</blockquote>
+    </div>
+
+    <header class="chapter reveal">
+      <p class="chapter-label">Chapter II · Interpretation</p>
+      <h2 class="chapter-title">Tradition, seen through our eyes.</h2>
+    </header>
+
+    <article class="exhibit reverse reveal">
+      <figure class="artwork"><img src="assets/woven.jpg" alt="Dita and Rafli with Bugis and Palembang textiles" loading="lazy"></figure>
+      <div class="caption">
+        <span class="index">Exhibit 04 · Traditional Contemporary I</span>
+        <h3>Woven Together</h3>
+        <p>Bugis and Palembang textiles come from different traditions, each with its own patterns, techniques, and character. Yet both are bold in their use of colour, turning fabric into something expressive and unmistakably their own.</p>
+        <p>The fabrics do not need to look the same to belong together. Their differences sit side by side, complement one another, and create something even richer. In many ways, that also feels familiar to us.</p>
+        <p class="credit">Photographed by @byjatidiriono</p>
+        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgBd8dxQgKl5Srn4SjsSvvbEAW8VmqZcald88VOVsgvAP_Q?e=J2WYXr" target="_blank" rel="noopener noreferrer">View collection</a>
+      </div>
+    </article>
+
+    <article class="exhibit reveal">
+      <figure class="artwork"><img src="assets/roots.jpg" alt="Dita and Rafli with projected traditional scripts" loading="lazy"></figure>
+      <div class="caption">
+        <span class="index">Exhibit 05 · Traditional Contemporary II</span>
+        <h3>Projection of Our Roots</h3>
+        <p>Lontara and Javanese script appear as projections of the cultural roots we carry. Beyond representing where we come from, they reflect our appreciation for traditional scripts, from their visual beauty to the way they preserve language, memory, and identity.</p>
+        <p>Cast through light, they feel less like something belonging only to the past, and more like something that continues to live with us today.</p>
+        <p class="credit">Photographed by @byjatidiriono</p>
+        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgDPHmUImkzYQbTYRf-XvKZjAbUVJNJdDTEeOwomKiT4rbg?e=N1Y1Yh" target="_blank" rel="noopener noreferrer">View collection</a>
+      </div>
+    </article>
+
+    <article class="exhibit reverse reveal">
+      <figure class="artwork"><img src="assets/peranakan.jpg" alt="Dita and Rafli in colourful Peranakan-inspired styling" loading="lazy"></figure>
+      <div class="caption">
+        <span class="index">Exhibit 06 · Peranakan</span>
+        <h3>A Shared Appreciation</h3>
+        <p>We have always been drawn to the vibrant colours, intricate kebaya, decorative details, and food of Peranakan culture. For this series, we created our own interpretation of that visual richness.</p>
+        <p>The colour palette also takes inspiration from Taylor Swift's <em>Lover</em>, one of our favourite albums. Our families first met over a meal at a Peranakan restaurant, giving this theme a small personal connection of its own.</p>
+        <p class="credit">Photographed by @azharbaizan</p>
+        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgBtOvFoVzydSbFM6q9kkTFxARMrHGZUVGZ2VUVtxMQvdoo?e=BCGsHI" target="_blank" rel="noopener noreferrer">View collection</a>
+      </div>
+    </article>
+
+    <header class="chapter reveal">
+      <p class="chapter-label">Chapter III · Us</p>
+      <h2 class="chapter-title">Where we began, and where we played.</h2>
+    </header>
+
+    <article class="exhibit reveal">
+      <figure class="artwork"><img src="assets/office.jpg" alt="Dita and Rafli near Bappenas in Menteng" loading="lazy"></figure>
+      <div class="caption">
+        <span class="index">Exhibit 07 · Bappenas, Menteng</span>
+        <h3>Where It Began</h3>
+        <p>We first knew each other as coworkers at Bappenas. Back then, Menteng was simply part of our everyday routine: the office, the streets around it, and the small conversations in between.</p>
+        <p>These photographs return us to a time when we were still getting to know each other, without knowing that this ordinary part of our lives would eventually become the beginning of us.</p>
+        <p class="credit">Photographed by @fikriipra</p>
+        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgBlGMB8CISOQaxVgBdttEFlAXq79kUHFcA7XfrtlJDH6nE?e=lmfNEu" target="_blank" rel="noopener noreferrer">View collection</a>
+      </div>
+    </article>
+
+    <article class="exhibit reverse reveal">
+      <figure class="artwork"><img src="assets/midcentury.jpg" alt="Dita and Rafli in a mid-century inspired setting" loading="lazy"></figure>
+      <div class="caption">
+        <span class="index">Exhibit 08 · Mid-Century</span>
+        <h3>Out of Character</h3>
+        <p>For this series, we tried something people would not normally expect from us. The mid-century styling, colours, and setting gave us a chance to step outside our usual character and play with a completely different idea.</p>
+        <p>Not every image had to explain who we already are. Some could simply be about curiosity, experimentation, and seeing ourselves in a new way.</p>
+        <p class="credit">Photographed by @azharbaizan</p>
+        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgDtcc7u4t8lQI6hPx7mCob8AWHVm1dGVN_BELtdTV0W510?e=gmKwUw" target="_blank" rel="noopener noreferrer">View collection</a>
+      </div>
+    </article>
+
+    <section class="film reveal" aria-labelledby="film-title">
+      <div class="film-inner">
+        <p class="eyebrow">Epilogue</p>
+        <h2 id="film-title">In Motion</h2>
+        <p>The still photographs end here. The story continues in our prewedding film.</p>
+        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgCZ57MmwmzLS5rkImKph78EAV7Hts1eOPCqsnLNks5LZL4?e=oogzSY" target="_blank" rel="noopener noreferrer">Watch the film</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>Dita &amp; Rafli · 2026</footer>
+
+  <script>
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const items = document.querySelectorAll('.reveal');
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      items.forEach(item => item.classList.add('visible'));
+    } else {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      items.forEach(item => observer.observe(item));
+    }
+  </script>
+</body>
+</html>
