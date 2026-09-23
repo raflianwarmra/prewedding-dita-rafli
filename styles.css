@@ -296,16 +296,48 @@ p { margin: 0 0 1em; }
 .room__story p { color: var(--room-soft); max-width: 62ch; text-wrap: pretty; }
 .room__credit { font-size: .95rem; font-style: italic; color: var(--room-soft); opacity: .85; }
 .cta {
-  display: inline-flex; align-items: center; gap: 12px;
-  min-height: 48px; margin-top: 10px; padding: 12px 22px;
-  border: 1px solid var(--room-accent);
-  color: var(--room-accent); text-decoration: none;
-  font-size: 1.05rem; letter-spacing: .04em;
-  transition: background-color .25s var(--ease-out), color .25s var(--ease-out);
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  width: 100%; min-height: 54px; margin-top: 14px; padding: 14px 24px;
+  background: var(--room-accent); color: var(--room-bg);
+  border: 1px solid var(--room-accent); border-radius: 2px;
+  text-decoration: none; font-size: 1.12rem; font-weight: 500; letter-spacing: .03em;
+  box-shadow: 0 14px 28px -16px color-mix(in oklch, var(--room-accent) 80%, transparent);
+  transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out), filter .25s;
 }
 .cta svg { width: 14px; height: 14px; transition: transform .3s var(--ease-out); }
-.cta:hover, .cta:active { background: var(--room-accent); color: var(--room-bg); }
+.cta:hover { filter: brightness(1.08); box-shadow: 0 18px 32px -14px color-mix(in oklch, var(--room-accent) 85%, transparent); }
 .cta:hover svg { transform: translate(3px, -3px); }
+.cta:active { transform: translateY(1px); }
+@media (min-width: 700px) { .cta { display: inline-flex; width: auto; } }
+
+/* End-of-room invitation into the full album. */
+.continue {
+  grid-column: 1 / -1; order: 9;
+  position: relative; display: grid; gap: 4px;
+  margin-top: clamp(18px, 4vw, 28px);
+  padding: clamp(22px, 5vw, 32px) calc(clamp(22px, 5vw, 36px) + 64px) clamp(22px, 5vw, 32px) clamp(22px, 5vw, 36px);
+  background: var(--room-accent); color: var(--room-bg);
+  text-decoration: none; text-align: left;
+  border-radius: 2px;
+  box-shadow: 0 24px 44px -26px color-mix(in oklch, var(--room-accent) 90%, transparent);
+  transform: none !important; /* never tilted by gallery styles */
+  transition: filter .25s, box-shadow .3s var(--ease-out);
+}
+.continue__kicker { font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; opacity: .8; }
+.continue__title { font-size: clamp(1.7rem, 7vw, 2.5rem); line-height: 1.05; }
+.continue__note { font-style: italic; font-size: 1rem; opacity: .85; }
+.continue__arrow {
+  position: absolute; right: clamp(20px, 5vw, 32px); top: 50%;
+  width: 52px; height: 52px; margin-top: -26px;
+  display: grid; place-items: center;
+  border: 1px solid currentColor; border-radius: 50%;
+  transition: transform .35s var(--ease-out), background-color .25s, color .25s;
+}
+.continue__arrow svg { width: 16px; height: 16px; }
+.continue:hover { filter: brightness(1.06); }
+.continue:hover .continue__arrow, .continue:focus-visible .continue__arrow { transform: translate(4px, -4px); background: var(--room-bg); color: var(--room-accent); }
+.continue.reveal.is-in .continue__arrow { animation: nudge 1.6s var(--ease-out) .6s 2; }
+@keyframes nudge { 0%, 100% { transform: none; } 45% { transform: translate(5px, -5px); } }
 
 .photo { margin: 0; position: relative; }
 .photo img { width: 100%; background: color-mix(in oklch, var(--room-ink) 8%, var(--room-bg)); }
