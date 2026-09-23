@@ -34,8 +34,9 @@
 .intro__model { opacity: 0; transform: translateY(24px) scale(.96); width: min(320px, 80vw); }
 .intro__card { opacity: 0; transform: translateY(24px); }
 .intro[data-scene="0"] .intro__hero { opacity: 1; transform: none; }
-.intro[data-scene="1"] .intro__model, .intro[data-scene="2"] .intro__model, .intro[data-scene="3"] .intro__model { opacity: 1; transform: none; }
-.intro[data-scene="4"] .intro__card { opacity: 1; transform: none; }
+.intro[data-scene="1"] .intro__model, .intro[data-scene="2"] .intro__model, .intro[data-scene="3"] .intro__model,
+.intro[data-scene="4"] .intro__model, .intro[data-scene="5"] .intro__model { opacity: 1; transform: none; }
+.intro[data-scene="6"] .intro__card { opacity: 1; transform: none; }
 
 .intro__mono {
   width: clamp(120px, 36vw, 190px); height: auto; color: var(--gold);
@@ -52,6 +53,12 @@
 .intro__model .maq { pointer-events: none; }
 .intro__model .m-you { display: none; }
 .intro__model .m-floor { cursor: default; }
+.intro__model .m-plinth, .intro__model .m-wingname, .intro__model .m-no { transition: background-color .6s var(--ease-out), box-shadow .6s var(--ease-out), color .6s; }
+/* The wing being explained keeps its colour; the other fades back to sand. */
+.intro__model.is-wing-1 .m-plinth--2, .intro__model.is-wing-2 .m-plinth--1 { background-color: var(--m-ground); box-shadow: none; }
+.intro__model.is-wing-1 .m-wingname--2, .intro__model.is-wing-2 .m-wingname--1,
+.intro__model.is-wing-1 .m-no--right, .intro__model.is-wing-2 .m-no--left { color: color-mix(in oklch, var(--ink) 30%, transparent); }
+.intro__model.is-wing-1 .m-plinth--1, .intro__model.is-wing-2 .m-plinth--2 { box-shadow: 0 0 0 3px var(--gold-bright), 0 0 calc(var(--u) * 1.6) oklch(85% 0.12 80 / .8); }
 .intro__model.is-wing-1 .m-room[data-wing="1"] .m-floor,
 .intro__model.is-wing-2 .m-room[data-wing="2"] .m-floor { background-color: color-mix(in oklch, var(--gold-bright) 45%, var(--floor)); box-shadow: inset 0 0 0 2px var(--gold-bright), inset 0 0 calc(var(--u) * 1.3) oklch(85% 0.12 80 / .7); }
 .intro__model .m-floor { transition: background-color .6s var(--ease-out), box-shadow .6s var(--ease-out); }
@@ -96,9 +103,9 @@
 .intro__card-name { margin: 2px 0 12px; font-size: var(--fs-xl); line-height: 1; }
 .intro__card-prints { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .intro__card-prints img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
-.intro[data-scene="4"] .intro__card-prints img { animation: print-in .7s var(--ease-out) both; }
-.intro[data-scene="4"] .intro__card-prints img:nth-child(2) { animation-delay: .12s; }
-.intro[data-scene="4"] .intro__card-prints img:nth-child(3) { animation-delay: .24s; }
+.intro[data-scene="6"] .intro__card-prints img { animation: print-in .7s var(--ease-out) both; }
+.intro[data-scene="6"] .intro__card-prints img:nth-child(2) { animation-delay: .12s; }
+.intro[data-scene="6"] .intro__card-prints img:nth-child(3) { animation-delay: .24s; }
 .intro__card-line { display: block; height: 6px; margin: 12px auto 0; width: 86%; border-radius: 3px; background: oklch(96% 0.02 110 / .25); }
 .intro__card-line.is-short { width: 58%; margin-top: 6px; }
 .intro__card-cta {
@@ -111,7 +118,7 @@
   content: ""; position: absolute; inset: 0; transform: translateX(-120%);
   background: linear-gradient(100deg, transparent 30%, oklch(100% 0 0 / .6) 50%, transparent 70%);
 }
-.intro[data-scene="4"] .intro__card-cta::after { animation: shimmer 2.4s 1s ease-in-out infinite; }
+.intro[data-scene="6"] .intro__card-cta::after { animation: shimmer 2.4s 1s ease-in-out infinite; }
 @keyframes shimmer { 60%, 100% { transform: translateX(120%); } }
 
 /* ---------- Text ---------- */
@@ -138,7 +145,7 @@
   box-shadow: 0 16px 28px -16px color-mix(in oklch, var(--accent) 85%, transparent);
 }
 .intro__alt { visibility: hidden; min-height: 40px; border: 0; background: none; color: var(--ink-soft); font: inherit; font-size: var(--fs-sm); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
-.intro[data-scene="4"] .intro__alt { visibility: visible; }
+.intro[data-scene="6"] .intro__alt { visibility: visible; }
 
 /* ---------- Map additions: "How to visit" and the tap hint ---------- */
 .mapview__how {

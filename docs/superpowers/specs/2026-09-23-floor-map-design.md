@@ -48,3 +48,12 @@ The flat grid plan was rejected as ugly (spreadsheet-like, clashing patterns, no
 - Phone (WebKit 390 px), tablet 820 px, desktop 1440 px, light and dark.
 - Open, next, previous, Back, Esc, deep link `#jawa`, view switch both ways.
 - Scroll view screenshots unchanged apart from the strip.
+
+## Revision: wings, labels and palette (approved 23 September 2026)
+
+- Wing II is renamed "Kontemporer & Eksploratif" (EN "Contemporary & Exploratory") everywhere; short form "Kontemporer" / "Contemporary".
+- Each wing stands on its own coloured plinth: Adat on terracotta, Kontemporer & Eksploratif on sage. The wing name is painted along the plinth's outer edge.
+- Room numbers move off the floors onto the plinth outside each room's outer wall, with a short tick to the wall. The cinema keeps its play mark.
+- "Pintu Masuk / Entrance" is painted on the ground in front of the lobby, in the model's plane.
+- Light palette follows the invitation's watercolour: faded sky to sand background, ivory walls, Adat floors on sand with terracotta and gold motifs, Kontemporer floors on mist with sage and blue motifs. Dark rooms (Projection, Out of Character, cinema) stay dark.
+- Landing grows to seven steps: welcome, the two kinds of prewedding, Wing I Adat, Wing II Kontemporer & Eksploratif, tap once, tap again, inside a room.

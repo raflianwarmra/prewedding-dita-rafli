@@ -15,7 +15,7 @@
   var dots = intro.querySelectorAll(".intro__dots i");
   var calm = window.matchMedia("(prefers-reduced-motion: reduce)");
   var touch = window.matchMedia("(hover: none)").matches;
-  var LAST = 4, scene = 0, timers = [], mini = null, lastFocus = null;
+  var LAST = 6, scene = 0, timers = [], mini = null, lastFocus = null;
   var outside = [document.querySelector(".bar"), document.querySelector(".mapview"), document.querySelector(".scrollview"), document.querySelector(".footer")];
 
   function T(k, v) { return window.I18N ? I18N.t(k, v) : k; }
@@ -39,7 +39,7 @@
   }
   function fitMini() {
     var W = 8.8, D = 17.6, s = 20 * Math.PI / 180, t = 48 * Math.PI / 180;
-    var u = Math.max(12, (modelBox.clientWidth || 300) / (W * Math.cos(s) + D * Math.sin(s) + 1.8));
+    var u = Math.max(10, (modelBox.clientWidth || 300) / ((W + 5.8) * Math.cos(s) + (D + 1.6) * Math.sin(s)));
     var avail = visual.clientHeight - 10;
     for (var pass = 0; pass < 3; pass++) {
       mini.style.setProperty("--u", u + "px");
@@ -76,14 +76,15 @@
   }
 
   /* ---------- Scene scripts ---------- */
-  function wings() {
+  /* Steps 1 to 3: the two wings light up in turn, then one at a time. */
+  function wings(which) {
     modelBox.classList.remove("is-wing-1", "is-wing-2");
+    if (which) { later(function () { modelBox.classList.add("is-wing-" + which); }, 350); return; }
     later(function () { modelBox.classList.add("is-wing-1"); }, 500);
-    later(function () { modelBox.classList.remove("is-wing-1"); modelBox.classList.add("is-wing-2"); }, 2300);
-    later(function () { modelBox.classList.add("is-wing-1"); }, 4100);
-    if (!calm.matches) later(wings, 6200);
+    later(function () { modelBox.classList.remove("is-wing-1"); modelBox.classList.add("is-wing-2"); }, 2000);
+    if (!calm.matches) later(function () { wings(); }, 3500);
   }
-  /* Step 2: a single tap previews the room. */
+  /* Step 4: a single tap previews the room. */
   function tapOnce() {
     var p = roomPoint("bugis"), room = mini.querySelector(".m-room--bugis");
     if (calm.matches) { room.classList.add("is-demo"); say(T(touch ? "bubble.tap1" : "bubble.point"), p); return; }
@@ -92,7 +93,7 @@
     later(function () { quiet(); }, 3200);
     later(tapOnce, 3500);
   }
-  /* Step 3: a second tap walks the camera in. */
+  /* Step 5: a second tap walks the camera in. */
   function tapAgain() {
     var p = roomPoint("bugis"), room = mini.querySelector(".m-room--bugis"), cam = mini.firstChild;
     room.classList.add("is-demo");
@@ -127,11 +128,13 @@
     dots.forEach(function (d, i) { d.classList.toggle("is-on", i === n); });
     labelNext();
     back.hidden = n === 0;
-    if (n >= 1 && n <= 3) { buildMini(); requestAnimationFrame(fitMini); }
-    if (n === 1) later(wings, 300);
-    if (n === 2) later(tapOnce, 400);
-    if (n === 3) later(tapAgain, 400);
-    if (n === 4) inside();
+    if (n >= 1 && n <= 5) { buildMini(); requestAnimationFrame(fitMini); }
+    if (n === 1) later(function () { wings(); }, 300);
+    if (n === 2) wings(1);
+    if (n === 3) wings(2);
+    if (n === 4) later(tapOnce, 400);
+    if (n === 5) later(tapAgain, 400);
+    if (n === 6) inside();
   }
 
   function labelNext() { next.textContent = T(scene === 0 ? "intro.begin" : scene < LAST ? "intro.next" : "intro.enter"); }
@@ -178,7 +181,7 @@
   });
   var how = document.querySelector("[data-intro-open]");
   if (how) how.addEventListener("click", function () { show(1); });
-  window.addEventListener("resize", function () { if (!intro.hidden && mini && (scene >= 1 && scene <= 3)) fitMini(); });
+  window.addEventListener("resize", function () { if (!intro.hidden && mini && (scene >= 1 && scene <= 5)) fitMini(); });
 
   /* First visit to the map, arriving without a room link: open with the landing. */
   var deep = location.hash.length > 1;

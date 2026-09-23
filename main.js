@@ -31,10 +31,10 @@
   var label = document.querySelector("[data-where-label]");
   var places = document.querySelectorAll("[data-where]");
   var ROOM_META = {
-    bugis: ["Adat", "01", "03", "Bugis-Makassar"], jawa: ["Adat", "02", "03", "Jawa"], palembang: ["Adat", "03", "03", "Palembang"],
-    woven: ["Non-Adat", "04", "08", "Woven Together"], projection: ["Non-Adat", "05", "08", "Projection of Our Roots"],
-    peranakan: ["Non-Adat", "06", "08", "Peranakan"], bappenas: ["Non-Adat", "07", "08", "Bappenas, Menteng"],
-    "out-of-character": ["Non-Adat", "08", "08", "Out of Character"]
+    bugis: ["wing1", "01", "03", "Bugis-Makassar"], jawa: ["wing1", "02", "03", "Jawa"], palembang: ["wing1", "03", "03", "Palembang"],
+    woven: ["wing2", "04", "08", "Woven Together"], projection: ["wing2", "05", "08", "Projection of Our Roots"],
+    peranakan: ["wing2", "06", "08", "Peranakan"], bappenas: ["wing2", "07", "08", "Bappenas, Menteng"],
+    "out-of-character": ["wing2", "08", "08", "Out of Character"]
   };
   var whereNow = "foyer";
   function whereText(key) {
@@ -43,7 +43,7 @@
     var id = key.slice(5);
     if (id === "film") return t("where.epilogue") + " · <b>In Motion</b>";
     var m = ROOM_META[id];
-    return m[0] + " · " + m[1] + " / " + m[2] + " · <b>" + m[3] + "</b>";
+    return t(m[0] + ".short") + " · " + m[1] + " / " + m[2] + " · <b>" + m[3] + "</b>";
   }
   if (window.I18N) I18N.onChange(function () { label.innerHTML = whereText(whereNow); syncToggle(); });
   if ("IntersectionObserver" in window) {

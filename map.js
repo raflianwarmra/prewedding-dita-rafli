@@ -7,6 +7,7 @@
 
   /* Footprint in model units. x grows to the right, y towards the entrance. */
   var W = 8.8, D = 17.6, HALL_X = 4.4;
+  var EDGE = 2.6;   /* plinth margin outside each wing, where numbers and wing names are painted */
   var MODEL = [
     { id: "palembang", no: "03", name: "Palembang", x: 0, y: 0, w: 3.4, d: 5, side: "left", walls: "new", n: ["palembang-1", "palembang-2"], e: ["palembang-3"] },
     { id: "jawa", no: "02", name: "Jawa", x: 0, y: 5, w: 3.4, d: 5, side: "left", walls: "new", n: ["jawa-1", "jawa-3"], e: ["jawa-2"] },
@@ -58,6 +59,11 @@
     r.style.cssText = "--x:" + x + ";--y:" + y + ";--w:" + w + ";--d:" + d;
     return r;
   }
+  function flat(cls, x, y, w, d, html) {
+    var f = el("div", "m-flat " + cls, html);
+    f.style.cssText = "--x:" + x + ";--y:" + y + ";--w:" + w + ";--d:" + d;
+    return f;
+  }
   function wall(side, extra) { return el("div", "m-wall m-wall--" + side + (extra ? " " + extra : "")); }
   function print(name) {
     var p = el("span", "m-print");
@@ -70,10 +76,21 @@
 
   var tags = el("div", "maq__tags");
   camera.appendChild(tags);
-  var entrance = el("span", "m-tag m-tag--entrance", T("entrance"));
-  entrance.setAttribute("aria-hidden", "true");
-  tags.appendChild(entrance);
   scene.appendChild(el("div", "m-ground"));
+  /* Each wing stands on its own plinth, with its name painted along the outer edge. */
+  scene.appendChild(flat("m-plinth m-plinth--1", -EDGE, -0.45, EDGE + 3.4, 15.45));
+  scene.appendChild(flat("m-plinth m-plinth--2", 5.4, -0.45, EDGE + 3.4, 15.45));
+  var wingName1 = flat("m-paint m-wingname m-wingname--1", -EDGE + 0.1, 0, 1, 15, "<span></span>");
+  var wingName2 = flat("m-paint m-wingname m-wingname--2", W + EDGE - 1.1, 0, 1, 15, "<span></span>");
+  scene.appendChild(wingName1); scene.appendChild(wingName2);
+  var entrance = flat("m-paint m-entrance", 0, D + 0.25, W, 1, "<span></span>");
+  scene.appendChild(entrance);
+  function paintNames() {
+    wingName1.firstChild.textContent = T("wing1.paint");
+    wingName2.firstChild.textContent = T("wing2.paint");
+    entrance.firstChild.textContent = T("entrance");
+  }
+  paintNames();
 
   var hall = box("m-hall", 3.4, 3, 2, 12);
   hall.appendChild(el("div", "m-floor"));
@@ -98,7 +115,8 @@
     floor.dataset.room = m.id;
     floor.setAttribute("aria-label", m.id === "film" ? T("aria.film") : T("aria.floor", { no: m.no, name: m.name }));
     r.appendChild(floor);
-    r.appendChild(el("span", "m-num", m.no || "&#9654;"));
+    if (m.no) { m.noEl = flat("m-paint m-no m-no--" + m.side, m.side === "left" ? -1.3 : W + 0.3, m.y + m.d / 2 - 0.5, 1, 1, m.no); scene.appendChild(m.noEl); }
+    else r.appendChild(el("span", "m-num", "&#9654;"));
     if (m.glyph) r.appendChild(el("span", "m-glyph", m.glyph));
     if (m.walls.indexOf("n") !== -1) { var n = wall("n"); (m.n || []).forEach(function (p) { n.appendChild(print(p)); }); r.appendChild(n); }
     if (m.walls.indexOf("e") !== -1) { var e = wall("e"); (m.e || []).forEach(function (p) { e.appendChild(print(p)); }); r.appendChild(e); }
@@ -117,7 +135,7 @@
   function fit() {
     var desktop = window.matchMedia("(min-width: 1024px)").matches;
     var s = rad(Math.abs(SPIN)), t = rad(TILT);
-    var extX = W * Math.cos(s) + D * Math.sin(s) + 1.8;
+    var extX = (W + 2 * EDGE + 0.6) * Math.cos(s) + (D + 1.6) * Math.sin(s);
     u = Math.max(18, Math.min(maq.clientWidth / extX, 44));
     var room = window.innerHeight - 56 - 40;
     for (var pass = 0; pass < 3; pass++) {
@@ -148,10 +166,7 @@
   var hintMode = learned ? "off" : "start";
   function pinTags() {
     if (flight) return;
-    var c = camera.getBoundingClientRect(), lr = lobby.getBoundingClientRect();
-    entrance.style.left = (lr.left + lr.width / 2 - c.left) + "px";
-    entrance.style.top = (lr.bottom - c.top + 10) + "px";
-    placeHint(c);
+    placeHint(camera.getBoundingClientRect());
   }
   function placeHint(c) {
     var on = hintMode !== "off" && selected && root.dataset.view === "map";
@@ -420,10 +435,11 @@
   var selected = null;
   function select(id) {
     if (selected === id) return;
-    if (selected) byId[selected].el.classList.remove("is-selected");
+    if (selected) { byId[selected].el.classList.remove("is-selected"); if (byId[selected].noEl) byId[selected].noEl.classList.remove("is-selected"); }
     selected = id;
     var m = byId[id];
     m.el.classList.add("is-selected");
+    if (m.noEl) m.noEl.classList.add("is-selected");
     var names = (m.n || []).concat(m.e || []);
     if (id === "film") names = ["film", "ooc-1", "ooc-4"];
     cardPrints.classList.remove("is-swapping");
@@ -536,7 +552,7 @@
     MODEL.forEach(function (m) {
       m.el.querySelector(".m-floor").setAttribute("aria-label", m.id === "film" ? T("aria.film") : T("aria.floor", { no: m.no, name: m.name }));
     });
-    entrance.textContent = T("entrance");
+    paintNames();
     paintVisits();
     paintCard();
     if (dialog.open && current && !busy) render(current);
