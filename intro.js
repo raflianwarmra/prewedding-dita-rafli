@@ -38,14 +38,17 @@
     modelBox.appendChild(mini);
   }
   function fitMini() {
-    var W = 8.8, D = 17.6, s = 20 * Math.PI / 180, t = 48 * Math.PI / 180;
-    var u = Math.max(10, (modelBox.clientWidth || 300) / ((W + 5.8) * Math.cos(s) + (D + 1.6) * Math.sin(s)));
+    var W = 9.8, D = 17.6, s = 20 * Math.PI / 180, t = 48 * Math.PI / 180;
+    var u = Math.max(10, (modelBox.clientWidth || 300) / ((W + 6.4) * Math.cos(s) + (D + 9) * Math.sin(s)));
     var avail = visual.clientHeight - 10;
     for (var pass = 0; pass < 3; pass++) {
       mini.style.setProperty("--u", u + "px");
       mini.style.setProperty("--nudge", "0px");
+      mini.style.setProperty("--shift", "0px");
       mini.style.setProperty("--maq-h", "900px");
       var g = mini.querySelector(".m-ground").getBoundingClientRect(), mb = mini.getBoundingClientRect();
+      if (g.width > mb.width - 4 && pass < 2) { u = Math.max(8, u * (mb.width - 8) / g.width); continue; }
+      mini.style.setProperty("--shift", Math.round(mb.left + mb.width / 2 - (g.left + g.width / 2)) + "px");
       var top = g.top - mb.top - 1.3 * u * Math.sin(t) - 6, h = g.bottom - mb.top + 6 - top;
       if (avail > 100 && h > avail && pass < 2) { u *= avail / h; continue; }
       mini.style.setProperty("--maq-h", Math.round(h) + "px");
