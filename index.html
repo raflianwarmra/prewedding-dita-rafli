@@ -19,6 +19,7 @@
       var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.dataset.theme = dark ? "dark" : "light";
       document.documentElement.classList.add("js");
+      document.documentElement.dataset.view = new URLSearchParams(location.search).get("view") === "scroll" ? "scroll" : "map";
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,6 +29,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Limelight&text=OutofCharcte%20&display=swap">
   <link rel="preload" as="image" href="assets/art/foyer-900.webp" imagesrcset="assets/art/foyer-900.webp 900w, assets/art/foyer-1600.webp 1600w" imagesizes="(min-width: 1024px) 520px, 90vw">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="map.css">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -54,14 +56,91 @@
       <svg aria-hidden="true"><use href="#monogram"/></svg>
       <span class="bar__names">D&amp;R</span>
     </a>
-    <p class="bar__where" aria-hidden="true" data-where-label><b>Foyer</b></p>
+    <div class="views" role="group" aria-label="View">
+      <button type="button" data-view-set="map" aria-pressed="true">Map</button>
+      <button type="button" data-view-set="scroll" aria-pressed="false">Scroll</button>
+    </div>
     <button class="switch" type="button" aria-pressed="false" data-theme-toggle>
       <span class="switch__plate" aria-hidden="true"><span class="switch__lever"></span></span>
       <span class="sr-only">Gallery lights off (dark mode)</span>
     </button>
   </header>
+  <p class="where" aria-hidden="true" data-where-label><b>Foyer</b></p>
 
-  <main>
+  <section class="mapview" aria-labelledby="map-title">
+    <div class="mapview__head">
+      <svg class="mapview__mono" viewBox="0 0 1275.59 1275.59" role="img" aria-label="Dita and Rafli monogram"><use href="#monogram"/></svg>
+      <p class="kicker">A digital photo exhibition</p>
+      <h1 id="map-title"><span class="of">Prewedding of</span> Dita dan Rafli</h1>
+      <p class="mapview__intro">Eight rooms in two wings. Tap a room to step inside.</p>
+      <p class="mapview__progress" data-progress aria-live="polite"></p>
+    </div>
+
+    <div class="plan-wrap">
+      <div class="plan-legend" aria-hidden="true">
+        <p><b>Wing I</b><strong>Adat</strong><span>Where we come from</span></p>
+        <svg class="compass" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width=".8"/><path d="M20 6 24 22 20 19 16 22Z" fill="currentColor"/><text x="20" y="36" text-anchor="middle" font-size="7" fill="currentColor">N</text></svg>
+        <p><b>Wing II</b><strong>Non-Adat</strong><span>Where we wander</span></p>
+      </div>
+      <div class="plan" data-plan>
+        <button class="plan-room plan-room--palembang" type="button" style="grid-area: pal" data-room="palembang" data-side="left" data-no="03" data-name="Palembang" aria-label="Room 03, Palembang, From her father">
+          <span class="plan-room__no">03</span><span class="plan-room__name">Palembang</span><span class="plan-room__sub">From her father</span>
+          <span class="stamp" aria-hidden="true"><svg viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg></span>
+        </button>
+        <button class="plan-room plan-room--jawa" type="button" style="grid-area: jaw" data-room="jawa" data-side="left" data-no="02" data-name="Jawa" aria-label="Room 02, Jawa, From her mother">
+          <span class="plan-room__no">02</span><span class="plan-room__name">Jawa</span><span class="plan-room__sub">From her mother</span>
+          <span class="stamp" aria-hidden="true"><svg viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg></span>
+        </button>
+        <button class="plan-room plan-room--bugis" type="button" style="grid-area: bug" data-room="bugis" data-side="left" data-no="01" data-name="Bugis-Makassar" aria-label="Room 01, Bugis-Makassar, Rafli's roots">
+          <span class="plan-room__no">01</span><span class="plan-room__name">Bugis-Makassar</span><span class="plan-room__sub">Rafli's roots</span>
+          <span class="stamp" aria-hidden="true"><svg viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg></span>
+        </button>
+        <button class="plan-room plan-room--out-of-character is-dark" type="button" style="grid-area: ooc" data-room="out-of-character" data-side="right" data-no="08" data-name="Out of Character" aria-label="Room 08, Out of Character, Mid-century">
+          <span class="plan-room__no">08</span><span class="plan-room__name">Out of Character</span><span class="plan-room__sub">Mid-century</span>
+          <span class="stamp" aria-hidden="true"><svg viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg></span>
+        </button>
+        <button class="plan-room plan-room--bappenas" type="button" style="grid-area: bap" data-room="bappenas" data-side="right" data-no="07" data-name="Bappenas, Menteng" aria-label="Room 07, Bappenas, Menteng, Where it began">
+          <span class="plan-room__no">07</span><span class="plan-room__name">Bappenas, Menteng</span><span class="plan-room__sub">Where it began</span>
+          <span class="stamp" aria-hidden="true"><svg viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg></span>
+        </button>
+        <button class="plan-room plan-room--peranakan" type="button" style="grid-area: per" data-room="peranakan" data-side="right" data-no="06" data-name="Peranakan" aria-label="Room 06, Peranakan, A shared appreciation">
+          <span class="plan-room__no">06</span><span class="plan-room__name">Peranakan</span><span class="plan-room__sub">A shared appreciation</span>
+          <span class="stamp" aria-hidden="true"><svg viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg></span>
+        </button>
+        <button class="plan-room plan-room--projection is-dark" type="button" style="grid-area: pro" data-room="projection" data-side="right" data-no="05" data-name="Projection of Our Roots" aria-label="Room 05, Projection of Our Roots, Traditional contemporary II">
+          <span class="plan-room__glyph" aria-hidden="true">ᨀ ꦲ ᨁ</span><span class="plan-room__no">05</span><span class="plan-room__name">Projection of Our Roots</span><span class="plan-room__sub">Traditional contemporary II</span>
+          <span class="stamp" aria-hidden="true"><svg viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg></span>
+        </button>
+        <button class="plan-room plan-room--woven" type="button" style="grid-area: wov" data-room="woven" data-side="right" data-no="04" data-name="Woven Together" aria-label="Room 04, Woven Together, Traditional contemporary I">
+          <span class="plan-room__no">04</span><span class="plan-room__name">Woven Together</span><span class="plan-room__sub">Traditional contemporary I</span>
+          <span class="stamp" aria-hidden="true"><svg viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg></span>
+        </button>
+        <button class="plan-room plan-room--film is-dark" type="button" style="grid-area: cin" data-room="film" data-no="" data-name="Cinema" aria-label="Cinema, epilogue: In Motion">
+          <span class="plan-room__no">Epilogue</span><span class="plan-room__name">Cinema</span>
+          <span class="stamp" aria-hidden="true"><svg viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg></span>
+        </button>
+        <div class="plan-hall" style="grid-area: hal" aria-hidden="true">
+          <span class="plan-hall__lobby"><svg viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg>Lobby</span>
+        </div>
+        <span class="you" data-you aria-hidden="true"></span>
+      </div>
+      <p class="plan-entrance" aria-hidden="true"><span>&#8593;</span> Entrance · You are here</p>
+    </div>
+  </section>
+
+  <dialog class="roomview" aria-labelledby="roomview-title" data-roomview>
+    <header class="roomview__bar">
+      <button class="roomview__back" type="button" data-close><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Map</button>
+      <p class="roomview__title" id="roomview-title"></p>
+    </header>
+    <div class="roomview__body" data-body></div>
+    <nav class="roomview__nav" aria-label="Walk to another room">
+      <button type="button" class="roomview__step" data-step="-1"><span>Previous</span><b data-prev-name></b></button>
+      <button type="button" class="roomview__step roomview__step--next" data-step="1"><span>Next</span><b data-next-name></b></button>
+    </nav>
+  </dialog>
+
+  <main class="scrollview">
     <!-- ============ FOYER ============ -->
     <section class="foyer" id="top" data-where="Foyer" aria-labelledby="title">
       <div class="foyer__head">
@@ -434,5 +513,6 @@
   </footer>
 
   <script src="main.js" defer></script>
+  <script src="map.js" defer></script>
 </body>
 </html>

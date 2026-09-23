@@ -54,17 +54,18 @@
     document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("is-in"); });
   }
 
-  /* Palembang: switch between the colour and sepia prints. */
-  var palembang = document.getElementById("palembang");
-  palembang.querySelectorAll("[data-print]").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var sepia = btn.dataset.print === "sepia";
-      palembang.classList.toggle("is-sepia", sepia);
-      palembang.querySelectorAll("[data-print]").forEach(function (b) {
-        b.setAttribute("aria-pressed", String(b === btn));
-      });
-      /* Sepia prints are lazy; make sure they load once asked for. */
-      palembang.querySelectorAll(".print img + img").forEach(function (img) { img.loading = "eager"; });
+  /* Palembang: switch between the colour and sepia prints.
+     Delegated so copies of the room shown in the map's room page work too. */
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-print]");
+    if (!btn) return;
+    var room = btn.closest(".room--palembang");
+    var sepia = btn.dataset.print === "sepia";
+    room.classList.toggle("is-sepia", sepia);
+    room.querySelectorAll("[data-print]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b === btn));
     });
+    /* Sepia prints are lazy; make sure they load once asked for. */
+    room.querySelectorAll(".print img + img").forEach(function (img) { img.loading = "eager"; });
   });
 })();
