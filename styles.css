@@ -1,0 +1,649 @@
+/* Prewedding of Dita dan Rafli: a digital photo exhibition.
+   Mobile first. Rooms set their own --room-* tokens; wings and doors share the base theme. */
+
+/* ---------- Theme tokens ---------- */
+:root {
+  --maroon: oklch(30% 0.115 5);          /* #540922 */
+  --gold: oklch(68% 0.058 68);           /* #B29474 */
+  --gold-bright: oklch(78% 0.075 75);
+
+  --wall: oklch(96.4% 0.013 78);
+  --wall-2: oklch(92.5% 0.02 72);
+  --ink: oklch(25% 0.07 10);
+  --ink-soft: oklch(43% 0.045 20);
+  --line: oklch(25% 0.07 10 / 0.16);
+  --board: var(--maroon);
+  --board-ink: oklch(94% 0.02 80);
+  --board-soft: oklch(80% 0.04 70);
+  --accent: var(--maroon);
+
+  --serif: "EB Garamond", "Garamond", "Georgia", serif;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --pad: clamp(20px, 5.5vw, 72px);
+  --bar-h: 56px;
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --wall: oklch(17.5% 0.028 12);
+  --wall-2: oklch(21.5% 0.034 12);
+  --ink: oklch(93% 0.017 78);
+  --ink-soft: oklch(78% 0.025 70);
+  --line: oklch(93% 0.017 78 / 0.14);
+  --board: oklch(24% 0.06 10);
+  --board-ink: oklch(90% 0.05 78);
+  --board-soft: oklch(74% 0.05 70);
+  --accent: var(--gold-bright);
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--bar-h) + 12px); }
+body {
+  margin: 0;
+  background: var(--wall);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  font-feature-settings: "onum", "kern", "liga";
+  overflow-x: clip;
+  transition: background-color .6s var(--ease-out), color .6s var(--ease-out);
+}
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+h1, h2, h3 { font-weight: 400; margin: 0; }
+p { margin: 0 0 1em; }
+:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 4px; border-radius: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip {
+  position: absolute; left: 12px; top: -60px; z-index: 50;
+  background: var(--board); color: var(--board-ink); padding: 10px 16px; text-decoration: none;
+}
+.skip:focus { top: 12px; }
+
+/* ---------- Top bar ---------- */
+.bar {
+  position: fixed; inset: 0 0 auto; z-index: 30;
+  height: var(--bar-h);
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 max(12px, env(safe-area-inset-left)) 0 max(16px, env(safe-area-inset-left));
+  background: color-mix(in oklch, var(--wall) 90%, transparent);
+  border-bottom: 1px solid var(--line);
+  transition: background-color .6s var(--ease-out);
+}
+.bar__home { display: flex; align-items: center; gap: 10px; text-decoration: none; min-height: 44px; color: var(--accent); }
+.bar__home svg { width: 30px; height: 30px; }
+.bar__names { font-size: .95rem; letter-spacing: .08em; color: var(--ink); }
+.bar__where {
+  flex: 1; min-width: 0;
+  font-size: .9rem; color: var(--ink-soft);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  text-align: center;
+}
+.bar__where b { font-weight: 500; color: var(--ink); }
+
+/* Light switch: a small wall plate with a lever. */
+.switch {
+  flex: none;
+  display: flex; align-items: center; gap: 10px;
+  min-width: 44px; min-height: 44px; padding: 0 4px;
+  background: none; border: 0; color: var(--ink-soft);
+  font: inherit; font-size: .85rem; cursor: pointer;
+}
+.switch__plate {
+  position: relative; width: 26px; height: 38px;
+  border-radius: 5px;
+  background: var(--wall-2);
+  box-shadow: inset 0 0 0 1px var(--line), 0 1px 0 oklch(100% 0 0 / .35);
+}
+.switch__plate::before, .switch__plate::after { /* screws */
+  content: ""; position: absolute; left: 50%; width: 3px; height: 3px; margin-left: -1.5px;
+  border-radius: 50%; background: var(--ink-soft); opacity: .45;
+}
+.switch__plate::before { top: 4px; }
+.switch__plate::after { bottom: 4px; }
+.switch__lever {
+  position: absolute; left: 50%; top: 50%;
+  width: 8px; height: 14px; margin: -7px 0 0 -4px;
+  border-radius: 3px;
+  background: var(--gold);
+  box-shadow: 0 2px 3px oklch(20% 0.03 20 / .35);
+  transform: translateY(-5px);
+  transition: transform .28s var(--ease-out), background-color .28s;
+}
+:root[data-theme="dark"] .switch__lever { transform: translateY(5px); background: var(--ink-soft); }
+.switch:active .switch__lever { transition-duration: .1s; }
+
+/* ---------- Foyer ---------- */
+.foyer {
+  padding: calc(var(--bar-h) + clamp(28px, 7vw, 64px)) var(--pad) clamp(48px, 10vw, 96px);
+  display: grid; gap: clamp(28px, 6vw, 56px);
+  max-width: 1240px; margin: 0 auto;
+}
+.foyer__head { text-align: center; }
+.foyer__mono { width: clamp(84px, 22vw, 116px); margin: 0 auto 22px; color: var(--gold); }
+.kicker {
+  margin: 0 0 12px;
+  font-size: .82rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.foyer h1 {
+  font-size: clamp(2.7rem, 12.5vw, 6.6rem);
+  line-height: .98; letter-spacing: -.012em;
+  text-wrap: balance;
+}
+.foyer h1 .of { display: block; font-style: italic; font-size: .42em; letter-spacing: 0; color: var(--ink-soft); margin-bottom: .18em; }
+.foyer__intro { max-width: 34ch; margin: 22px auto 0; color: var(--ink-soft); font-size: 1.15rem; text-wrap: pretty; }
+
+/* The arched window onto the illustrated sky. */
+.window {
+  position: relative; overflow: hidden; isolation: isolate;
+  width: min(100%, 560px); margin: 0 auto;
+  aspect-ratio: 4 / 5;
+  border-radius: 999px 999px 6px 6px;
+  box-shadow: 0 0 0 1px var(--gold), 0 0 0 7px var(--wall), 0 0 0 8px color-mix(in oklch, var(--gold) 60%, transparent);
+}
+.window img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+.window__lanterns {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+}
+.window__lanterns img {
+  position: absolute; width: 34%; height: auto; object-fit: contain;
+  animation: drift 22s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 18px oklch(88% 0.14 85 / .55));
+}
+.window__lanterns img { left: 6%; top: 16%; width: 20%; }
+@keyframes drift {
+  from { transform: translate3d(0, 18%, 0) rotate(-3deg); }
+  to   { transform: translate3d(10%, -22%, 0) rotate(3deg); }
+}
+:root[data-theme="dark"] .window img:first-child { filter: brightness(.72) saturate(.9) hue-rotate(-8deg); }
+
+/* Directory board */
+.directory {
+  background: var(--board); color: var(--board-ink);
+  padding: clamp(24px, 6vw, 44px) clamp(20px, 5vw, 44px);
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px oklch(100% 0 0 / .08), 0 30px 60px -30px oklch(20% 0.08 10 / .5);
+}
+.directory h2 { font-size: .82rem; letter-spacing: .24em; text-transform: uppercase; color: var(--board-soft); margin-bottom: 18px; }
+.directory ol { list-style: none; margin: 0; padding: 0; }
+.directory__wing { margin-top: 22px; padding-top: 16px; border-top: 1px solid oklch(100% 0 0 / .14); }
+.directory__wing:first-of-type { margin-top: 0; }
+.directory__wing-name { font-size: 1.55rem; line-height: 1.1; margin-bottom: 2px; }
+.directory__wing-sub { font-style: italic; color: var(--board-soft); font-size: 1rem; margin-bottom: 8px; }
+.directory a {
+  display: flex; align-items: baseline; gap: 12px;
+  min-height: 44px; padding: 9px 0;
+  text-decoration: none; font-size: 1.12rem;
+}
+.directory a span:first-child { font-variant-numeric: lining-nums tabular-nums; color: var(--gold-bright); font-size: .9rem; width: 1.6em; flex: none; }
+.directory a .lead { flex: 1; border-bottom: 1px dotted oklch(100% 0 0 / .22); transform: translateY(-5px); }
+.directory a em { color: var(--board-soft); font-size: .95rem; white-space: nowrap; }
+.directory a:hover .name { color: var(--gold-bright); }
+.directory a .name { transition: color .2s; }
+
+/* ---------- Doors between wings ---------- */
+.door { position: relative; }
+.door__stage {
+  display: grid; place-items: center; align-content: center; gap: clamp(28px, 6vw, 44px);
+  padding: clamp(64px, 14vw, 120px) var(--pad);
+  overflow: hidden;
+}
+.door__frame { position: relative; }
+.door__view { position: absolute; overflow: hidden; background: var(--wall-2); }
+.door__view img { width: 100%; height: 100%; object-fit: cover; }
+.door__text { text-align: center; }
+.door__text .kicker { color: var(--ink-soft); }
+.door__text h2 { font-size: clamp(3rem, 15vw, 6.5rem); line-height: .95; }
+.door__text p { font-style: italic; font-size: clamp(1.15rem, 4.4vw, 1.6rem); color: var(--ink-soft); margin: .4em 0 0; }
+
+/* Adat: the illustrator's arch, with a glimpse of the first room through its opening. */
+.door--adat .door__frame { width: min(92vw, 640px, 110svh); aspect-ratio: 1400 / 986; }
+.door--adat .door__frame > img { position: relative; width: 100%; height: 100%; }
+.door--adat .door__view { inset: 0 9.6% 0; border-radius: 50% 50% 0 0 / 42% 42% 0 0; }
+.door--adat .door__view img { object-position: 50% 28%; }
+:root[data-theme="dark"] .door--adat .door__frame > img { filter: brightness(.85); }
+
+/* Non-Adat: a plain modern doorway whose leaf swings open onto the first room. */
+.door--modern .door__frame {
+  width: min(58vw, 34svh, 340px); aspect-ratio: 5 / 9;
+  perspective: 1400px;
+  box-shadow: 0 0 0 1px var(--gold), 0 0 0 10px var(--wall), 0 0 0 11px color-mix(in oklch, var(--gold) 50%, transparent);
+}
+.door--modern .door__view { inset: 0; }
+.door__leaf {
+  position: absolute; inset: 0;
+  transform-origin: left center;
+  transform: rotateY(-24deg);
+  background: linear-gradient(90deg, var(--wall-2), color-mix(in oklch, var(--wall-2) 92%, var(--ink)));
+  box-shadow: inset 0 0 0 1px var(--line), 18px 0 40px -18px oklch(15% 0.03 20 / .45);
+}
+.door__leaf::after { /* handle */
+  content: ""; position: absolute; right: 12%; top: 52%;
+  width: 5px; height: 36px; border-radius: 3px; background: var(--gold);
+}
+
+/* Scroll-driven walk-through, only where supported and wanted. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .door { height: 250svh; view-timeline: --door block; }
+    .door__stage { position: sticky; top: 0; height: 100svh; padding-block: var(--bar-h) 0; }
+    .door__frame { animation: walk-through linear both; animation-timeline: --door; animation-range: contain 22% contain 100%; }
+    .door--adat .door__frame { transform-origin: 50% 62%; }
+    .door--modern .door__frame { transform-origin: 50% 48%; }
+    .door__text { animation: fade-away linear both; animation-timeline: --door; animation-range: contain 2% contain 30%; }
+    .door--modern .door__leaf { animation: swing linear both; animation-timeline: --door; animation-range: contain 0% contain 45%; }
+  }
+}
+@keyframes walk-through {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); }
+  86% { opacity: 1; }
+  100% { transform: scale(7); opacity: 0; }
+}
+@keyframes fade-away { to { opacity: 0; transform: translateY(30px); } }
+@keyframes swing { to { transform: rotateY(-100deg); } }
+
+/* ---------- Wings ---------- */
+.wing-intro {
+  max-width: 1240px; margin: 0 auto; padding: 0 var(--pad) clamp(24px, 6vw, 48px);
+  color: var(--ink-soft); font-size: 1.2rem; text-align: center;
+}
+.wing-intro p { max-width: 36ch; margin: 0 auto; text-wrap: pretty; }
+.pattern-band {
+  height: clamp(30px, 6vw, 56px);
+  background: url("assets/art/pattern.webp") left center / auto 100% repeat-x;
+  opacity: .9;
+}
+:root[data-theme="dark"] .pattern-band { opacity: .55; }
+
+/* ---------- Rooms: shared anatomy ---------- */
+.room {
+  --room-bg: var(--wall);
+  --room-ink: var(--ink);
+  --room-soft: var(--ink-soft);
+  --room-accent: var(--accent);
+  --room-line: var(--line);
+  position: relative; isolation: isolate;
+  background: var(--room-bg); color: var(--room-ink);
+  padding: clamp(64px, 14vw, 140px) 0;
+  transition: background-color .6s var(--ease-out), color .6s var(--ease-out);
+}
+.room__inner {
+  max-width: 1240px; margin: 0 auto; padding: 0 var(--pad);
+  display: grid; gap: clamp(32px, 7vw, 72px);
+}
+.room__plaque { max-width: 40rem; }
+.room__no {
+  display: flex; align-items: center; gap: 14px;
+  font-size: .82rem; letter-spacing: .22em; text-transform: uppercase; color: var(--room-soft);
+  margin-bottom: 18px;
+}
+.room__no::after { content: ""; flex: 1; max-width: 80px; height: 1px; background: currentColor; opacity: .5; }
+.room__script {
+  display: block; font-size: clamp(1.8rem, 7vw, 2.6rem); line-height: 1.2;
+  color: var(--room-accent); margin-bottom: 6px;
+}
+.room h3 {
+  font-size: clamp(2.6rem, 11vw, 5.2rem); line-height: .98; letter-spacing: -.01em;
+  text-wrap: balance;
+}
+.room__sub { display: block; font-style: italic; font-size: clamp(1.25rem, 4.6vw, 1.7rem); color: var(--room-accent); margin: 10px 0 24px; }
+.room__story p { color: var(--room-soft); max-width: 62ch; text-wrap: pretty; }
+.room__credit { font-size: .95rem; font-style: italic; color: var(--room-soft); opacity: .85; }
+.cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  min-height: 48px; margin-top: 10px; padding: 12px 22px;
+  border: 1px solid var(--room-accent);
+  color: var(--room-accent); text-decoration: none;
+  font-size: 1.05rem; letter-spacing: .04em;
+  transition: background-color .25s var(--ease-out), color .25s var(--ease-out);
+}
+.cta svg { width: 14px; height: 14px; transition: transform .3s var(--ease-out); }
+.cta:hover, .cta:active { background: var(--room-accent); color: var(--room-bg); }
+.cta:hover svg { transform: translate(3px, -3px); }
+
+.photo { margin: 0; position: relative; }
+.photo img { width: 100%; background: color-mix(in oklch, var(--room-ink) 8%, var(--room-bg)); }
+.photo--fill img { height: 100%; object-fit: cover; }
+
+/* Reveal (added by JS; without JS everything is simply visible). */
+.js .reveal { opacity: 0; transform: translateY(26px); transition: opacity 1s var(--ease-out), transform 1.1s var(--ease-out); }
+.js .reveal.is-in { opacity: 1; transform: none; }
+
+/* ---------- Room 01: Bugis-Makassar ---------- */
+.room--bugis {
+  --room-accent: oklch(50% 0.19 358);
+  --plaid: repeating-linear-gradient(90deg, oklch(50% 0.19 358) 0 14px, oklch(62% 0.13 150) 14px 18px, oklch(85% 0.14 95) 18px 22px, oklch(50% 0.19 358) 22px 34px, oklch(45% 0.1 250) 34px 38px),
+           repeating-linear-gradient(0deg, transparent 0 6px, oklch(100% 0 0 / .18) 6px 8px);
+}
+:root[data-theme="dark"] .room--bugis { --room-accent: oklch(72% 0.15 358); --room-bg: oklch(18% 0.035 355); }
+.room--bugis::before { /* lipa' sabbe rule */
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: var(--plaid);
+}
+.room--bugis .house {
+  width: 100%; height: clamp(120px, 30vw, 260px); object-fit: cover; object-position: 50% 40%;
+  margin: -1px 0 clamp(40px, 8vw, 80px);
+  -webkit-mask-image: linear-gradient(transparent, #000 25%, #000 60%, transparent);
+          mask-image: linear-gradient(transparent, #000 25%, #000 60%, transparent);
+  opacity: .9;
+}
+.hall { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hall .photo:nth-child(1) { grid-column: 1 / -1; }
+.hall .photo:nth-child(4) { grid-column: 1 / -1; }
+.hall .photo:nth-child(1) img { aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; }
+.hall .photo:nth-child(2) img, .hall .photo:nth-child(3) img { aspect-ratio: 2 / 3; object-fit: cover; }
+.hall .photo:nth-child(4) img { aspect-ratio: 3 / 2; object-fit: cover; }
+
+/* ---------- Room 02: Jawa ---------- */
+.room--jawa {
+  --room-bg: oklch(94.5% 0.022 140);
+  --room-ink: oklch(24% 0.05 150);
+  --room-soft: oklch(40% 0.04 150);
+  --room-accent: oklch(40% 0.085 150);
+  text-align: center;
+  overflow: hidden;
+}
+:root[data-theme="dark"] .room--jawa {
+  --room-bg: oklch(22% 0.045 150);
+  --room-ink: oklch(94% 0.02 110);
+  --room-soft: oklch(80% 0.03 120);
+  --room-accent: oklch(82% 0.08 120);
+}
+.room--jawa .room__plaque { margin: 0 auto; }
+.room--jawa .room__no { justify-content: center; }
+.room--jawa .room__no::before { content: ""; flex: 1; max-width: 80px; height: 1px; background: currentColor; opacity: .5; }
+.room--jawa .room__story p { margin-left: auto; margin-right: auto; }
+.jasmine { position: absolute; top: 0; width: 18px; height: min(58%, 560px); pointer-events: none; z-index: -1; color: oklch(97% 0.01 100); }
+:root:not([data-theme="dark"]) .jasmine { color: oklch(99% 0.005 100); filter: drop-shadow(0 1px 1px oklch(40% 0.05 150 / .35)); }
+.jasmine--l { left: clamp(10px, 4vw, 60px); }
+.jasmine--r { right: clamp(10px, 4vw, 60px); height: min(44%, 420px); }
+.jasmine svg { width: 100%; height: 100%; transform-origin: 50% 0; animation: sway 9s ease-in-out infinite alternate; }
+.jasmine--r svg { animation-duration: 11s; animation-delay: -4s; }
+@keyframes sway { from { transform: rotate(-1.6deg); } to { transform: rotate(1.6deg); } }
+.triptych { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; max-width: 1080px; margin: 0 auto; width: 100%; }
+.triptych .photo--center { grid-column: 1 / -1; order: -1; }
+.triptych .photo img { aspect-ratio: 2 / 3; object-fit: cover; }
+.triptych .photo--center img { border-radius: 999px 999px 0 0; }
+.triptych .photo--detail { grid-column: 1 / -1; width: 58%; margin: 12px auto 0; }
+.triptych .photo--detail img { aspect-ratio: 1; border-radius: 50%; }
+
+/* ---------- Room 03: Palembang ---------- */
+.room--palembang {
+  --room-bg: oklch(95% 0.03 85);
+  --room-ink: oklch(28% 0.06 60);
+  --room-soft: oklch(42% 0.05 60);
+  --room-accent: oklch(55% 0.11 75);
+  --gilt: linear-gradient(135deg, oklch(84% 0.12 88), oklch(62% 0.11 70) 30%, oklch(88% 0.1 92) 52%, oklch(58% 0.1 65) 78%, oklch(80% 0.11 85));
+}
+:root[data-theme="dark"] .room--palembang {
+  --room-bg: oklch(20% 0.035 65);
+  --room-ink: oklch(93% 0.03 85);
+  --room-soft: oklch(80% 0.04 80);
+  --room-accent: oklch(80% 0.11 85);
+}
+.room--palembang .house {
+  width: 100%; height: clamp(120px, 30vw, 260px); object-fit: cover; object-position: 50% 40%;
+  margin-bottom: clamp(40px, 8vw, 80px);
+  -webkit-mask-image: linear-gradient(transparent, #000 25%, #000 60%, transparent);
+          mask-image: linear-gradient(transparent, #000 25%, #000 60%, transparent);
+}
+.gilded { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.gilded .photo:first-child { grid-column: 1 / -1; padding: 10px; background: var(--gilt); box-shadow: 0 30px 60px -28px oklch(35% 0.08 60 / .6); }
+.gilded .photo:first-child::after { content: ""; position: absolute; inset: 16px; border: 1px solid oklch(95% 0.05 90 / .7); pointer-events: none; }
+.gilded .photo img { aspect-ratio: 2 / 3; object-fit: cover; }
+.gilded .photo:nth-child(4) { grid-column: 1 / -1; }
+.gilded .photo:nth-child(4) img { aspect-ratio: 16 / 10; }
+.print { position: relative; }
+.print img + img { position: absolute; inset: 0; height: 100%; opacity: 0; transition: opacity .9s var(--ease-out); }
+.gilded .photo:first-child .print img + img { inset: 0; }
+.room--palembang.is-sepia .print img + img { opacity: 1; }
+.prints-toggle {
+  display: inline-flex; margin: 4px 0 18px; padding: 3px;
+  border: 1px solid var(--room-accent); border-radius: 999px;
+}
+.prints-toggle button {
+  min-height: 42px; min-width: 88px; padding: 0 16px;
+  border: 0; border-radius: 999px; background: none; color: var(--room-soft);
+  font: inherit; font-size: 1rem; cursor: pointer;
+  transition: background-color .3s var(--ease-out), color .3s var(--ease-out);
+}
+.prints-toggle button[aria-pressed="true"] { background: var(--room-accent); color: var(--room-bg); }
+
+/* ---------- Interlude ---------- */
+.interlude { padding: clamp(80px, 16vw, 160px) var(--pad); text-align: center; background: var(--board); color: var(--board-ink); }
+.interlude blockquote { margin: 0 auto; max-width: 22ch; font-size: clamp(2rem, 7.4vw, 4rem); line-height: 1.1; font-style: italic; text-wrap: balance; }
+
+/* ---------- Room 04: Woven Together ---------- */
+.room--woven {
+  --room-bg: oklch(98% 0.006 90);
+  --room-ink: oklch(24% 0.02 60);
+  --room-soft: oklch(42% 0.02 60);
+  --room-accent: oklch(52% 0.16 35);
+  --textiles: linear-gradient(90deg, oklch(64% 0.17 45) 0 16%, oklch(62% 0.11 195) 16% 30%, oklch(86% 0.15 100) 30% 44%, oklch(52% 0.19 0) 44% 60%, oklch(42% 0.12 300) 60% 72%, oklch(58% 0.17 30) 72% 86%, oklch(40% 0.08 160) 86%);
+}
+:root[data-theme="dark"] .room--woven { --room-bg: oklch(22% 0.012 60); --room-ink: oklch(94% 0.01 90); --room-soft: oklch(80% 0.015 80); --room-accent: oklch(74% 0.14 45); }
+.room--woven::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 10px; background: var(--textiles); }
+.line {
+  position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 26px 14px;
+  padding-top: 26px;
+}
+.line::before { /* the washing line */
+  content: ""; position: absolute; left: -6%; right: -6%; top: 8px; height: 1px;
+  background: var(--room-soft); opacity: .5;
+}
+.line .photo { transform-origin: 50% -12px; transform: rotate(var(--tilt, 0deg)); }
+.line .photo::before { /* peg */
+  content: ""; position: absolute; left: 50%; top: -16px; width: 8px; height: 22px; margin-left: -4px;
+  background: oklch(78% 0.05 70); border-radius: 2px; z-index: 1;
+  box-shadow: 0 1px 2px oklch(20% 0.02 60 / .3);
+}
+.line .photo img { box-shadow: 0 18px 30px -18px oklch(20% 0.02 60 / .5); }
+.line .photo:nth-child(1) { grid-column: 1 / -1; --tilt: -.8deg; }
+.line .photo:nth-child(2) { --tilt: 1.4deg; }
+.line .photo:nth-child(3) { --tilt: -1.6deg; margin-top: 22px; }
+.line .photo:nth-child(4) { grid-column: 1 / -1; width: 62%; margin: 0 auto; --tilt: 1deg; }
+.line .photo:nth-child(n+2) img { aspect-ratio: 2 / 3; object-fit: cover; }
+
+/* ---------- Room 05: Projection of Our Roots (always dark) ---------- */
+.room--projection {
+  --room-bg: oklch(13% 0.012 280);
+  --room-ink: oklch(93% 0.012 90);
+  --room-soft: oklch(76% 0.02 100);
+  --room-accent: oklch(86% 0.13 150);
+  overflow: hidden;
+  color-scheme: dark;
+}
+.glyphs { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.glyphs span {
+  position: absolute; white-space: nowrap;
+  font-size: clamp(3rem, 16vw, 9rem); line-height: 1;
+  color: oklch(86% 0.13 150 / .16);
+  text-shadow: 0 0 22px oklch(86% 0.13 150 / .35);
+  animation: project 34s linear infinite;
+}
+.glyphs .lontara { font-family: "Noto Sans Buginese", serif; }
+.glyphs .jawa { font-family: "Noto Sans Javanese", serif; }
+.glyphs span:nth-child(1) { top: 6%; left: -10%; }
+.glyphs span:nth-child(2) { top: 44%; left: -30%; animation-duration: 42s; animation-direction: reverse; color: oklch(88% 0.08 85 / .12); }
+.glyphs span:nth-child(3) { top: 78%; left: -20%; animation-duration: 38s; }
+@keyframes project { from { transform: translateX(0); } to { transform: translateX(-40%); } }
+.room--projection .room__script { font-family: "Noto Sans Buginese", "Noto Sans Javanese", serif; text-shadow: 0 0 18px oklch(86% 0.13 150 / .6); }
+.dark-room { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.dark-room .photo img {
+  -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 58%, transparent 100%);
+          mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 58%, transparent 100%);
+  background: transparent;
+}
+.dark-room .photo:nth-child(1), .dark-room .photo:nth-child(2) { grid-column: 1 / -1; }
+.dark-room .photo:nth-child(n+3) img { aspect-ratio: 2 / 3; object-fit: cover; }
+
+/* ---------- Room 06: Peranakan ---------- */
+.room--peranakan {
+  --room-bg: oklch(95.5% 0.022 350);
+  --room-ink: oklch(28% 0.06 300);
+  --room-soft: oklch(43% 0.05 310);
+  --room-accent: oklch(52% 0.13 250);
+  --tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Crect width='60' height='60' fill='%23f7e6ee'/%3E%3Cg fill='%23f2b3c9'%3E%3Cellipse cx='30' cy='15' rx='7' ry='12'/%3E%3Cellipse cx='30' cy='45' rx='7' ry='12'/%3E%3Cellipse cx='15' cy='30' rx='12' ry='7'/%3E%3Cellipse cx='45' cy='30' rx='12' ry='7'/%3E%3C/g%3E%3Ccircle cx='30' cy='30' r='5' fill='%236aa3c9'/%3E%3Cg fill='%23b9a4dc'%3E%3Cpath d='M0 0h9L0 9zM60 0h-9l9 9zM0 60h9l-9-9zM60 60h-9l9-9z'/%3E%3C/g%3E%3Cpath d='M0 .5h60M.5 0v60' stroke='%23fff' stroke-width='1'/%3E%3C/svg%3E");
+}
+:root[data-theme="dark"] .room--peranakan {
+  --room-bg: oklch(23% 0.05 300);
+  --room-ink: oklch(94% 0.02 350);
+  --room-soft: oklch(82% 0.04 340);
+  --room-accent: oklch(80% 0.1 240);
+}
+.room--peranakan::after { /* tiled floor */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: clamp(90px, 22vw, 180px); z-index: -1;
+  background: var(--tile) 0 0 / 44px 44px;
+  -webkit-mask-image: linear-gradient(transparent, #000 70%);
+          mask-image: linear-gradient(transparent, #000 70%);
+}
+:root[data-theme="dark"] .room--peranakan::after { opacity: .35; }
+.table { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.table .photo img { aspect-ratio: 2 / 3; object-fit: cover; border-radius: 6px; }
+.table .photo:nth-child(1) { grid-column: 1 / -1; }
+.table .photo:nth-child(1) img { aspect-ratio: 4 / 5; border-radius: 999px 999px 6px 6px; }
+.table .photo:nth-child(3) { grid-column: 1 / -1; }
+.table .photo:nth-child(3) img { aspect-ratio: 16 / 11; border-radius: 50% / 18%; }
+.table .photo:nth-child(3) { order: 1; }
+.table .photo:nth-child(2), .table .photo:nth-child(4) { order: 2; }
+
+/* ---------- Room 07: Bappenas, Menteng ---------- */
+.room--bappenas {
+  --room-bg: oklch(95% 0.004 240);
+  --room-ink: oklch(22% 0.02 250);
+  --room-soft: oklch(42% 0.02 250);
+  --room-accent: oklch(46% 0.1 160);
+  --sign: oklch(46% 0.1 160);
+}
+:root[data-theme="dark"] .room--bappenas { --room-bg: oklch(20% 0.012 250); --room-ink: oklch(94% 0.005 240); --room-soft: oklch(78% 0.01 240); --room-accent: oklch(76% 0.11 160); }
+.sign {
+  display: inline-block; margin-bottom: 18px;
+  padding: 8px 14px 7px;
+  background: var(--sign); color: oklch(98% 0.01 160);
+  font-family: "Overpass", system-ui, sans-serif; font-weight: 800;
+  font-size: .95rem; letter-spacing: .32em; text-transform: uppercase;
+  box-shadow: inset 0 0 0 2px oklch(98% 0.01 160 / .85), 0 0 0 1px var(--sign);
+}
+.strip { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.strip .photo { background: oklch(16% 0.01 250); padding: 8px 8px 28px; }
+.strip .photo figcaption {
+  position: absolute; left: 10px; bottom: 7px;
+  font-family: "Overpass", system-ui, sans-serif; font-size: .72rem; font-weight: 800; letter-spacing: .14em;
+  color: oklch(78% 0.14 80);
+}
+.strip .photo:nth-child(3), .strip .photo:nth-child(4) { grid-column: 1 / -1; }
+.strip .photo:nth-child(1) img, .strip .photo:nth-child(2) img { aspect-ratio: 2 / 3; object-fit: cover; }
+.strip .photo:nth-child(3) img, .strip .photo:nth-child(4) img { aspect-ratio: 3 / 2; object-fit: cover; }
+
+/* ---------- Room 08: Out of Character (always night) ---------- */
+.room--ooc {
+  --room-bg: oklch(20% 0.04 45);
+  --room-ink: oklch(93% 0.035 80);
+  --room-soft: oklch(80% 0.05 75);
+  --room-accent: oklch(80% 0.12 70);
+  color-scheme: dark;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 10%, oklch(55% 0.13 55 / .35), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 10% 70%, oklch(45% 0.12 30 / .3), transparent 70%),
+    var(--room-bg);
+}
+.room--ooc::after { /* film grain */
+  content: ""; position: absolute; inset: -50%; z-index: 2; pointer-events: none; opacity: .09; mix-blend-mode: overlay;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(4) infinite;
+}
+@keyframes grain { 0% { transform: translate(0, 0); } 25% { transform: translate(-3%, 2%); } 50% { transform: translate(2%, -3%); } 75% { transform: translate(-2%, -1%); } 100% { transform: translate(0, 0); } }
+.room--ooc h3 { font-family: "Limelight", var(--serif); letter-spacing: .01em; color: var(--room-accent); text-shadow: 0 0 28px oklch(75% 0.14 65 / .45); }
+.collage { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.collage .photo img { box-shadow: 0 30px 50px -24px oklch(8% 0.02 40 / .9); }
+.collage .photo:nth-child(1) { grid-column: 1 / 6; }
+.collage .photo:nth-child(1) img { aspect-ratio: 4 / 5; object-fit: cover; }
+.collage .photo:nth-child(2) { grid-column: 4 / 7; margin-top: -32%; z-index: 1; transform: rotate(2deg); }
+.collage .photo:nth-child(2) img { aspect-ratio: 2 / 3; object-fit: cover; outline: 6px solid oklch(93% 0.035 80); }
+.collage .photo:nth-child(3) { grid-column: 1 / 4; margin-top: 14px; transform: rotate(-1.5deg); }
+.collage .photo:nth-child(3) img { aspect-ratio: 3 / 4; object-fit: cover; }
+.collage .photo:nth-child(4) { grid-column: 1 / 7; margin-top: 10px; }
+.collage .photo:nth-child(4) img { aspect-ratio: 16 / 9; object-fit: cover; }
+
+/* ---------- Epilogue ---------- */
+.epilogue {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: 92svh; display: grid; place-items: center; text-align: center;
+  padding: 120px var(--pad); color: oklch(95% 0.02 80);
+  background: oklch(10% 0.02 20);
+}
+.epilogue > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: .5; }
+.epilogue::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse at 50% 55%, transparent 20%, oklch(8% 0.02 20 / .9) 80%); }
+.epilogue .kicker { color: oklch(84% 0.05 75); }
+.epilogue h2 { font-size: clamp(3.4rem, 16vw, 8rem); line-height: .95; font-style: italic; }
+.epilogue p { max-width: 30ch; margin: 18px auto 30px; color: oklch(88% 0.02 80); font-size: 1.2rem; }
+.epilogue .cta { --room-accent: oklch(86% 0.07 78); --room-bg: oklch(15% 0.02 20); }
+.epilogue .cta .play { width: 12px; height: 12px; }
+
+/* ---------- Footer ---------- */
+.footer { padding: 56px var(--pad) calc(40px + env(safe-area-inset-bottom)); text-align: center; background: var(--wall); color: var(--ink-soft); }
+.footer svg { width: 56px; height: 56px; margin: 0 auto 18px; color: var(--gold); }
+.footer p { margin: 0 0 6px; }
+.footer .names { font-size: 1.3rem; letter-spacing: .14em; color: var(--ink); text-transform: uppercase; }
+.footer .credits { margin-top: 18px; font-size: .98rem; font-style: italic; max-width: 44ch; margin-left: auto; margin-right: auto; }
+
+/* ---------- Tablet ---------- */
+@media (min-width: 700px) {
+  .bar { padding-inline: 28px 20px; }
+  .hall { grid-template-columns: 1.2fr 1fr; }
+  .hall .photo:nth-child(1) { grid-column: 1; grid-row: 1 / 3; }
+  .hall .photo:nth-child(1) img { aspect-ratio: auto; height: 100%; }
+  .hall .photo:nth-child(4) { grid-column: 1 / -1; }
+  .triptych { grid-template-columns: 1fr 1.35fr 1fr; gap: 16px; }
+  .triptych .photo--center { grid-column: 2; order: 0; }
+  .triptych .photo--detail { grid-column: 1 / -1; width: 30%; }
+  .gilded { grid-template-columns: 1.4fr 1fr; }
+  .gilded .photo:first-child { grid-column: 1; grid-row: 1 / 3; }
+  .gilded .photo:first-child .print, .gilded .photo:first-child .print img { height: 100%; aspect-ratio: auto; }
+  .gilded .photo:nth-child(4) { grid-column: 1 / -1; }
+  .line { grid-template-columns: repeat(3, 1fr); }
+  .line .photo:nth-child(4) { grid-column: auto; width: auto; margin: 0; }
+  .line .photo:nth-child(3) { margin-top: 0; }
+  .line .photo:nth-child(2) { margin-top: 30px; }
+  .dark-room { grid-template-columns: repeat(2, 1fr); }
+  .dark-room .photo:nth-child(2) { grid-column: 1 / -1; }
+  .table { grid-template-columns: 1fr 1.3fr 1fr; align-items: end; }
+  .table .photo:nth-child(1) { grid-column: 2; grid-row: 1; }
+  .table .photo:nth-child(2) { grid-column: 1; grid-row: 1; }
+  .table .photo:nth-child(4) { grid-column: 3; grid-row: 1; }
+  .table .photo:nth-child(3) { grid-column: 1 / -1; }
+  .table .photo { order: 0 !important; }
+  .collage .photo:nth-child(1) { grid-column: 1 / 4; }
+  .collage .photo:nth-child(2) { grid-column: 4 / 7; margin-top: 18%; }
+  .collage .photo:nth-child(3) { grid-column: 2 / 4; margin-top: -10%; }
+  .collage .photo:nth-child(4) { grid-column: 4 / 7; margin-top: -40%; align-self: end; }
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 1024px) {
+  .foyer { grid-template-columns: 1.05fr .95fr; align-items: center; column-gap: 64px; min-height: 100svh; }
+  .foyer__head { text-align: left; grid-column: 1; }
+  .foyer__mono { margin-left: 0; }
+  .foyer__intro { margin-left: 0; }
+  .window { grid-column: 2; grid-row: 1 / 3; width: 100%; max-width: 520px; }
+  .directory { grid-column: 1; }
+
+  .room__inner { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; column-gap: clamp(48px, 6vw, 96px); }
+  .room__plaque { position: sticky; top: calc(var(--bar-h) + 48px); }
+  .room--flip .room__inner { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .room--flip .room__plaque { order: 2; }
+  .room--jawa .room__inner { grid-template-columns: 1fr; }
+  .room--jawa .room__plaque { position: static; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+  .js .reveal { opacity: 1; transform: none; }
+}

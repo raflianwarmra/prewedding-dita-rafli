@@ -1,482 +1,382 @@
 <!doctype html>
-<!-- Claude Code handoff: read ../Product.md before modifying this production HTML. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#5d1225">
-  <meta name="description" content="A digital photo exhibition of Dita and Rafli's prewedding stories.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Prewedding of Dita dan Rafli</title>
+  <meta name="description" content="A digital photo exhibition of Dita and Rafli's prewedding stories, in two wings: Adat and Non-Adat.">
+  <meta name="theme-color" content="#f6f0e6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1c1012" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="Prewedding of Dita dan Rafli">
+  <meta property="og:description" content="A digital photo exhibition in eight rooms.">
+  <meta property="og:image" content="assets/photos/jawa-1-800.webp">
+  <link rel="icon" href="assets/monogram.svg" type="image/svg+xml">
+  <script>
+    /* Set theme before first paint: saved choice, else the device setting. */
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem("dr-theme"); } catch (e) {}
+      var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+      document.documentElement.classList.add("js");
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%235d1225'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='serif' font-size='24' fill='%23d7b47b'%3ED%26R%3C/text%3E%3C/svg%3E">
-  <style>
-    :root {
-      --maroon: #5d1225;
-      --maroon-deep: #380b17;
-      --gold: #b58a4f;
-      --gold-light: #d7b47b;
-      --ivory: #f5efe5;
-      --paper: #fbf8f2;
-      --ink: #241c1b;
-      --muted: #746968;
-      --line: rgba(91, 54, 39, .2);
-      --serif: "Italiana", Georgia, serif;
-      --sans: "DM Sans", Arial, sans-serif;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: var(--sans);
-      font-size: 16px;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    a { color: inherit; }
-    img { display: block; max-width: 100%; }
-
-    .topbar {
-      position: fixed;
-      inset: 0 0 auto;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px clamp(20px, 4vw, 64px);
-      color: #fff;
-      mix-blend-mode: difference;
-      pointer-events: none;
-    }
-    .topbar span {
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-
-    .hero {
-      position: relative;
-      min-height: 100svh;
-      display: grid;
-      place-items: center;
-      padding: 88px 24px 64px;
-      color: var(--ivory);
-      text-align: center;
-      background:
-        radial-gradient(circle at 50% 22%, rgba(215, 180, 123, .22), transparent 30%),
-        linear-gradient(145deg, var(--maroon), var(--maroon-deep));
-      overflow: hidden;
-    }
-    .hero::before,
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: min(58vw, 680px);
-      aspect-ratio: 1;
-      border: 1px solid rgba(215, 180, 123, .24);
-      border-radius: 50%;
-    }
-    .hero::before { transform: translate(-45vw, -40vh); }
-    .hero::after { transform: translate(45vw, 44vh); }
-    .hero-inner { position: relative; z-index: 1; max-width: 980px; }
-    .monogram {
-      width: clamp(118px, 18vw, 170px);
-      aspect-ratio: 1;
-      margin: 0 auto 30px;
-      overflow: hidden;
-      border-radius: 50%;
-      border: 1px solid rgba(215, 180, 123, .55);
-      background: #fff;
-      box-shadow: 0 24px 70px rgba(0, 0, 0, .24);
-    }
-    .monogram img { width: 100%; height: 100%; object-fit: cover; }
-    .eyebrow {
-      margin: 0 0 14px;
-      color: var(--gold-light);
-      font-size: .75rem;
-      font-weight: 600;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-    }
-    h1 {
-      max-width: 900px;
-      margin: 0 auto;
-      font-family: var(--serif);
-      font-size: clamp(3.2rem, 9vw, 7.6rem);
-      font-weight: 400;
-      line-height: .95;
-      letter-spacing: -.035em;
-    }
-    .hero-intro {
-      max-width: 520px;
-      margin: 28px auto 0;
-      color: rgba(255, 255, 255, .72);
-      font-size: clamp(1rem, 1.6vw, 1.1rem);
-    }
-    .scroll-cue {
-      position: absolute;
-      bottom: 28px;
-      left: 50%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transform: translateX(-50%);
-      color: rgba(255,255,255,.62);
-      font-size: .7rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-    .scroll-cue::before { content: ""; width: 34px; height: 1px; background: currentColor; }
-
-    .intro {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr);
-      gap: clamp(36px, 8vw, 120px);
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: clamp(90px, 12vw, 160px) clamp(24px, 5vw, 72px);
-      border-bottom: 1px solid var(--line);
-    }
-    .intro h2,
-    .chapter-title,
-    .exhibit h3,
-    .film h2 {
-      font-family: var(--serif);
-      font-weight: 400;
-    }
-    .intro h2 {
-      margin: 0;
-      font-size: clamp(2.6rem, 6vw, 5rem);
-      line-height: 1;
-    }
-    .intro-copy { color: var(--muted); }
-    .intro-copy p { margin: 0 0 18px; }
-
-    .chapter {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: clamp(82px, 11vw, 150px) clamp(24px, 5vw, 72px) 30px;
-    }
-    .chapter-label {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin: 0 0 14px;
-      color: var(--maroon);
-      font-size: .75rem;
-      font-weight: 600;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-    }
-    .chapter-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-    .chapter-title {
-      max-width: 750px;
-      margin: 0;
-      font-size: clamp(3rem, 7vw, 6rem);
-      line-height: .98;
-    }
-
-    .exhibit {
-      display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr);
-      gap: clamp(42px, 8vw, 110px);
-      align-items: center;
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: clamp(58px, 8vw, 110px) clamp(24px, 5vw, 72px);
-    }
-    .exhibit.reverse .artwork { order: 2; }
-    .exhibit.reverse .caption { order: 1; }
-    .artwork {
-      position: relative;
-      overflow: hidden;
-      background: #e9e1d6;
-      box-shadow: 0 30px 70px rgba(45, 22, 18, .13);
-    }
-    .artwork::after {
-      content: "";
-      position: absolute;
-      inset: 12px;
-      border: 1px solid rgba(255, 255, 255, .55);
-      pointer-events: none;
-    }
-    .artwork img {
-      width: 100%;
-      aspect-ratio: 4 / 5;
-      object-fit: cover;
-      transition: transform .8s cubic-bezier(.2,.7,.2,1);
-    }
-    .exhibit:hover .artwork img { transform: scale(1.025); }
-    .index {
-      display: block;
-      margin-bottom: 28px;
-      color: var(--gold);
-      font-size: .78rem;
-      font-weight: 600;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-    }
-    .exhibit h3 {
-      margin: 0 0 24px;
-      font-size: clamp(2.5rem, 5vw, 4.8rem);
-      line-height: 1;
-    }
-    .caption p { margin: 0 0 18px; color: var(--muted); }
-    .credit { font-size: .82rem; color: #928685 !important; }
-    .view-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      margin-top: 14px;
-      padding: 13px 0 9px;
-      border-bottom: 1px solid var(--gold);
-      color: var(--maroon);
-      font-size: .8rem;
-      font-weight: 600;
-      letter-spacing: .13em;
-      text-decoration: none;
-      text-transform: uppercase;
-    }
-    .view-link::after { content: "↗"; font-size: 1rem; transition: transform .2s ease; }
-    .view-link:hover::after { transform: translate(3px, -3px); }
-    .view-link:focus-visible { outline: 3px solid var(--gold-light); outline-offset: 6px; }
-
-    .interlude {
-      margin: clamp(70px, 10vw, 130px) 0;
-      padding: clamp(74px, 11vw, 140px) 24px;
-      color: var(--ivory);
-      text-align: center;
-      background: var(--maroon);
-    }
-    .interlude blockquote {
-      max-width: 940px;
-      margin: 0 auto;
-      font-family: var(--serif);
-      font-size: clamp(2.3rem, 5.8vw, 5.4rem);
-      line-height: 1.08;
-    }
-
-    .film {
-      position: relative;
-      min-height: 70svh;
-      display: grid;
-      place-items: center;
-      margin-top: clamp(70px, 11vw, 140px);
-      padding: 96px 24px;
-      color: #fff;
-      text-align: center;
-      background:
-        linear-gradient(rgba(30, 9, 15, .58), rgba(30, 9, 15, .84)),
-        url("assets/midcentury.jpg") center 45% / cover;
-    }
-    .film-inner { max-width: 760px; }
-    .film h2 { margin: 0 0 18px; font-size: clamp(3.4rem, 8vw, 7rem); line-height: 1; }
-    .film p { max-width: 520px; margin: 0 auto 32px; color: rgba(255,255,255,.76); }
-    .film .view-link { color: #fff; border-color: var(--gold-light); }
-    footer {
-      padding: 34px 24px;
-      color: rgba(255,255,255,.68);
-      text-align: center;
-      background: var(--maroon-deep);
-      font-size: .78rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
-    .reveal.visible { opacity: 1; transform: none; }
-
-    @media (max-width: 800px) {
-      .topbar { padding: 16px 18px; }
-      .topbar span:last-child { display: none; }
-      .hero { padding-inline: 20px; }
-      .intro { grid-template-columns: 1fr; }
-      .exhibit { grid-template-columns: 1fr; gap: 36px; }
-      .exhibit.reverse .artwork,
-      .exhibit.reverse .caption { order: initial; }
-      .caption { padding: 0 4px; }
-      .artwork img { max-height: 76svh; }
-      .index { margin-bottom: 18px; }
-      .chapter { padding-bottom: 8px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      .reveal { opacity: 1; transform: none; transition: none; }
-      .artwork img { transition: none; }
-    }
-  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400..500&family=Noto+Sans+Buginese&family=Noto+Sans+Javanese&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@800&text=BAPENSMTG07CD%C2%B7%20&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Limelight&text=OutofCharcte%20&display=swap">
+  <link rel="preload" as="image" href="assets/art/foyer-900.webp" imagesrcset="assets/art/foyer-900.webp 900w, assets/art/foyer-1600.webp 1600w" imagesizes="(min-width: 1024px) 520px, 90vw">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="topbar" aria-hidden="true">
-    <span>Dita &amp; Rafli</span>
-    <span>Digital Photo Exhibition</span>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="monogram" viewBox="0 0 1275.59 1275.59"><g fill="currentColor"><path d="M1033.58,876.46c-72.07,15.15-31.77,74.42-56.18,103.99-13.34,13.34-67.59-4.17-86.05,23.59-10.57,17.94-19.37,52.05-28.35,72.88-33.31,90.09-129.78,143.79-225.21,145.4-95.42-1.61-191.89-55.31-225.2-145.4-8.99-20.82-17.78-54.93-28.35-72.88-18.46-27.76-72.72-10.25-86.06-23.59-24.41-29.56,15.89-88.83-56.18-103.99-111.93-25.42-187.41-132.95-187.8-238.66.39-105.72,75.87-213.25,187.8-238.66,72.07-15.15,31.77-74.42,56.18-103.99,13.34-13.34,67.59,4.17,86.06-23.59,10.57-17.94,19.36-52.05,28.35-72.88,33.31-90.08,129.78-143.79,225.2-145.39,95.43,1.61,191.89,55.31,225.21,145.39,8.99,20.83,17.78,54.94,28.35,72.88,18.46,27.76,72.72,10.25,86.05,23.59,24.41,29.56-15.89,88.83,56.18,103.99,111.93,25.42,187.41,132.95,187.8,238.66-.39,105.72-75.87,213.25-187.8,238.66M1050.73,385.9c-7.01-1.7-19.64-5.89-26.59-8.37-15.2-5.43-20.19-17.12-20.48-33.26-.42-22.93,4.38-49.81-8.37-64.04-19.16-14.98-70.08-.78-89.61-19.19-9.87-5.32-21.52-56.66-29.11-74.79-39.62-93.33-136.4-153.89-238.79-152.98-102.38-.91-199.16,59.65-238.78,152.98-7.58,18.13-19.24,69.47-29.11,74.79-19.53,18.41-70.45,4.21-89.61,19.19-12.74,14.22-7.94,41.11-8.37,64.04-.3,16.13-5.29,27.83-20.48,33.26-6.95,2.48-19.58,6.67-26.59,8.37-93.79,24.23-163.77,101.3-183.79,193.59-4.44,19.32-6.52,38.88-6.31,58.3-.21,19.42,1.87,38.98,6.31,58.3,20.02,92.29,90,169.36,183.79,193.59,7.01,1.7,19.64,5.89,26.59,8.37,15.2,5.43,20.19,17.12,20.48,33.25.42,22.93-4.38,49.82,8.37,64.04,19.16,14.98,70.08.78,89.61,19.19,9.87,5.33,21.52,56.66,29.11,74.79,39.62,93.33,136.4,153.89,238.78,152.98,102.39.91,199.16-59.65,238.79-152.98,7.58-18.13,19.24-69.46,29.11-74.79,19.53-18.41,70.45-4.21,89.61-19.19,12.74-14.22,7.94-41.11,8.37-64.04.3-16.13,5.29-27.82,20.48-33.25,6.95-2.48,19.58-6.67,26.59-8.37,93.79-24.23,163.77-101.3,183.79-193.59,4.44-19.32,6.52-38.88,6.31-58.3.21-19.42-1.87-38.98-6.31-58.3-20.02-92.29-90-169.36-183.79-193.59"/><path d="M1212.51,791.34c-103.65,156.3-185.3,90.41-185.3,144.22,0,17.45,6.51,65.57-7.8,80.36-22.56,21.56-82.63,1.84-100.26,15.48-7.85,6.07-9.57,24.6-13.9,40.26-18.19,65.03-67.15,114.84-128.41,150.03-42.52,25.89-90.81,37.53-139.05,36.94-48.24.59-96.54-11.05-139.05-36.94-61.26-35.2-110.22-85.01-128.41-150.03-4.32-15.66-6.05-34.19-13.9-40.26-17.63-13.64-77.7,6.08-100.27-15.48-14.29-14.79-7.79-62.91-7.79-80.36,0-53.81-81.66,12.08-185.31-144.22-30.8-46.56-45.2-100.2-44.89-153.54-.31-53.34,14.1-106.98,44.89-153.54,103.65-156.3,185.31-90.41,185.31-144.22,0-17.45-6.51-65.57,7.79-80.36,22.56-21.57,82.63-1.84,100.27-15.48,7.85-6.07,9.57-24.6,13.9-40.26,18.19-65.02,67.15-114.83,128.41-150.03,42.51-25.89,90.81-37.53,139.05-36.94,48.24-.59,96.53,11.05,139.05,36.94,61.26,35.2,110.22,85.01,128.41,150.03,4.32,15.66,6.05,34.19,13.9,40.26,17.63,13.64,77.7-6.08,100.26,15.48,14.3,14.78,7.8,62.91,7.8,80.36,0,53.81,81.66-12.08,185.3,144.22,30.8,46.56,45.2,100.2,44.89,153.54.31,53.34-14.09,106.98-44.89,153.54M1275.59,633.83c0-131.41-77.92-260.65-229.68-286.61-1.69-121.85,12.94-111.71-112.6-114.09C905.28,81.3,771.24,1,637.8,0c-133.45,1-267.48,81.3-295.52,233.12-125.55,2.38-110.91-7.75-112.6,114.09C77.92,373.18,0,502.42,0,633.83c0,1.33,0,2.66.02,3.97-.02,1.31-.02,2.64-.02,3.97,0,131.41,77.92,260.65,229.68,286.61,1.69,121.85-12.95,111.72,112.6,114.09,28.03,151.82,162.07,232.13,295.52,233.12,133.45-1,267.48-81.3,295.52-233.12,125.54-2.38,110.91,7.75,112.6-114.09,151.76-25.96,229.68-155.2,229.68-286.61,0-1.33,0-2.66-.03-3.97.03-1.31.03-2.64.03-3.97"/><path d="M926.83,945.79c-7.69,2.2-16.37,2.6-24.39,2.6-32.87,0-62.1-16.17-92.07-51.02-30.83-34.85-48.77-80.53-63.21-117.25-6.56-16.72-12.25-31.16-18.29-42.65l-2.28-4.33-4.82.78c-10.05,1.68-23.54,2.49-41.27,2.49-12.52,0-35.58-.65-44.11-2.44l-8.16-1.68v82.18c0,7.4.08,15.96.27,26.09.24,14.6.7,23.29,1.27,38.3.19,9.3.97,17.29,2.33,24.31-.4-.08-.81-.19-1.22-.27-18.15-3.93-36.31-9.46-53.79-16.91.25-2.14.46-4.39.68-6.77,1.44-19.65,2.33-39.71,2.33-64.75v-108.85c17.37-5.37,33.49-12.63,48.12-21.73v39l6.04.68c6.53.71,12.25.71,36.2.71,85.14,0,133.96-36.45,133.96-99.96,0-55.71-32.37-85.96-92.79-94.22-8.97-1.22-18.67-1.84-28.86-1.84s-17.37.49-23.25,1.57c-22.03,4.12-27.32,12.02-28.92,30.14-1.92,16.34-2.28,30.57-2.36,47.83-11.9,19.27-28.07,34.22-48.15,44.6v-12.63c0-25.03-.89-48.94-2.33-68.69-2.55-28.72-7.94-46.69-19.21-61.16,4.09.22,33.19.63,46.39.63s24.6-.54,36.09-1.08c5.61-.3,11.43-.57,17.96-.81,8.51-.3,20.32-.65,36.12-.65,4.33,0,8.86.11,13.41.3,102.15,4.36,147.86,59.39,147.86,109.62s-29.35,85.62-82.62,104.75l-7.83,2.79,4.33,7.1c4.85,7.97,10.21,19.92,16.45,33.74,16.34,36.31,38.72,86.05,79.25,128.73,17.23,17.56,34.95,35.63,60.83,50.75"/><path d="M876.15,359.6l-.3-.16c-29.32-13.44-67.03,4.46-87.51,28.17l-5.36,6.2-1.7-8.01c-5.87-27.74-24.45-37.21-32.16-39.99-12.83-4.59-26.85-2.94-33.32,3.94-3.68,3.91-4.42,9.04-2.1,14.45,3.05,7.04,6.22,10.96,9.98,12.33,4.35,1.59,8.7-.6,12.56-2.53,4.21-2.07,8.17-4,12.22-2.51,4.33,1.63,8.36,7.03,12.32,16.53,9.42,22.63-12.13,81.57-40.72,111.2l23.57,3.79c.51-.8,6.38-13.55,6.38-13.55l3.38,2.45c15.04,10.8,28.23,10.99,40.49.7l.38-.38c5.26-6.43,8.13-9.51,11.52-9.97,3.42-.46,7.77,1.54,16.51,5.74l.76.37.35-.06c5.07-.81,11.44-2.94,12.86-8.41,1.23-4.89-1.99-10.77-8.86-16.09-9.7-7.51-28.06-14.28-47.88-8.68l-8.6,2.43,3.82-8.08c13.13-27.8,41.27-74.28,82.92-73.26l.31.02c4.88.5,12.27,4.24,16.95,11.28,3.05,4.54,4.05,9.54,2.82,14.07l-.14.52-.27.47c-.24.4-.44.73-.64,1.03l-1.9,2.86-3.13-1.39c-11.7-5.17-20.43-5-24.6.48-4.05,5.32-2.41,14.91,3.71,21.83,3.03,3.44,14.24,13.85,31.93,3.6l.07-.05c11.4-7.67,17.6-19.89,17.01-33.52-.67-15.41-9.95-30.26-23.65-37.83"/><path d="M745.89,930.63c-7.39-.97-13.77-1.81-18.23-3.53-26.44-10.77-56.59-44.19-45.77-74.24l.18-.51.31-.44c2.12-3.04,2.68-6.18,1.52-8.41-.71-1.36-1.96-2.11-3.51-2.11-2.25,0-4.85,1.49-7.32,4.2-8.32,9.15-12.31,20.39-11.57,32.51.97,15.62,9.52,31.43,23.46,43.39l9.78,8.39-12.82-1.26c-8.06-.79-16.29-1.9-24.48-3.29-2.68-.47-5.34-.94-7.99-1.46-2.23-.4-4.44-.88-6.69-1.38l-1.13-.25c-19.36-4.19-37.71-9.96-54.59-17.16-1.13-.45-2.35-.96-3.55-1.5-2.05-.93-4.1-1.86-6.13-2.82l-1.7-.81c-.58-.28-1.15-.56-1.74-.83-20.27-9.97-38.3-22.17-53.64-36.33-12.84-11.87-31.96-50.71-27.49-66.56,1.16-4.11,3.88-6.78,7.67-7.53,25.08-4.93,36.88-13.39,35.08-25.12-2.15-14.14-13.74-16.25-20.45-16.25-14.82,0-31.45,9.75-40.45,23.72-7.01,10.89-12.94,29.23-1.32,54.83l5.96,13.14-11.95-8.1c-11.77-7.98-26.2-12.2-41.75-12.2-22.06,0-42.91,8.51-57.19,23.36-13.66,14.2-20.43,33.35-19.57,55.36.61,15.23,15.08,36.68,45.34,36.68,11.38,0,23.54-4.38,23.54-16.69,0-7.31-10.38-14.76-20.57-14.76-3.15,0-7.72.73-11.54,4.22-2.74,2.49-5.3,3.69-7.81,3.69-1.9,0-5.41-.74-7.47-5.66-4.41-10.56.09-37.31,10-47.35,10.18-10.35,23-15.6,38.09-15.6,28.3,0,64.54,18.41,110.77,56.31l5.73,4.7-7.05,2.31c-5.94,1.94-11.04,2.77-15.96,3.56-8.87,1.44-16.52,2.67-26.48,10.55l-.61.4c-7.1,3.79-18.2,22.68-16.22,33.87.68,3.81,2.82,5.83,6.92,6.48,4.45-.21,9.39-5.68,13.37-10.08,1.33-1.47,2.61-2.88,3.82-4.09l.38-.38.47-.27c2.65-1.53,5.54-2.3,8.58-2.3,5.56.02,10.76,2.54,15.78,4.99,5.86,2.85,11.46,5.47,16.66,4.11l.62-.11c9.27-.9,10.96-4.39,13.74-10.15,1.75-3.62,3.74-7.72,7.78-11.65,2.58-3.01,6.97-3.01,8.44-3.01,7.65,0,20.77,3.7,37.37,8.39,27.85,7.87,65.99,18.65,101.95,18.65,5.31,0,10.41-.23,15.2-.69l.55-.05.54.1c4.62.81,18.66,3.27,31.73,3.27,14.29,0,20.4-2.88,22.99-5.45,2.29-4.49,2.78-8.04,1.48-10.57-3.43-6.63-19.42-8.73-31.09-10.27"/><path d="M680.5,537.88c-6.2,0-11.36.2-15.76.63l-1.13.11-.09,1.13c-2.55,31.68-11.01,51.31-23.82,72.72-15.14,25.29-36.76,43.99-64.27,55.56-21.71,9.24-47.06,13.93-75.37,13.93h-8.44c-45.43.12-66.08.18-69.33-32.6-1.13-11.45-1.64-41.9-1.64-59.86v-164.36c0-19.13,0-31.76,1.65-48.9,1.77-23.59,11.62-30.45,73.43-30.45,97.13,0,161.53,58.07,168.08,151.55l.09,1.3,1.29-.04c7.31-.2,17.32-.43,29.93-.43,2.13,0,4.31.03,6.53.08l1.49.04-.11-1.48c-3.68-52.62-25.58-96.59-63.34-127.14-35.99-29.15-85.58-45.2-139.64-45.2-18.9,0-34.65,1.01-49.89,1.98-14.89.95-28.96,1.84-45.33,1.84-9.64,0-17.43-.91-23.7-1.64-2.15-.25-4.15-.46-6.09-.65l-2.71-.27,1.42,2.32c7.14,11.71,10.78,26.17,12.54,49.91,1,16.83,1.62,40.34,1.62,61.34v144.77c0,21.04-.62,44.51-1.62,61.25-1.76,23.82-5.4,38.3-12.54,50.01l-1.39,2.28,2.66-.23c1.58-.13,3.22-.32,4.94-.52l1.39-.16c6.64-.75,14.17-1.59,23.47-1.59,9.78,0,20.55.93,33.01,2.01l1.16.1c17.22,1.48,38.66,3.34,64.87,3.34,24.13,0,47-3.04,67.98-9.02,22.34-6.34,42.52-15.94,59.98-28.55,42.2-30.37,65.3-70.49,70.63-122.63l.14-1.35-1.35-.13c-6.55-.65-13.54-.98-20.76-.98"/></g></symbol>
+      <symbol id="arrow" viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+      <symbol id="play" viewBox="0 0 12 12"><path d="M2 1.2v9.6L10.5 6z" fill="currentColor"/></symbol>
+      <symbol id="strand" viewBox="0 0 18 400" preserveAspectRatio="none">
+        <path d="M9 0v400" stroke="currentColor" stroke-width="1" opacity=".7"/>
+        <g fill="currentColor">
+          <circle cx="9" cy="30" r="5"/><circle cx="9" cy="62" r="4"/><circle cx="9" cy="92" r="5"/><circle cx="9" cy="124" r="4"/>
+          <circle cx="9" cy="156" r="5"/><circle cx="9" cy="188" r="4"/><circle cx="9" cy="220" r="5"/><circle cx="9" cy="252" r="4"/>
+          <circle cx="9" cy="284" r="5"/><circle cx="9" cy="316" r="4"/><circle cx="9" cy="348" r="5"/>
+        </g>
+        <path d="M9 372c-5 6-5 14 0 22 5-8 5-16 0-22z" fill="oklch(62% 0.18 30)"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <a class="skip" href="#adat">Skip to the exhibition</a>
+
+  <header class="bar">
+    <a class="bar__home" href="#top" aria-label="Back to the foyer">
+      <svg aria-hidden="true"><use href="#monogram"/></svg>
+      <span class="bar__names">D&amp;R</span>
+    </a>
+    <p class="bar__where" aria-hidden="true" data-where-label><b>Foyer</b></p>
+    <button class="switch" type="button" aria-pressed="false" data-theme-toggle>
+      <span class="switch__plate" aria-hidden="true"><span class="switch__lever"></span></span>
+      <span class="sr-only">Gallery lights off (dark mode)</span>
+    </button>
   </header>
 
   <main>
-    <section class="hero" aria-labelledby="main-title">
-      <div class="hero-inner reveal">
-        <div class="monogram">
-          <img src="https://lh3.googleusercontent.com/d/1oU00qLnMYi6Vakx9DOzMJk2Rez5v38Ek=w1000" alt="Dita and Rafli monogram">
+    <!-- ============ FOYER ============ -->
+    <section class="foyer" id="top" data-where="Foyer" aria-labelledby="title">
+      <div class="foyer__head">
+        <svg class="foyer__mono" viewBox="0 0 1275.59 1275.59" role="img" aria-label="Dita and Rafli monogram"><use href="#monogram"/></svg>
+        <p class="kicker">A digital photo exhibition</p>
+        <h1 id="title"><span class="of">Prewedding of</span> Dita dan Rafli</h1>
+        <p class="foyer__intro">Eight visual stories about where we come from, how we met, and the worlds we wanted to explore together.</p>
+      </div>
+
+      <div class="window">
+        <img src="assets/art/foyer-900.webp" srcset="assets/art/foyer-900.webp 900w, assets/art/foyer-1600.webp 1600w" sizes="(min-width: 1024px) 520px, 90vw" width="900" height="1350" alt="Watercolour illustration of Bugis stilt houses under a blue sky with paper lanterns rising" fetchpriority="high">
+        <div class="window__lanterns" aria-hidden="true">
+          <img src="assets/art/lanterns.webp" alt="" width="700" height="812">
         </div>
-        <p class="eyebrow">A digital photo exhibition</p>
-        <h1 id="main-title">Prewedding of Dita dan Rafli</h1>
-        <p class="hero-intro">Eight visual stories about where we come from, how we met, and the worlds we wanted to explore together.</p>
       </div>
-      <span class="scroll-cue">Enter exhibition</span>
+
+      <nav class="directory" aria-label="Exhibition directory">
+        <h2>Directory</h2>
+        <div class="directory__wing">
+          <p class="directory__wing-name">Adat</p>
+          <p class="directory__wing-sub">Where we come from</p>
+          <ol>
+            <li><a href="#bugis"><span>01</span><span class="name">Bugis-Makassar</span><span class="lead"></span><em>Rafli's roots</em></a></li>
+            <li><a href="#jawa"><span>02</span><span class="name">Jawa</span><span class="lead"></span><em>From her mother</em></a></li>
+            <li><a href="#palembang"><span>03</span><span class="name">Palembang</span><span class="lead"></span><em>From her father</em></a></li>
+          </ol>
+        </div>
+        <div class="directory__wing">
+          <p class="directory__wing-name">Non-Adat</p>
+          <p class="directory__wing-sub">Where we wander</p>
+          <ol start="4">
+            <li><a href="#woven"><span>04</span><span class="name">Woven Together</span></a></li>
+            <li><a href="#projection"><span>05</span><span class="name">Projection of Our Roots</span></a></li>
+            <li><a href="#peranakan"><span>06</span><span class="name">Peranakan</span></a></li>
+            <li><a href="#bappenas"><span>07</span><span class="name">Bappenas, Menteng</span></a></li>
+            <li><a href="#out-of-character"><span>08</span><span class="name">Out of Character</span></a></li>
+            <li><a href="#film"><span>&#9656;</span><span class="name">Epilogue: In Motion</span></a></li>
+          </ol>
+        </div>
+      </nav>
     </section>
 
-    <section class="intro reveal">
-      <h2>Our story,<br>in eight rooms.</h2>
-      <div class="intro-copy">
-        <p>Each collection holds a different part of us: the cultures carried through our families, the ordinary place where our story began, and the ideas we chose to explore simply because they felt like us.</p>
-        <p>Select any collection to enter its full album.</p>
+    <!-- ============ ADAT WING ============ -->
+    <section id="adat" aria-labelledby="adat-title">
+      <div class="door door--adat" data-where="Adat wing">
+        <div class="door__stage">
+          <div class="door__frame">
+            <div class="door__view"><img src="assets/photos/bugis-1-800.webp" width="800" height="1200" alt="" loading="lazy"></div>
+            <img src="assets/art/arch.webp" width="1400" height="986" alt="" loading="lazy">
+          </div>
+          <div class="door__text">
+            <p class="kicker">Wing I</p>
+            <h2 id="adat-title">Adat</h2>
+            <p>Where we come from</p>
+          </div>
+        </div>
       </div>
+
+      <div class="wing-intro"><p>Three rooms for three family lines: Rafli's, and both sides of Dita's.</p></div>
+      <div class="pattern-band" aria-hidden="true"></div>
+
+      <!-- Room 01: Bugis-Makassar -->
+      <article class="room room--bugis" id="bugis" data-where="Adat · 01 / 03 · <b>Bugis-Makassar</b>" aria-labelledby="bugis-title">
+        <img class="house" src="assets/art/house-bugis.webp" width="1400" height="756" alt="" loading="lazy">
+        <div class="room__inner">
+          <div class="room__plaque reveal">
+            <p class="room__no">Room 01</p>
+            <span class="room__script" lang="bug" aria-hidden="true">ᨕᨘᨁᨗ</span>
+            <h3 id="bugis-title">Bugis-Makassar</h3>
+            <span class="room__sub">Rafli's Roots</span>
+            <div class="room__story">
+              <p>This series returns to Rafli's Bugis-Makassar roots. The attire, textiles, and gestures carry a heritage passed through family, presented here not as something distant, but as a living part of who he is today.</p>
+              <p class="room__credit">Photographed by @fikriipra</p>
+            </div>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgDd1_KJTqcHTJS6udsKtA0hASVXK0JJr3grCJVy9A4Nn1Y?e=4aBprS" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Bugis-Makassar, opens OneDrive in a new tab)</span></a>
+          </div>
+          <div class="hall">
+            <figure class="photo reveal"><img src="assets/photos/bugis-1-800.webp" srcset="assets/photos/bugis-1-800.webp 800w, assets/photos/bugis-1-1600.webp 1600w" sizes="(min-width: 1024px) 34vw, (min-width: 700px) 52vw, 92vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli and Dita in magenta baju bodo and plaid lipa' sabbe, standing before tall stained-glass windows"></figure>
+            <figure class="photo reveal"><img src="assets/photos/bugis-2-800.webp" srcset="assets/photos/bugis-2-800.webp 800w, assets/photos/bugis-2-1600.webp 1600w" sizes="(min-width: 1024px) 24vw, (min-width: 700px) 42vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="The couple in a dim colonial hall beneath a crystal chandelier"></figure>
+            <figure class="photo reveal"><img src="assets/photos/bugis-4-800.webp" srcset="assets/photos/bugis-4-800.webp 800w, assets/photos/bugis-4-1600.webp 1600w" sizes="(min-width: 1024px) 24vw, (min-width: 700px) 42vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Close view of Dita's gold headpiece and flowers pinned in her hair"></figure>
+            <figure class="photo reveal"><img src="assets/photos/bugis-3-800.webp" srcset="assets/photos/bugis-3-800.webp 800w, assets/photos/bugis-3-1600.webp 1600w" sizes="(min-width: 1024px) 58vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Dita climbing a steep stairwell in magenta, seen from above"></figure>
+          </div>
+        </div>
+      </article>
+
+      <!-- Room 02: Jawa -->
+      <article class="room room--jawa" id="jawa" data-where="Adat · 02 / 03 · <b>Jawa</b>" aria-labelledby="jawa-title">
+        <span class="jasmine jasmine--l" aria-hidden="true"><svg preserveAspectRatio="none"><use href="#strand"/></svg></span>
+        <span class="jasmine jasmine--r" aria-hidden="true"><svg preserveAspectRatio="none"><use href="#strand"/></svg></span>
+        <div class="room__inner">
+          <div class="room__plaque reveal">
+            <p class="room__no">Room 02</p>
+            <span class="room__script" lang="jv" aria-hidden="true" style="font-family: 'Noto Sans Javanese', serif">ꦗꦮ</span>
+            <h3 id="jawa-title">Jawa</h3>
+            <span class="room__sub">From Her Mother</span>
+            <div class="room__story">
+              <p>Dita's Javanese roots come from her mother's side of the family. This collection honours that inheritance through the quiet elegance of Javanese dress, its details, and the sense of grace carried across generations.</p>
+              <p class="room__credit">Photographed by @azharbaizan</p>
+            </div>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgChawxCVLXoRJNTb3Hc2v_JAbyWfv0ssYr9_r9GdQLKFGA?e=yiXMC1" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Jawa, opens OneDrive in a new tab)</span></a>
+          </div>
+          <div class="triptych">
+            <figure class="photo reveal"><img src="assets/photos/jawa-2-800.webp" srcset="assets/photos/jawa-2-800.webp 800w, assets/photos/jawa-2-1600.webp 1600w" sizes="(min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli in a dark green Javanese jacket and batik, holding strands of jasmine"></figure>
+            <figure class="photo photo--center reveal"><img src="assets/photos/jawa-1-800.webp" srcset="assets/photos/jawa-1-800.webp 800w, assets/photos/jawa-1-1600.webp 1600w" sizes="(min-width: 700px) 38vw, 92vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli and Dita side by side in Javanese attire before a woven green backdrop"></figure>
+            <figure class="photo reveal"><img src="assets/photos/jawa-3-800.webp" srcset="assets/photos/jawa-3-800.webp 800w, assets/photos/jawa-3-1600.webp 1600w" sizes="(min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Dita in a green kemben and gold jewellery, jasmine falling from her hands"></figure>
+            <figure class="photo photo--detail reveal"><img src="assets/photos/jawa-4-800.webp" srcset="assets/photos/jawa-4-800.webp 800w" sizes="(min-width: 700px) 30vw, 58vw" width="800" height="1203" loading="lazy" decoding="async" alt="Dita's hand lifting long strands of jasmine"></figure>
+          </div>
+        </div>
+      </article>
+
+      <!-- Room 03: Palembang -->
+      <article class="room room--palembang room--flip" id="palembang" data-where="Adat · 03 / 03 · <b>Palembang</b>" aria-labelledby="palembang-title">
+        <img class="house" src="assets/art/house-palembang.webp" width="1400" height="756" alt="" loading="lazy">
+        <div class="room__inner">
+          <div class="room__plaque reveal">
+            <p class="room__no">Room 03</p>
+            <h3 id="palembang-title">Palembang</h3>
+            <span class="room__sub">From Her Father</span>
+            <div class="room__story">
+              <p>Through her father's side, Dita carries Palembang roots. Rich gold, structured silhouettes, and ceremonial detail become a portrait of that lineage and a tribute to the heritage at the heart of her family.</p>
+              <p class="room__credit">Photographed by @byjatidiriono</p>
+            </div>
+            <div class="prints-toggle" role="group" aria-label="Print">
+              <button type="button" aria-pressed="true" data-print="colour">Colour</button>
+              <button type="button" aria-pressed="false" data-print="sepia">Sepia</button>
+            </div>
+            <br>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgA6XKFXWqUBQIsKHjMyckVDAcH4ePiMx-l0IgbpabRVYts?e=27UhpN" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Palembang, opens OneDrive in a new tab)</span></a>
+          </div>
+          <div class="gilded">
+            <figure class="photo reveal"><div class="print">
+              <img src="assets/photos/palembang-1-800.webp" srcset="assets/photos/palembang-1-800.webp 800w, assets/photos/palembang-1-1600.webp 1600w" sizes="(min-width: 1024px) 34vw, (min-width: 700px) 55vw, 88vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli seated and Dita beside him in full gold Aesan Gede, crowns and songket">
+              <img src="assets/photos/palembang-1-sepia-800.webp" srcset="assets/photos/palembang-1-sepia-800.webp 800w, assets/photos/palembang-1-sepia-1600.webp 1600w" sizes="(min-width: 1024px) 34vw, (min-width: 700px) 55vw, 88vw" width="800" height="1200" loading="lazy" decoding="async" alt="">
+            </div></figure>
+            <figure class="photo reveal"><div class="print">
+              <img src="assets/photos/palembang-2-800.webp" sizes="(min-width: 700px) 30vw, 46vw" srcset="assets/photos/palembang-2-800.webp 800w, assets/photos/palembang-2-1600.webp 1600w" width="800" height="1200" loading="lazy" decoding="async" alt="Dita smiling beneath the tall gold Palembang crown">
+              <img src="assets/photos/palembang-2-sepia-800.webp" width="800" height="1200" loading="lazy" decoding="async" alt="">
+            </div></figure>
+            <figure class="photo reveal"><div class="print">
+              <img src="assets/photos/palembang-3-800.webp" sizes="(min-width: 700px) 30vw, 46vw" srcset="assets/photos/palembang-3-800.webp 800w, assets/photos/palembang-3-1600.webp 1600w" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli in a gold crown, Dita in profile beside him">
+              <img src="assets/photos/palembang-3-sepia-800.webp" width="800" height="1200" loading="lazy" decoding="async" alt="">
+            </div></figure>
+            <figure class="photo reveal"><div class="print">
+              <img src="assets/photos/palembang-4-800.webp" sizes="(min-width: 1024px) 58vw, 92vw" srcset="assets/photos/palembang-4-800.webp 800w, assets/photos/palembang-4-1600.webp 1600w" width="800" height="1200" loading="lazy" decoding="async" alt="A hand wearing a ring rests on gold-studded ceremonial cloth">
+              <img src="assets/photos/palembang-4-sepia-800.webp" srcset="assets/photos/palembang-4-sepia-800.webp 800w, assets/photos/palembang-4-sepia-1600.webp 1600w" sizes="(min-width: 1024px) 58vw, 92vw" width="800" height="1200" loading="lazy" decoding="async" alt="">
+            </div></figure>
+          </div>
+        </div>
+      </article>
     </section>
 
-    <header class="chapter reveal">
-      <p class="chapter-label">Chapter I · Heritage</p>
-      <h2 class="chapter-title">The roots we carry.</h2>
-    </header>
-
-    <article class="exhibit reveal">
-      <figure class="artwork"><img src="assets/bugis.jpg" alt="Rafli in Bugis-Makassar traditional attire" loading="lazy"></figure>
-      <div class="caption">
-        <span class="index">Exhibit 01 · Bugis-Makassar</span>
-        <h3>Rafli's Roots</h3>
-        <p>This series returns to Rafli's Bugis-Makassar roots. The attire, textiles, and gestures carry a heritage passed through family, presented here not as something distant, but as a living part of who he is today.</p>
-        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgDd1_KJTqcHTJS6udsKtA0hASVXK0JJr3grCJVy9A4Nn1Y?e=4aBprS" target="_blank" rel="noopener noreferrer">View collection</a>
-      </div>
-    </article>
-
-    <article class="exhibit reverse reveal">
-      <figure class="artwork"><img src="assets/jawa.jpg" alt="Dita and Rafli in Javanese traditional attire" loading="lazy"></figure>
-      <div class="caption">
-        <span class="index">Exhibit 02 · Jawa</span>
-        <h3>From Her Mother</h3>
-        <p>Dita's Javanese roots come from her mother's side of the family. This collection honours that inheritance through the quiet elegance of Javanese dress, its details, and the sense of grace carried across generations.</p>
-        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgChawxCVLXoRJNTb3Hc2v_JAbyWfv0ssYr9_r9GdQLKFGA?e=yiXMC1" target="_blank" rel="noopener noreferrer">View collection</a>
-      </div>
-    </article>
-
-    <article class="exhibit reveal">
-      <figure class="artwork"><img src="assets/palembang.jpg" alt="Dita and Rafli in Palembang traditional attire" loading="lazy"></figure>
-      <div class="caption">
-        <span class="index">Exhibit 03 · Palembang</span>
-        <h3>From Her Father</h3>
-        <p>Through her father's side, Dita carries Palembang roots. Rich gold, structured silhouettes, and ceremonial detail become a portrait of that lineage and a tribute to the heritage at the heart of her family.</p>
-        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgA6XKFXWqUBQIsKHjMyckVDAcH4ePiMx-l0IgbpabRVYts?e=27UhpN" target="_blank" rel="noopener noreferrer">View collection</a>
-      </div>
-    </article>
-
-    <div class="interlude reveal">
+    <div class="interlude" data-where="Between the wings">
       <blockquote>Different traditions do not need to look the same to belong together.</blockquote>
     </div>
 
-    <header class="chapter reveal">
-      <p class="chapter-label">Chapter II · Interpretation</p>
-      <h2 class="chapter-title">Tradition, seen through our eyes.</h2>
-    </header>
-
-    <article class="exhibit reverse reveal">
-      <figure class="artwork"><img src="assets/woven.jpg" alt="Dita and Rafli with Bugis and Palembang textiles" loading="lazy"></figure>
-      <div class="caption">
-        <span class="index">Exhibit 04 · Traditional Contemporary I</span>
-        <h3>Woven Together</h3>
-        <p>Bugis and Palembang textiles come from different traditions, each with its own patterns, techniques, and character. Yet both are bold in their use of colour, turning fabric into something expressive and unmistakably their own.</p>
-        <p>The fabrics do not need to look the same to belong together. Their differences sit side by side, complement one another, and create something even richer. In many ways, that also feels familiar to us.</p>
-        <p class="credit">Photographed by @byjatidiriono</p>
-        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgBd8dxQgKl5Srn4SjsSvvbEAW8VmqZcald88VOVsgvAP_Q?e=J2WYXr" target="_blank" rel="noopener noreferrer">View collection</a>
+    <!-- ============ NON-ADAT WING ============ -->
+    <section id="non-adat" aria-labelledby="non-adat-title">
+      <div class="door door--modern" data-where="Non-Adat wing">
+        <div class="door__stage">
+          <div class="door__frame">
+            <div class="door__view"><img src="assets/photos/woven-1-800.webp" width="800" height="534" alt="" loading="lazy"></div>
+            <div class="door__leaf" aria-hidden="true"></div>
+          </div>
+          <div class="door__text">
+            <p class="kicker">Wing II</p>
+            <h2 id="non-adat-title">Non-Adat</h2>
+            <p>Where we wander</p>
+          </div>
+        </div>
       </div>
-    </article>
 
-    <article class="exhibit reveal">
-      <figure class="artwork"><img src="assets/roots.jpg" alt="Dita and Rafli with projected traditional scripts" loading="lazy"></figure>
-      <div class="caption">
-        <span class="index">Exhibit 05 · Traditional Contemporary II</span>
-        <h3>Projection of Our Roots</h3>
-        <p>Lontara and Javanese script appear as projections of the cultural roots we carry. Beyond representing where we come from, they reflect our appreciation for traditional scripts, from their visual beauty to the way they preserve language, memory, and identity.</p>
-        <p>Cast through light, they feel less like something belonging only to the past, and more like something that continues to live with us today.</p>
-        <p class="credit">Photographed by @byjatidiriono</p>
-        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgDPHmUImkzYQbTYRf-XvKZjAbUVJNJdDTEeOwomKiT4rbg?e=N1Y1Yh" target="_blank" rel="noopener noreferrer">View collection</a>
-      </div>
-    </article>
+      <div class="wing-intro"><p>Tradition seen through our own eyes, the place we first met, and the ideas we chose simply because they felt like us.</p></div>
 
-    <article class="exhibit reverse reveal">
-      <figure class="artwork"><img src="assets/peranakan.jpg" alt="Dita and Rafli in colourful Peranakan-inspired styling" loading="lazy"></figure>
-      <div class="caption">
-        <span class="index">Exhibit 06 · Peranakan</span>
-        <h3>A Shared Appreciation</h3>
-        <p>We have always been drawn to the vibrant colours, intricate kebaya, decorative details, and food of Peranakan culture. For this series, we created our own interpretation of that visual richness.</p>
-        <p>The colour palette also takes inspiration from Taylor Swift's <em>Lover</em>, one of our favourite albums. Our families first met over a meal at a Peranakan restaurant, giving this theme a small personal connection of its own.</p>
-        <p class="credit">Photographed by @azharbaizan</p>
-        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgBtOvFoVzydSbFM6q9kkTFxARMrHGZUVGZ2VUVtxMQvdoo?e=BCGsHI" target="_blank" rel="noopener noreferrer">View collection</a>
-      </div>
-    </article>
+      <!-- Room 04: Woven Together -->
+      <article class="room room--woven" id="woven" data-where="Non-Adat · 04 / 08 · <b>Woven Together</b>" aria-labelledby="woven-title">
+        <div class="room__inner">
+          <div class="room__plaque reveal">
+            <p class="room__no">Room 04</p>
+            <h3 id="woven-title">Woven Together</h3>
+            <span class="room__sub">Traditional Contemporary I</span>
+            <div class="room__story">
+              <p>Bugis and Palembang textiles come from different traditions, each with its own patterns, techniques, and character. Yet both are bold in their use of colour, turning fabric into something expressive and unmistakably their own.</p>
+              <p>The fabrics do not need to look the same to belong together. Their differences sit side by side, complement one another, and create something even richer. In many ways, that also feels familiar to us.</p>
+              <p class="room__credit">Photographed by @byjatidiriono</p>
+            </div>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgBd8dxQgKl5Srn4SjsSvvbEAW8VmqZcald88VOVsgvAP_Q?e=J2WYXr" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Woven Together, opens OneDrive in a new tab)</span></a>
+          </div>
+          <div class="line">
+            <figure class="photo reveal"><img src="assets/photos/woven-1-800.webp" srcset="assets/photos/woven-1-800.webp 800w, assets/photos/woven-1-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Rafli and Dita peeking over a line of Bugis and Palembang textiles"></figure>
+            <figure class="photo reveal"><img src="assets/photos/woven-2-800.webp" srcset="assets/photos/woven-2-800.webp 800w, assets/photos/woven-2-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="The couple holding up a striped songket between them"></figure>
+            <figure class="photo reveal"><img src="assets/photos/woven-3-800.webp" srcset="assets/photos/woven-3-800.webp 800w, assets/photos/woven-3-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Dita seated in white with jasmine, Rafli leaning in behind her"></figure>
+            <figure class="photo reveal"><img src="assets/photos/woven-4-800.webp" srcset="assets/photos/woven-4-800.webp 800w, assets/photos/woven-4-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 58vw" width="800" height="1200" loading="lazy" decoding="async" alt="Seen from behind, the couple hold hands beneath the hanging fabrics"></figure>
+          </div>
+        </div>
+      </article>
 
-    <header class="chapter reveal">
-      <p class="chapter-label">Chapter III · Us</p>
-      <h2 class="chapter-title">Where we began, and where we played.</h2>
-    </header>
+      <!-- Room 05: Projection of Our Roots -->
+      <article class="room room--projection room--flip" id="projection" data-where="Non-Adat · 05 / 08 · <b>Projection of Our Roots</b>" aria-labelledby="projection-title">
+        <div class="glyphs" aria-hidden="true">
+          <span class="lontara">ᨀ ᨁ ᨂ ᨃ ᨄ ᨅ ᨆ ᨇ ᨈ ᨉ ᨊ ᨋ ᨀ ᨁ ᨂ ᨃ</span>
+          <span class="jawa">ꦲꦤꦕꦫꦏ ꦢꦠꦱꦮꦭ ꦥꦝꦗꦪꦚ ꦲꦤꦕꦫꦏ</span>
+          <span class="lontara">ᨌ ᨍ ᨎ ᨏ ᨐ ᨑ ᨒ ᨓ ᨔ ᨕ ᨖ ᨌ ᨍ ᨎ</span>
+        </div>
+        <div class="room__inner">
+          <div class="room__plaque reveal">
+            <p class="room__no">Room 05</p>
+            <span class="room__script" aria-hidden="true">ᨕᨘᨁᨗ · ꦗꦮ</span>
+            <h3 id="projection-title">Projection of Our Roots</h3>
+            <span class="room__sub">Traditional Contemporary II</span>
+            <div class="room__story">
+              <p>Lontara and Javanese script appear as projections of the cultural roots we carry. Beyond representing where we come from, they reflect our appreciation for traditional scripts, from their visual beauty to the way they preserve language, memory, and identity.</p>
+              <p>Cast through light, they feel less like something belonging only to the past, and more like something that continues to live with us today.</p>
+              <p class="room__credit">Photographed by @byjatidiriono</p>
+            </div>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgDPHmUImkzYQbTYRf-XvKZjAbUVJNJdDTEeOwomKiT4rbg?e=N1Y1Yh" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Projection of Our Roots, opens OneDrive in a new tab)</span></a>
+          </div>
+          <div class="dark-room">
+            <figure class="photo reveal"><img src="assets/photos/projection-1-800.webp" srcset="assets/photos/projection-1-800.webp 800w, assets/photos/projection-1-1600.webp 1600w" sizes="(min-width: 1024px) 56vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Rafli and Dita in a dark room, Lontara script projected in light on the curtain beside them"></figure>
+            <figure class="photo reveal"><img src="assets/photos/projection-2-800.webp" srcset="assets/photos/projection-2-800.webp 800w, assets/photos/projection-2-1600.webp 1600w" sizes="(min-width: 1024px) 56vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Green Javanese characters projected across the couple's faces"></figure>
+            <figure class="photo reveal"><img src="assets/photos/projection-3-800.webp" srcset="assets/photos/projection-3-800.webp 800w, assets/photos/projection-3-1600.webp 1600w" sizes="(min-width: 1024px) 28vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Script glowing on a magenta songket shawl"></figure>
+            <figure class="photo reveal"><img src="assets/photos/projection-4-800.webp" srcset="assets/photos/projection-4-800.webp 800w, assets/photos/projection-4-1600.webp 1600w" sizes="(min-width: 1024px) 28vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="The couple in silhouette, a glowing script painted across them in light"></figure>
+          </div>
+        </div>
+      </article>
 
-    <article class="exhibit reveal">
-      <figure class="artwork"><img src="assets/office.jpg" alt="Dita and Rafli near Bappenas in Menteng" loading="lazy"></figure>
-      <div class="caption">
-        <span class="index">Exhibit 07 · Bappenas, Menteng</span>
-        <h3>Where It Began</h3>
-        <p>We first knew each other as coworkers at Bappenas. Back then, Menteng was simply part of our everyday routine: the office, the streets around it, and the small conversations in between.</p>
-        <p>These photographs return us to a time when we were still getting to know each other, without knowing that this ordinary part of our lives would eventually become the beginning of us.</p>
-        <p class="credit">Photographed by @fikriipra</p>
-        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgBlGMB8CISOQaxVgBdttEFlAXq79kUHFcA7XfrtlJDH6nE?e=lmfNEu" target="_blank" rel="noopener noreferrer">View collection</a>
-      </div>
-    </article>
+      <!-- Room 06: Peranakan -->
+      <article class="room room--peranakan" id="peranakan" data-where="Non-Adat · 06 / 08 · <b>Peranakan</b>" aria-labelledby="peranakan-title">
+        <div class="room__inner">
+          <div class="room__plaque reveal">
+            <p class="room__no">Room 06</p>
+            <h3 id="peranakan-title">Peranakan</h3>
+            <span class="room__sub">A Shared Appreciation</span>
+            <div class="room__story">
+              <p>We have always been drawn to the vibrant colours, intricate kebaya, decorative details, and food of Peranakan culture. For this series, we created our own interpretation of that visual richness.</p>
+              <p>The colour palette also takes inspiration from Taylor Swift's <em>Lover</em>, one of our favourite albums. Our families first met over a meal at a Peranakan restaurant, giving this theme a small personal connection of its own.</p>
+              <p class="room__credit">Photographed by @azharbaizan</p>
+            </div>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgBtOvFoVzydSbFM6q9kkTFxARMrHGZUVGZ2VUVtxMQvdoo?e=BCGsHI" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Peranakan, opens OneDrive in a new tab)</span></a>
+          </div>
+          <div class="table">
+            <figure class="photo reveal"><img src="assets/photos/peranakan-1-800.webp" srcset="assets/photos/peranakan-1-800.webp 800w, assets/photos/peranakan-1-1600.webp 1600w" sizes="(min-width: 1024px) 24vw, (min-width: 700px) 38vw, 92vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli and Dita behind a laden table of fruit, flowers and Peranakan porcelain in a blue dining room"></figure>
+            <figure class="photo reveal"><img src="assets/photos/peranakan-2-800.webp" srcset="assets/photos/peranakan-2-800.webp 800w, assets/photos/peranakan-2-1600.webp 1600w" sizes="(min-width: 1024px) 17vw, (min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Dita in a floral pink kebaya holding a paper fan and bouquet"></figure>
+            <figure class="photo reveal"><img src="assets/photos/peranakan-3-800.webp" srcset="assets/photos/peranakan-3-800.webp 800w, assets/photos/peranakan-3-1600.webp 1600w" sizes="(min-width: 1024px) 58vw, 92vw" width="800" height="1202" loading="lazy" decoding="async" alt="A table spread of kueh, oranges and patterned bowls"></figure>
+            <figure class="photo reveal"><img src="assets/photos/peranakan-4-800.webp" srcset="assets/photos/peranakan-4-800.webp 800w, assets/photos/peranakan-4-1600.webp 1600w" sizes="(min-width: 1024px) 17vw, (min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Dita hides a smile behind her fan as Rafli leans close"></figure>
+          </div>
+        </div>
+      </article>
 
-    <article class="exhibit reverse reveal">
-      <figure class="artwork"><img src="assets/midcentury.jpg" alt="Dita and Rafli in a mid-century inspired setting" loading="lazy"></figure>
-      <div class="caption">
-        <span class="index">Exhibit 08 · Mid-Century</span>
-        <h3>Out of Character</h3>
-        <p>For this series, we tried something people would not normally expect from us. The mid-century styling, colours, and setting gave us a chance to step outside our usual character and play with a completely different idea.</p>
-        <p>Not every image had to explain who we already are. Some could simply be about curiosity, experimentation, and seeing ourselves in a new way.</p>
-        <p class="credit">Photographed by @azharbaizan</p>
-        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgDtcc7u4t8lQI6hPx7mCob8AWHVm1dGVN_BELtdTV0W510?e=gmKwUw" target="_blank" rel="noopener noreferrer">View collection</a>
-      </div>
-    </article>
+      <!-- Room 07: Bappenas, Menteng -->
+      <article class="room room--bappenas room--flip" id="bappenas" data-where="Non-Adat · 07 / 08 · <b>Bappenas, Menteng</b>" aria-labelledby="bappenas-title">
+        <div class="room__inner">
+          <div class="room__plaque reveal">
+            <p class="room__no">Room 07</p>
+            <span class="sign" aria-hidden="true">Bappenas · Menteng</span>
+            <h3 id="bappenas-title">Where It Began</h3>
+            <span class="room__sub">Bappenas, Menteng</span>
+            <div class="room__story">
+              <p>We first knew each other as coworkers at Bappenas. Back then, Menteng was simply part of our everyday routine: the office, the streets around it, and the small conversations in between.</p>
+              <p>These photographs return us to a time when we were still getting to know each other, without knowing that this ordinary part of our lives would eventually become the beginning of us.</p>
+              <p class="room__credit">Photographed by @fikriipra</p>
+            </div>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgBlGMB8CISOQaxVgBdttEFlAXq79kUHFcA7XfrtlJDH6nE?e=lmfNEu" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Bappenas, Menteng, opens OneDrive in a new tab)</span></a>
+          </div>
+          <div class="strip">
+            <figure class="photo reveal"><img src="assets/photos/bappenas-1-800.webp" srcset="assets/photos/bappenas-1-800.webp 800w, assets/photos/bappenas-1-1600.webp 1600w" sizes="(min-width: 1024px) 22vw, (min-width: 700px) 38vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli and Dita in office wear with lanyards, making a heart with their hands outside the Bappenas building"><figcaption aria-hidden="true">07A</figcaption></figure>
+            <figure class="photo reveal"><img src="assets/photos/bappenas-3-800.webp" srcset="assets/photos/bappenas-3-800.webp 800w, assets/photos/bappenas-3-1600.webp 1600w" sizes="(min-width: 1024px) 22vw, (min-width: 700px) 38vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="The two waiting together at a green-roofed bus stop"><figcaption aria-hidden="true">07B</figcaption></figure>
+            <figure class="photo reveal"><img src="assets/photos/bappenas-2-800.webp" srcset="assets/photos/bappenas-2-800.webp 800w, assets/photos/bappenas-2-1600.webp 1600w" sizes="(min-width: 1024px) 34vw, (min-width: 700px) 55vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Dita swinging high in a Menteng park while Rafli laughs beside her"><figcaption aria-hidden="true">07C</figcaption></figure>
+            <figure class="photo reveal"><img src="assets/photos/bappenas-4-800.webp" srcset="assets/photos/bappenas-4-800.webp 800w, assets/photos/bappenas-4-1600.webp 1600w" sizes="(min-width: 1024px) 58vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Two hands linked by the little fingers against dark office jackets"><figcaption aria-hidden="true">07D</figcaption></figure>
+          </div>
+        </div>
+      </article>
 
-    <section class="film reveal" aria-labelledby="film-title">
-      <div class="film-inner">
-        <p class="eyebrow">Epilogue</p>
+      <!-- Room 08: Out of Character -->
+      <article class="room room--ooc" id="out-of-character" data-where="Non-Adat · 08 / 08 · <b>Out of Character</b>" aria-labelledby="ooc-title">
+        <div class="room__inner">
+          <div class="room__plaque reveal">
+            <p class="room__no">Room 08</p>
+            <h3 id="ooc-title">Out of Character</h3>
+            <span class="room__sub">Mid-Century</span>
+            <div class="room__story">
+              <p>For this series, we tried something people would not normally expect from us. The mid-century styling, colours, and setting gave us a chance to step outside our usual character and play with a completely different idea.</p>
+              <p>Not every image had to explain who we already are. Some could simply be about curiosity, experimentation, and seeing ourselves in a new way.</p>
+              <p class="room__credit">Photographed by @azharbaizan</p>
+            </div>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgDtcc7u4t8lQI6hPx7mCob8AWHVm1dGVN_BELtdTV0W510?e=gmKwUw" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Out of Character, opens OneDrive in a new tab)</span></a>
+          </div>
+          <div class="collage">
+            <figure class="photo reveal"><img src="assets/photos/ooc-1-800.webp" srcset="assets/photos/ooc-1-800.webp 800w, assets/photos/ooc-1-1600.webp 1600w" sizes="(min-width: 1024px) 29vw, (min-width: 700px) 46vw, 76vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli and Dita face to face in soft focus, city lights behind them at night"></figure>
+            <figure class="photo reveal"><img src="assets/photos/ooc-2-800.webp" srcset="assets/photos/ooc-2-800.webp 800w, assets/photos/ooc-2-1600.webp 1600w" sizes="(min-width: 1024px) 29vw, (min-width: 700px) 46vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="The couple dancing in a warm-lit hotel room, Dita in a tartan shawl"></figure>
+            <figure class="photo reveal"><img src="assets/photos/ooc-3-800.webp" srcset="assets/photos/ooc-3-800.webp 800w, assets/photos/ooc-3-1600.webp 1600w" sizes="(min-width: 1024px) 20vw, (min-width: 700px) 30vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Laughing on the bed as confetti falls around them"></figure>
+            <figure class="photo reveal"><img src="assets/photos/ooc-4-800.webp" srcset="assets/photos/ooc-4-800.webp 800w, assets/photos/ooc-4-1600.webp 1600w" sizes="(min-width: 1024px) 29vw, (min-width: 700px) 46vw, 92vw" width="800" height="533" loading="lazy" decoding="async" alt="Side by side at a table of mahjong tiles, chins resting on their hands"></figure>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============ EPILOGUE ============ -->
+    <section class="epilogue" id="film" data-where="Epilogue · <b>In Motion</b>" aria-labelledby="film-title">
+      <img src="assets/photos/film-800.webp" srcset="assets/photos/film-800.webp 800w, assets/photos/film-1600.webp 1600w" sizes="100vw" width="800" height="1203" alt="" loading="lazy" decoding="async">
+      <div class="reveal">
+        <p class="kicker">Epilogue</p>
         <h2 id="film-title">In Motion</h2>
         <p>The still photographs end here. The story continues in our prewedding film.</p>
-        <a class="view-link" href="https://1drv.ms/a/c/22beffb20649113e/IgCZ57MmwmzLS5rkImKph78EAV7Hts1eOPCqsnLNks5LZL4?e=oogzSY" target="_blank" rel="noopener noreferrer">Watch the film</a>
+        <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgCZ57MmwmzLS5rkImKph78EAV7Hts1eOPCqsnLNks5LZL4?e=oogzSY" target="_blank" rel="noopener noreferrer"><svg class="play" aria-hidden="true"><use href="#play"/></svg> Watch the film<span class="sr-only"> (opens OneDrive in a new tab)</span></a>
       </div>
     </section>
   </main>
 
-  <footer>Dita &amp; Rafli · 2026</footer>
+  <footer class="footer">
+    <svg viewBox="0 0 1275.59 1275.59" aria-hidden="true"><use href="#monogram"/></svg>
+    <p class="names">Dita &amp; Rafli</p>
+    <p>12 · 09 · 2026</p>
+    <p class="credits">Photography by @fikriipra, @azharbaizan and @byjatidiriono. Illustrations from our wedding invitation.</p>
+  </footer>
 
-  <script>
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const items = document.querySelectorAll('.reveal');
-    if (reduceMotion || !('IntersectionObserver' in window)) {
-      items.forEach(item => item.classList.add('visible'));
-    } else {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12 });
-      items.forEach(item => observer.observe(item));
-    }
-  </script>
+  <script src="main.js" defer></script>
 </body>
 </html>
