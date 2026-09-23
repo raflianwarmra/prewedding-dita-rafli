@@ -64,10 +64,10 @@
 .mapview__mono { width: clamp(44px, 12vw, 84px); margin: 0 auto 10px; color: var(--gold); display: block; }
 .mapview h1 { font-size: clamp(2.1rem, 9.5vw, 5rem); line-height: .98; letter-spacing: -.01em; text-wrap: balance; }
 .mapview h1 .of { display: block; font-style: italic; font-size: .45em; color: var(--ink-soft); margin-bottom: .15em; }
-.mapview__intro { margin: 14px auto 0; max-width: 34ch; color: var(--ink-soft); font-size: 1.1rem; text-wrap: pretty; }
+.mapview__intro { margin: 14px auto 0; max-width: 34ch; color: var(--ink-soft); font-size: var(--fs-md); text-wrap: pretty; }
 .mapview__progress {
   display: inline-flex; align-items: center; gap: 8px;
-  margin: 10px 0 0; font-style: italic; font-size: .98rem; color: var(--accent);
+  margin: 10px 0 0; font-style: italic; font-size: var(--fs-sm); color: var(--accent);
 }
 .mapview__progress:empty { display: none; }
 .mapview__progress.is-complete::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px color-mix(in oklch, var(--gold) 30%, transparent); }
@@ -239,7 +239,7 @@
 .maq__tags { position: absolute; inset: 0; pointer-events: none; }
 .m-tag--entrance {
   position: absolute; left: 0; top: 0; transform: translate(-50%, 0);
-  font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); white-space: nowrap;
+  font-size: var(--fs-xs); letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); white-space: nowrap;
 }
 .maq.is-flying .m-tag--entrance { opacity: 0; }
 .mapview__head, .maqcard, .roomlist { transition: opacity .35s var(--ease-out); }
@@ -272,12 +272,12 @@
   background: var(--wall); border-top: 2px solid var(--accent);
   box-shadow: 0 0 0 1px var(--line), 0 24px 40px -30px oklch(25% 0.06 15 / .5);
 }
-.maqcard__wing { margin: 0 0 6px; text-align: center; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
+.maqcard__wing { margin: 0 0 6px; text-align: center; font-size: var(--fs-xs); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
 .maqcard__row { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 8px; }
 .maqcard__name { margin: 0; text-align: center; font-weight: 400; line-height: 1.05; min-height: 3.1em; display: flex; flex-direction: column; justify-content: center; }
-.maqcard__name span { font-size: .78rem; letter-spacing: .16em; color: var(--accent); font-variant-numeric: lining-nums; }
+.maqcard__name span { font-size: var(--fs-xs); letter-spacing: .16em; color: var(--accent); font-variant-numeric: lining-nums; }
 .maqcard__name b { font-weight: 400; font-size: clamp(1.6rem, 7.2vw, 2.2rem); text-wrap: balance; }
-.maqcard__name em { font-size: 1rem; color: var(--ink-soft); margin-top: 3px; }
+.maqcard__name em { font-size: var(--fs-md); color: var(--ink-soft); margin-top: 3px; }
 .maqcard__step {
   width: 44px; height: 44px; border-radius: 50%;
   display: grid; place-items: center;
@@ -295,7 +295,7 @@
   display: flex; align-items: center; justify-content: center; gap: 10px;
   width: 100%; min-height: 52px; border: 0; border-radius: 2px;
   background: var(--accent); color: var(--wall);
-  font: inherit; font-size: 1.12rem; letter-spacing: .02em; cursor: pointer;
+  font: inherit; font-size: var(--fs-md); letter-spacing: .02em; cursor: pointer;
   box-shadow: 0 14px 26px -16px color-mix(in oklch, var(--accent) 85%, transparent);
 }
 .maqcard__enter svg { width: 15px; height: 15px; transition: transform .3s var(--ease-out); }
@@ -303,19 +303,19 @@
 
 /* ---------- Room list (text alternative) ---------- */
 .roomlist { display: grid; gap: 18px; max-width: 560px; margin: 8px auto 0; width: 100%; }
-.roomlist__head { margin: 0 0 4px; font-size: 1.3rem; }
-.roomlist__head b { font-weight: 400; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); margin-right: 6px; }
-.roomlist__head span { display: block; font-style: italic; font-size: .95rem; color: var(--ink-soft); }
+.roomlist__head { margin: 0 0 4px; font-size: var(--fs-lg); }
+.roomlist__head b { font-weight: 400; font-size: var(--fs-xs); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); margin-right: 6px; }
+.roomlist__head span { display: block; font-style: italic; font-size: var(--fs-sm); color: var(--ink-soft); }
 .roomlist ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .roomlist button {
   display: flex; align-items: baseline; gap: 12px; width: 100%; min-height: 48px; padding: 10px 2px;
   border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--ink);
-  font: inherit; font-size: 1.1rem; text-align: left; cursor: pointer;
+  font: inherit; font-size: var(--fs-md); text-align: left; cursor: pointer;
 }
-.roomlist button span { width: 1.6em; flex: none; font-size: .85rem; color: var(--accent); font-variant-numeric: lining-nums tabular-nums; }
-.roomlist button em { margin-left: auto; font-size: .92rem; color: var(--ink-soft); }
+.roomlist button span { width: 1.6em; flex: none; font-size: var(--fs-xs); color: var(--accent); font-variant-numeric: lining-nums tabular-nums; }
+.roomlist button em { margin-left: auto; font-size: var(--fs-sm); color: var(--ink-soft); }
 .roomlist button:hover { color: var(--accent); }
-.roomlist button.is-visited::after { content: "Visited"; margin-left: 10px; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.roomlist button.is-visited::after { content: "Visited"; margin-left: 10px; font-size: var(--fs-xs); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
 .roomlist button.is-visited em { display: none; }
 
 /* ---------- Room page ---------- */
@@ -336,9 +336,9 @@ html:has(.roomview[open]) { overflow: hidden; }
 .curtain.is-on { visibility: visible; }
 .roomview.is-entering { background: transparent; }
 .roomview.is-entering .roomview__bar, .roomview.is-entering .roomview__body, .roomview.is-entering .roomview__nav { visibility: hidden; }
-.curtain__no { margin: 0; font-size: .8rem; letter-spacing: .32em; text-transform: uppercase; opacity: .8; }
+.curtain__no { margin: 0; font-size: var(--fs-xs); letter-spacing: .32em; text-transform: uppercase; opacity: .8; }
 .curtain__name { margin: 0; font-size: clamp(2.8rem, 13vw, 6.5rem); line-height: .98; text-wrap: balance; }
-.curtain__sub { margin: 4px 0 0; font-style: italic; font-size: clamp(1.1rem, 4.4vw, 1.6rem); opacity: .85; }
+.curtain__sub { margin: 4px 0 0; font-style: italic; font-size: var(--fs-sub); opacity: .85; }
 .curtain__rule { width: 64px; height: 1px; margin: 14px auto 0; background: currentColor; opacity: .5; transform-origin: center; }
 .roomview__bar {
   position: sticky; top: 0; z-index: 10;
@@ -350,10 +350,10 @@ html:has(.roomview[open]) { overflow: hidden; }
   display: inline-flex; align-items: center; gap: 8px;
   min-height: 44px; padding: 0 16px 0 12px;
   border: 1px solid var(--line); border-radius: 999px; background: var(--wall-2); color: var(--ink);
-  font: inherit; font-size: 1rem; cursor: pointer;
+  font: inherit; font-size: var(--fs-md); cursor: pointer;
 }
 .roomview__back svg { width: 14px; height: 14px; }
-.roomview__title { margin: 0; flex: 1; min-width: 0; text-align: right; font-size: .9rem; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.roomview__title { margin: 0; flex: 1; min-width: 0; text-align: right; font-size: var(--fs-sm); color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .roomview .room { padding-top: clamp(40px, 9vw, 96px); }
 .roomview .room__plaque { top: calc(var(--bar-h) + 40px); }
 .roomview .epilogue { min-height: calc(100svh - var(--bar-h)); }
@@ -367,8 +367,8 @@ html:has(.roomview[open]) { overflow: hidden; }
   border: 0; background: var(--wall); color: var(--ink); font: inherit; text-align: left; cursor: pointer;
   transition: background-color .25s var(--ease-out);
 }
-.roomview__step span { font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
-.roomview__step b { font-weight: 400; font-size: clamp(1.1rem, 4.6vw, 1.5rem); line-height: 1.15; }
+.roomview__step span { font-size: var(--fs-xs); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
+.roomview__step b { font-weight: 400; font-size: var(--fs-sub); line-height: 1.15; }
 .roomview__step--next { align-items: flex-end; text-align: right; }
 .roomview__step:hover { background: var(--wall-2); }
 ::view-transition-group(root) { animation-duration: .3s; }

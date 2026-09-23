@@ -15,9 +15,11 @@
   var dots = intro.querySelectorAll(".intro__dots i");
   var calm = window.matchMedia("(prefers-reduced-motion: reduce)");
   var touch = window.matchMedia("(hover: none)").matches;
-  var LAST = 3, scene = 0, timers = [], mini = null, lastFocus = null;
+  var LAST = 4, scene = 0, timers = [], mini = null, lastFocus = null;
   var outside = [document.querySelector(".bar"), document.querySelector(".mapview"), document.querySelector(".scrollview"), document.querySelector(".footer")];
 
+  function T(k, v) { return window.I18N ? I18N.t(k, v) : k; }
+  var back = intro.querySelector("[data-intro-back]");
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
   function clear() { timers.forEach(clearTimeout); timers = []; }
   function seen(v) { try { if (v) localStorage.setItem("dr-intro-seen", "1"); return localStorage.getItem("dr-intro-seen") === "1"; } catch (e) { return false; } }
@@ -81,20 +83,30 @@
     later(function () { modelBox.classList.add("is-wing-1"); }, 4100);
     if (!calm.matches) later(wings, 6200);
   }
-  function howTo() {
+  /* Step 2: a single tap previews the room. */
+  function tapOnce() {
+    var p = roomPoint("bugis"), room = mini.querySelector(".m-room--bugis");
+    if (calm.matches) { room.classList.add("is-demo"); say(T(touch ? "bubble.tap1" : "bubble.point"), p); return; }
+    later(function () { tapAt(p); room.classList.add("is-demo"); say(T(touch ? "bubble.tap1" : "bubble.point"), p); }, 500);
+    later(function () { finger.style.opacity = 0; }, 1300);
+    later(function () { quiet(); }, 3200);
+    later(tapOnce, 3500);
+  }
+  /* Step 3: a second tap walks the camera in. */
+  function tapAgain() {
     var p = roomPoint("bugis"), room = mini.querySelector(".m-room--bugis"), cam = mini.firstChild;
-    if (calm.matches) { room.classList.add("is-demo"); say(touch ? "Tap to preview, tap again to enter" : "Point to preview, click to enter", p); return; }
-    later(function () { tapAt(p); room.classList.add("is-demo"); say(touch ? "Tap once to preview" : "Point to preview", p); }, 500);
-    later(function () { tapAt(p); say(touch ? "Tap again to step inside" : "Click to step inside", p); }, 2300);
+    room.classList.add("is-demo");
+    if (calm.matches) { say(T(touch ? "bubble.tap2" : "bubble.click"), p); return; }
+    later(function () { tapAt(p); say(T(touch ? "bubble.tap2" : "bubble.click"), p); }, 600);
     later(function () {
       bubble.classList.remove("is-on"); finger.style.opacity = 0;
       var c = cam.getBoundingClientRect(), f = room.querySelector(".m-floor").getBoundingClientRect();
       cam.style.transformOrigin = (f.left + f.width / 2 - c.left) + "px " + (f.top + f.height / 2 - c.top) + "px";
       cam.animate([{ transform: "none", opacity: 1 }, { transform: "rotate(20deg) scale(2.6)", opacity: 1, offset: .75 }, { transform: "rotate(20deg) scale(3)", opacity: 0 }],
         { duration: 1500, easing: "cubic-bezier(.55,0,.25,1)", fill: "forwards" });
-    }, 3200);
-    later(function () { quiet(); }, 4900);
-    later(howTo, 5300);
+    }, 1700);
+    later(function () { quiet(); }, 3500);
+    later(tapAgain, 3900);
   }
   function inside() {
     var cta = intro.querySelector(".intro__card-cta");
@@ -113,12 +125,17 @@
     intro.dataset.scene = n;
     steps.forEach(function (s) { s.classList.toggle("is-active", +s.dataset.introStep === n); });
     dots.forEach(function (d, i) { d.classList.toggle("is-on", i === n); });
-    next.textContent = n === 0 ? "Begin" : n < LAST ? "Next" : "Enter the exhibition";
-    if (n === 1 || n === 2) { buildMini(); requestAnimationFrame(fitMini); }
+    labelNext();
+    back.hidden = n === 0;
+    if (n >= 1 && n <= 3) { buildMini(); requestAnimationFrame(fitMini); }
     if (n === 1) later(wings, 300);
-    if (n === 2) later(howTo, 500);
-    if (n === 3) inside();
+    if (n === 2) later(tapOnce, 400);
+    if (n === 3) later(tapAgain, 400);
+    if (n === 4) inside();
   }
+
+  function labelNext() { next.textContent = T(scene === 0 ? "intro.begin" : scene < LAST ? "intro.next" : "intro.enter"); }
+  if (window.I18N) I18N.onChange(function () { labelNext(); if (!intro.hidden) go(scene); });
 
   function show(from) {
     lastFocus = document.activeElement;
@@ -151,6 +168,7 @@
   }
 
   next.addEventListener("click", function () { if (scene < LAST) go(scene + 1); else finish(); });
+  back.addEventListener("click", function () { if (scene > 0) go(scene - 1); });
   intro.querySelector("[data-intro-skip]").addEventListener("click", function () { finish(); });
   intro.querySelector("[data-intro-scroll]").addEventListener("click", function () { finish(true); });
   intro.addEventListener("keydown", function (e) {
@@ -160,7 +178,7 @@
   });
   var how = document.querySelector("[data-intro-open]");
   if (how) how.addEventListener("click", function () { show(1); });
-  window.addEventListener("resize", function () { if (!intro.hidden && mini && (scene === 1 || scene === 2)) fitMini(); });
+  window.addEventListener("resize", function () { if (!intro.hidden && mini && (scene >= 1 && scene <= 3)) fitMini(); });
 
   /* First visit to the map, arriving without a room link: open with the landing. */
   var deep = location.hash.length > 1;

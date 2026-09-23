@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Prewedding of Dita dan Rafli</title>
-  <meta name="description" content="A digital photo exhibition of Dita and Rafli's prewedding stories, in two wings: Adat and Non-Adat.">
+  <title>Prewedding Dita dan Rafli</title>
+  <meta name="description" content="Pameran foto digital prewedding Dita dan Rafli, dalam dua sayap: Adat dan Non-Adat.">
   <meta name="theme-color" content="#f6f0e6" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1c1012" media="(prefers-color-scheme: dark)">
-  <meta property="og:title" content="Prewedding of Dita dan Rafli">
-  <meta property="og:description" content="A digital photo exhibition in eight rooms.">
+  <meta property="og:title" content="Prewedding Dita dan Rafli">
+  <meta property="og:description" content="Pameran foto digital dalam delapan ruang.">
   <meta property="og:image" content="assets/photos/jawa-1-800.webp">
   <link rel="icon" href="assets/monogram.svg" type="image/svg+xml">
   <script>
@@ -19,6 +19,16 @@
       var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.dataset.theme = dark ? "dark" : "light";
       document.documentElement.classList.add("js");
+      /* Language: ?lang= wins, then the saved choice, else Indonesian. */
+      var q = new URLSearchParams(location.search).get("lang"), savedLang = null;
+      try { savedLang = localStorage.getItem("dr-lang"); } catch (e) {}
+      var lang = q === "en" || q === "id" ? q : savedLang === "en" ? "en" : "id";
+      document.documentElement.dataset.lang = lang;
+      document.documentElement.lang = lang;
+      if (lang === "en") {
+        document.documentElement.classList.add("i18n-pending");
+        setTimeout(function () { document.documentElement.classList.remove("i18n-pending"); }, 1500);
+      }
       document.documentElement.dataset.view = new URLSearchParams(location.search).get("view") === "scroll" ? "scroll" : "map";
       var introSeen = false;
       try { introSeen = localStorage.getItem("dr-intro-seen") === "1"; } catch (e) {}
@@ -53,26 +63,27 @@
     </defs>
   </svg>
 
-  <a class="skip" href="#adat">Skip to the exhibition</a>
+  <a class="skip" href="#adat" data-i18n="skip">Langsung ke pameran</a>
 
   <header class="bar">
-    <a class="bar__home" href="#top" aria-label="Back to the foyer">
+    <a class="bar__home" href="#top" aria-label="Kembali ke awal" data-i18n-attr="aria-label:bar.home">
       <svg aria-hidden="true"><use href="#monogram"/></svg>
       <span class="bar__names">D&amp;R</span>
     </a>
-    <div class="views" role="group" aria-label="View">
-      <button type="button" data-view-set="map" aria-pressed="true">Map</button>
-      <button type="button" data-view-set="scroll" aria-pressed="false">Scroll</button>
+    <div class="views" role="group" aria-label="Tampilan" data-i18n-attr="aria-label:views.label">
+      <button type="button" data-view-set="map" aria-pressed="true" data-i18n="views.map">Denah</button>
+      <button type="button" data-view-set="scroll" aria-pressed="false" data-i18n="views.scroll">Gulir</button>
     </div>
+    <button class="lang" type="button" data-lang-toggle><span aria-hidden="true">EN</span><span class="sr-only">Switch to English</span></button>
     <button class="switch" type="button" aria-pressed="false" data-theme-toggle>
       <span class="switch__plate" aria-hidden="true"><span class="switch__lever"></span></span>
       <span class="sr-only">Gallery lights off (dark mode)</span>
     </button>
   </header>
-  <p class="where" aria-hidden="true" data-where-label><b>Foyer</b></p>
+  <p class="where" aria-hidden="true" data-where-label><b>Lobi</b></p>
 
   <div class="intro" data-intro tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="intro-title" hidden>
-    <button class="intro__skip" type="button" data-intro-skip>Skip</button>
+    <button class="intro__skip" type="button" data-intro-skip data-i18n="intro.skip">Lewati</button>
     <div class="intro__visual" data-intro-visual aria-hidden="true">
       <div class="intro__hero">
         <svg class="intro__mono" viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg>
@@ -81,7 +92,7 @@
       <span class="intro__finger" data-intro-finger></span>
       <span class="intro__bubble" data-intro-bubble></span>
       <div class="intro__card">
-        <p class="intro__card-no">Room 02</p>
+        <p class="intro__card-no" data-i18n="intro.card.no">Ruang 02</p>
         <p class="intro__card-name">Jawa</p>
         <div class="intro__card-prints">
           <img src="assets/photos/jawa-1-360.webp" alt="" width="360" height="450">
@@ -89,46 +100,54 @@
           <img src="assets/photos/jawa-2-360.webp" alt="" width="360" height="450">
         </div>
         <span class="intro__card-line"></span><span class="intro__card-line is-short"></span>
-        <span class="intro__card-cta">See the full collection <svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></span>
+        <span class="intro__card-cta" data-i18n="intro.card.cta">Lihat semua foto <svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></span>
       </div>
     </div>
     <div class="intro__text">
       <div class="intro__step" data-intro-step="0">
-        <p class="kicker">A digital photo exhibition</p>
-        <h2 id="intro-title"><span class="of">Prewedding of</span> Dita dan Rafli</h2>
-        <p>Our prewedding photographs, hung as a small exhibition you can walk through on your phone.</p>
+        <p class="kicker" data-i18n="kicker">Pameran foto digital</p>
+        <h2 id="intro-title" data-i18n="title"><span class="of">Prewedding</span> Dita dan Rafli</h2>
+        <p data-i18n="intro.0.p">Foto-foto prewedding kami, dipajang sebagai pameran kecil yang bisa dijelajahi dari ponsel.</p>
       </div>
       <div class="intro__step" data-intro-step="1">
-        <p class="kicker">The exhibition</p>
-        <h2>Two wings, eight rooms.</h2>
-        <p><b>Wing I · Adat</b> holds where we come from: Rafli's Bugis-Makassar roots and both sides of Dita's family. <b>Wing II · Non-Adat</b> is where we wander: tradition through our eyes, where we met, and ideas we simply loved.</p>
+        <p class="kicker" data-i18n="intro.1.k">Pamerannya</p>
+        <h2 data-i18n="intro.1.h">Dua sayap, delapan ruang.</h2>
+        <p data-i18n="intro.1.p"><b>Sayap I · Adat</b> berisi asal-usul kami: akar Bugis-Makassar Rafli, serta keluarga ibu dan ayah Dita. <b>Sayap II · Non-Adat</b> berisi tradisi dari sudut pandang kami, kantor tempat kami bertemu, dan beberapa ide yang kami sukai.</p>
       </div>
       <div class="intro__step" data-intro-step="2">
-        <p class="kicker">How to visit</p>
-        <h2>Tap a room to see it. Tap again to step inside.</h2>
-        <p>The card under the model shows the room first. You can also use its arrows, or the list of rooms below.</p>
+        <p class="kicker" data-i18n="intro.2.k">Cara berkunjung · 1</p>
+        <h2 data-i18n="intro.2.h">Ketuk ruangan untuk melihatnya.</h2>
+        <p data-i18n="intro.2.p">Ruangan itu menyala, lalu kartu kecil menunjukkan isinya dan beberapa fotonya.</p>
       </div>
       <div class="intro__step" data-intro-step="3">
-        <p class="kicker">Inside each room</p>
-        <h2>Every room opens its full album.</h2>
-        <p>Read the story behind each theme, see its highlights, then tap <b>See the full collection</b> for every photograph. The film waits in the cinema at the end.</p>
+        <p class="kicker" data-i18n="intro.3.k">Cara berkunjung · 2</p>
+        <h2 data-i18n="intro.3.h">Ketuk sekali lagi untuk masuk.</h2>
+        <p data-i18n="intro.3.p">Bisa juga lewat tombol Masuk di kartu. Untuk kembali ke denah, ketuk panah di kiri atas.</p>
+      </div>
+      <div class="intro__step" data-intro-step="4">
+        <p class="kicker" data-i18n="intro.4.k">Di dalam ruangan</p>
+        <h2 data-i18n="intro.4.h">Setiap ruang punya album lengkapnya.</h2>
+        <p data-i18n="intro.4.p">Baca cerita di balik tiap tema, lihat foto pilihannya, lalu ketuk <b>Lihat semua foto</b> untuk membuka albumnya. Film kami diputar di bioskop, di ujung pameran.</p>
       </div>
     </div>
     <div class="intro__nav">
-      <div class="intro__dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-      <button class="intro__next" type="button" data-intro-next>Begin</button>
-      <button class="intro__alt" type="button" data-intro-scroll>Prefer scrolling? Open the simple view</button>
+      <div class="intro__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="intro__buttons">
+        <button class="intro__back" type="button" data-intro-back aria-label="Langkah sebelumnya" data-i18n-attr="aria-label:intro.back.label"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span data-i18n="intro.back">Kembali</span></button>
+        <button class="intro__next" type="button" data-intro-next>Begin</button>
+      </div>
+      <button class="intro__alt" type="button" data-intro-scroll data-i18n="intro.alt">Lebih suka menggulir? Buka tampilan sederhana</button>
     </div>
   </div>
 
   <section class="mapview" aria-labelledby="map-title">
     <div class="mapview__head">
-      <svg class="mapview__mono" viewBox="0 0 1275.59 1275.59" role="img" aria-label="Dita and Rafli monogram"><use href="#monogram"/></svg>
-      <p class="kicker">A digital photo exhibition</p>
-      <h1 id="map-title"><span class="of">Prewedding of</span> Dita dan Rafli</h1>
-      <p class="mapview__intro">A model of our exhibition in two wings. Tap a room to see it, tap again to step inside.</p>
+      <svg class="mapview__mono" viewBox="0 0 1275.59 1275.59" role="img" aria-label="Monogram Dita dan Rafli" data-i18n-attr="aria-label:mono"><use href="#monogram"/></svg>
+      <p class="kicker" data-i18n="kicker">Pameran foto digital</p>
+      <h1 id="map-title" data-i18n="title"><span class="of">Prewedding</span> Dita dan Rafli</h1>
+      <p class="mapview__intro" data-i18n="map.intro">Maket pameran kami: dua sayap, delapan ruang. Ketuk ruangan untuk melihatnya, ketuk lagi untuk masuk.</p>
       <p class="mapview__progress" data-progress aria-live="polite"></p>
-      <button class="mapview__how" type="button" data-intro-open><span aria-hidden="true">?</span> How to visit</button>
+      <button class="mapview__how" type="button" data-intro-open><span aria-hidden="true">?</span> <b data-i18n="map.how">Cara berkunjung</b></button>
     </div>
 
     <div class="maq" data-maq>
@@ -137,35 +156,46 @@
       </div>
     </div>
 
-    <section class="maqcard" data-card aria-label="Selected room">
+    <div class="peek" data-peek hidden>
+      <img class="peek__img" data-peek-img src="assets/photos/bugis-1-360.webp" alt="" width="360" height="450">
+      <div class="peek__body">
+        <p class="peek__no" data-peek-no></p>
+        <p class="peek__name" data-peek-name></p>
+        <p class="peek__desc" data-peek-desc></p>
+      </div>
+      <button class="peek__close" type="button" data-peek-close aria-label="Tutup pratinjau" data-i18n-attr="aria-label:peek.close"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+      <button class="peek__enter" type="button" data-peek-enter><span data-peek-label>Enter the room</span> <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8M8 3l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+    </div>
+
+    <section class="maqcard" data-card aria-label="Ruang terpilih" data-i18n-attr="aria-label:card.label">
       <p class="maqcard__wing" data-card-wing></p>
       <div class="maqcard__row">
-        <button class="maqcard__step" type="button" data-card-step="-1" aria-label="Previous room"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+        <button class="maqcard__step" type="button" data-card-step="-1" aria-label="Ruang sebelumnya" data-i18n-attr="aria-label:card.prev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
         <h2 class="maqcard__name" aria-live="polite"><span data-card-no></span><b data-card-name></b><em data-card-sub></em></h2>
-        <button class="maqcard__step" type="button" data-card-step="1" aria-label="Next room"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M5 2l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+        <button class="maqcard__step" type="button" data-card-step="1" aria-label="Ruang berikutnya" data-i18n-attr="aria-label:card.next"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M5 2l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
       </div>
       <div class="maqcard__prints" data-card-prints aria-hidden="true"></div>
-      <button class="maqcard__enter" type="button" data-enter>Enter the room <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8M8 3l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+      <button class="maqcard__enter" type="button" data-enter><span data-enter-label>Enter the room</span> <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8M8 3l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
     </section>
 
-    <nav class="roomlist" aria-label="All rooms">
+    <nav class="roomlist" aria-label="Semua ruang" data-i18n-attr="aria-label:rooms.label">
       <div class="roomlist__wing">
-        <p class="roomlist__head"><b>Wing I</b> Adat <span>Where we come from</span></p>
+        <p class="roomlist__head" data-i18n="list.w1"><b>Sayap I</b> Adat <span>Dari mana kami berasal</span></p>
         <ol>
-          <li><button type="button" data-room="bugis"><span>01</span>Bugis-Makassar<em>Rafli's roots</em></button></li>
-          <li><button type="button" data-room="jawa"><span>02</span>Jawa<em>From her mother</em></button></li>
-          <li><button type="button" data-room="palembang"><span>03</span>Palembang<em>From her father</em></button></li>
+          <li><button type="button" data-room="bugis"><span>01</span>Bugis-Makassar<em data-i18n="sub.bugis.s">Akar Rafli</em></button></li>
+          <li><button type="button" data-room="jawa"><span>02</span>Jawa<em data-i18n="sub.jawa.s">Dari keluarga ibu</em></button></li>
+          <li><button type="button" data-room="palembang"><span>03</span>Palembang<em data-i18n="sub.palembang.s">Dari keluarga ayah</em></button></li>
         </ol>
       </div>
       <div class="roomlist__wing">
-        <p class="roomlist__head"><b>Wing II</b> Non-Adat <span>Where we wander</span></p>
+        <p class="roomlist__head" data-i18n="list.w2"><b>Sayap II</b> Non-Adat <span>Ke mana kami melangkah</span></p>
         <ol>
           <li><button type="button" data-room="woven"><span>04</span>Woven Together</button></li>
           <li><button type="button" data-room="projection"><span>05</span>Projection of Our Roots</button></li>
           <li><button type="button" data-room="peranakan"><span>06</span>Peranakan</button></li>
           <li><button type="button" data-room="bappenas"><span>07</span>Bappenas, Menteng</button></li>
           <li><button type="button" data-room="out-of-character"><span>08</span>Out of Character</button></li>
-          <li><button type="button" data-room="film"><span>&#9656;</span>Cinema: In Motion</button></li>
+          <li><button type="button" data-room="film"><span>&#9656;</span><span data-i18n="list.film">Bioskop: In Motion</span></button></li>
         </ol>
       </div>
     </nav>
@@ -185,54 +215,54 @@
       <span class="curtain__rule"></span>
     </div>
     <header class="roomview__bar">
-      <button class="roomview__back" type="button" data-close><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Map</button>
+      <button class="roomview__back" type="button" data-close><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span data-i18n="rv.back">Denah</span></button>
       <p class="roomview__title" id="roomview-title"></p>
     </header>
     <div class="roomview__body" data-body></div>
-    <nav class="roomview__nav" aria-label="Walk to another room">
-      <button type="button" class="roomview__step" data-step="-1"><span>Previous</span><b data-prev-name></b></button>
-      <button type="button" class="roomview__step roomview__step--next" data-step="1"><span>Next</span><b data-next-name></b></button>
+    <nav class="roomview__nav" aria-label="Pindah ruang" data-i18n-attr="aria-label:rv.nav">
+      <button type="button" class="roomview__step" data-step="-1"><span data-i18n="rv.prev">Sebelumnya</span><b data-prev-name></b></button>
+      <button type="button" class="roomview__step roomview__step--next" data-step="1"><span data-i18n="rv.next">Berikutnya</span><b data-next-name></b></button>
     </nav>
   </dialog>
 
   <main class="scrollview">
     <!-- ============ FOYER ============ -->
-    <section class="foyer" id="top" data-where="Foyer" aria-labelledby="title">
+    <section class="foyer" id="top" data-where="foyer" aria-labelledby="title">
       <div class="foyer__head">
-        <svg class="foyer__mono" viewBox="0 0 1275.59 1275.59" role="img" aria-label="Dita and Rafli monogram"><use href="#monogram"/></svg>
-        <p class="kicker">A digital photo exhibition</p>
-        <h1 id="title"><span class="of">Prewedding of</span> Dita dan Rafli</h1>
-        <p class="foyer__intro">Eight visual stories about where we come from, how we met, and the worlds we wanted to explore together.</p>
+        <svg class="foyer__mono" viewBox="0 0 1275.59 1275.59" role="img" aria-label="Monogram Dita dan Rafli" data-i18n-attr="aria-label:mono"><use href="#monogram"/></svg>
+        <p class="kicker" data-i18n="kicker">Pameran foto digital</p>
+        <h1 id="title" data-i18n="title"><span class="of">Prewedding</span> Dita dan Rafli</h1>
+        <p class="foyer__intro" data-i18n="foyer.intro">Delapan cerita tentang asal kami, cara kami bertemu, dan hal-hal yang ingin kami coba bersama.</p>
       </div>
 
       <div class="window">
-        <img src="assets/art/foyer-900.webp" srcset="assets/art/foyer-900.webp 900w, assets/art/foyer-1600.webp 1600w" sizes="(min-width: 1024px) 520px, 90vw" width="900" height="1350" alt="Watercolour illustration of Bugis stilt houses under a blue sky with paper lanterns rising" fetchpriority="high">
+        <img src="assets/art/foyer-900.webp" srcset="assets/art/foyer-900.webp 900w, assets/art/foyer-1600.webp 1600w" sizes="(min-width: 1024px) 520px, 90vw" width="900" height="1350" alt="Ilustrasi cat air rumah panggung Bugis di bawah langit biru, dengan lampion kertas yang terbang" data-i18n-attr="alt:alt.0" fetchpriority="high">
         <div class="window__lanterns" aria-hidden="true">
           <img src="assets/art/lanterns.webp" alt="" width="700" height="812">
         </div>
       </div>
 
-      <nav class="directory" aria-label="Exhibition directory">
-        <h2>Directory</h2>
+      <nav class="directory" aria-label="Petunjuk pameran" data-i18n-attr="aria-label:dir.label">
+        <h2 data-i18n="dir.h">Petunjuk ruang</h2>
         <div class="directory__wing">
           <p class="directory__wing-name">Adat</p>
-          <p class="directory__wing-sub">Where we come from</p>
+          <p class="directory__wing-sub" data-i18n="wing1.sub">Dari mana kami berasal</p>
           <ol>
-            <li><a href="#bugis"><span>01</span><span class="name">Bugis-Makassar</span><span class="lead"></span><em>Rafli's roots</em></a></li>
-            <li><a href="#jawa"><span>02</span><span class="name">Jawa</span><span class="lead"></span><em>From her mother</em></a></li>
-            <li><a href="#palembang"><span>03</span><span class="name">Palembang</span><span class="lead"></span><em>From her father</em></a></li>
+            <li><a href="#bugis"><span>01</span><span class="name">Bugis-Makassar</span><span class="lead"></span><em data-i18n="sub.bugis.s">Akar Rafli</em></a></li>
+            <li><a href="#jawa"><span>02</span><span class="name">Jawa</span><span class="lead"></span><em data-i18n="sub.jawa.s">Dari keluarga ibu</em></a></li>
+            <li><a href="#palembang"><span>03</span><span class="name">Palembang</span><span class="lead"></span><em data-i18n="sub.palembang.s">Dari keluarga ayah</em></a></li>
           </ol>
         </div>
         <div class="directory__wing">
           <p class="directory__wing-name">Non-Adat</p>
-          <p class="directory__wing-sub">Where we wander</p>
+          <p class="directory__wing-sub" data-i18n="wing2.sub">Ke mana kami melangkah</p>
           <ol start="4">
             <li><a href="#woven"><span>04</span><span class="name">Woven Together</span></a></li>
             <li><a href="#projection"><span>05</span><span class="name">Projection of Our Roots</span></a></li>
             <li><a href="#peranakan"><span>06</span><span class="name">Peranakan</span></a></li>
             <li><a href="#bappenas"><span>07</span><span class="name">Bappenas, Menteng</span></a></li>
             <li><a href="#out-of-character"><span>08</span><span class="name">Out of Character</span></a></li>
-            <li><a href="#film"><span>&#9656;</span><span class="name">Epilogue: In Motion</span></a></li>
+            <li><a href="#film"><span>&#9656;</span><span class="name" data-i18n="dir.film">Epilog: In Motion</span></a></li>
           </ol>
         </div>
       </nav>
@@ -240,188 +270,188 @@
 
     <!-- ============ ADAT WING ============ -->
     <section id="adat" aria-labelledby="adat-title">
-      <div class="door door--adat" data-where="Adat wing">
+      <div class="door door--adat" data-where="wing1">
         <div class="door__stage">
           <div class="door__frame">
             <div class="door__view"><img src="assets/photos/bugis-1-800.webp" width="800" height="1200" alt="" loading="lazy"></div>
             <img src="assets/art/arch.webp" width="1400" height="986" alt="" loading="lazy">
           </div>
           <div class="door__text">
-            <p class="kicker">Wing I</p>
+            <p class="kicker" data-i18n="wing1.k">Sayap I</p>
             <h2 id="adat-title">Adat</h2>
-            <p>Where we come from</p>
+            <p data-i18n="wing1.sub">Dari mana kami berasal</p>
           </div>
         </div>
       </div>
 
-      <div class="wing-intro"><p>Three rooms for three family lines: Rafli's, and both sides of Dita's.</p></div>
+      <div class="wing-intro"><p data-i18n="wing1.intro">Tiga ruang untuk tiga garis keluarga: keluarga Rafli, serta keluarga ibu dan ayah Dita.</p></div>
       <div class="pattern-band" aria-hidden="true"></div>
 
       <!-- Room 01: Bugis-Makassar -->
-      <article class="room room--bugis" id="bugis" data-where="Adat · 01 / 03 · <b>Bugis-Makassar</b>" aria-labelledby="bugis-title">
+      <article class="room room--bugis" id="bugis" data-where="room:bugis" aria-labelledby="bugis-title">
         <img class="house" src="assets/art/house-bugis.webp" width="1400" height="756" alt="" loading="lazy">
         <div class="room__inner">
           <div class="room__plaque reveal">
-            <p class="room__no">Room 01</p>
+            <p class="room__no" data-i18n="room.no.01">Ruang 01</p>
             <span class="room__script" lang="bug" aria-hidden="true">ᨕᨘᨁᨗ</span>
             <h3 id="bugis-title">Bugis-Makassar</h3>
-            <span class="room__sub">Rafli's Roots</span>
+            <span class="room__sub" data-i18n="sub.bugis">Akar Rafli</span>
             <div class="room__story">
-              <p>This series returns to Rafli's Bugis-Makassar roots. The attire, textiles, and gestures carry a heritage passed through family, presented here not as something distant, but as a living part of who he is today.</p>
-              <p class="room__credit">Photographed by @fikriipra</p>
+              <p data-i18n="story.bugis">Seri ini kembali ke akar Bugis-Makassar Rafli. Busana, kain, dan sikap tubuhnya diwariskan keluarga, dan masih ia bawa sampai hari ini.</p>
+              <p class="room__credit"><span data-i18n="credit">Foto oleh</span> @fikriipra</p>
             </div>
-            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgDd1_KJTqcHTJS6udsKtA0hASVXK0JJr3grCJVy9A4Nn1Y?e=4aBprS" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Bugis-Makassar, opens OneDrive in a new tab)</span></a>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgDd1_KJTqcHTJS6udsKtA0hASVXK0JJr3grCJVy9A4Nn1Y?e=4aBprS" target="_blank" rel="noopener noreferrer"><span data-i18n="cta.view">Lihat semua foto</span> <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only" data-i18n="sr.bugis-makassar">(Bugis-Makassar, membuka OneDrive di tab baru)</span></a>
           </div>
           <div class="hall">
-            <figure class="photo reveal"><img src="assets/photos/bugis-1-800.webp" srcset="assets/photos/bugis-1-800.webp 800w, assets/photos/bugis-1-1600.webp 1600w" sizes="(min-width: 1024px) 34vw, (min-width: 700px) 52vw, 92vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli and Dita in magenta baju bodo and plaid lipa' sabbe, standing before tall stained-glass windows"></figure>
-            <figure class="photo reveal"><img src="assets/photos/bugis-2-800.webp" srcset="assets/photos/bugis-2-800.webp 800w, assets/photos/bugis-2-1600.webp 1600w" sizes="(min-width: 1024px) 24vw, (min-width: 700px) 42vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="The couple in a dim colonial hall beneath a crystal chandelier"></figure>
-            <figure class="photo reveal"><img src="assets/photos/bugis-4-800.webp" srcset="assets/photos/bugis-4-800.webp 800w, assets/photos/bugis-4-1600.webp 1600w" sizes="(min-width: 1024px) 24vw, (min-width: 700px) 42vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Close view of Dita's gold headpiece and flowers pinned in her hair"></figure>
-            <figure class="photo reveal"><img src="assets/photos/bugis-3-800.webp" srcset="assets/photos/bugis-3-800.webp 800w, assets/photos/bugis-3-1600.webp 1600w" sizes="(min-width: 1024px) 58vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Dita climbing a steep stairwell in magenta, seen from above"></figure>
+            <figure class="photo reveal"><img src="assets/photos/bugis-1-800.webp" srcset="assets/photos/bugis-1-800.webp 800w, assets/photos/bugis-1-1600.webp 1600w" sizes="(min-width: 1024px) 34vw, (min-width: 700px) 52vw, 92vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli dan Dita dalam baju bodo magenta dan lipa' sabbe kotak-kotak, berdiri di depan jendela kaca patri yang tinggi" data-i18n-attr="alt:alt.1"></figure>
+            <figure class="photo reveal"><img src="assets/photos/bugis-2-800.webp" srcset="assets/photos/bugis-2-800.webp 800w, assets/photos/bugis-2-1600.webp 1600w" sizes="(min-width: 1024px) 24vw, (min-width: 700px) 42vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli dan Dita di aula kolonial yang temaram, di bawah lampu gantung kristal" data-i18n-attr="alt:alt.2"></figure>
+            <figure class="photo reveal"><img src="assets/photos/bugis-4-800.webp" srcset="assets/photos/bugis-4-800.webp 800w, assets/photos/bugis-4-1600.webp 1600w" sizes="(min-width: 1024px) 24vw, (min-width: 700px) 42vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Detail hiasan kepala emas dan bunga di sanggul Dita" data-i18n-attr="alt:alt.3"></figure>
+            <figure class="photo reveal"><img src="assets/photos/bugis-3-800.webp" srcset="assets/photos/bugis-3-800.webp 800w, assets/photos/bugis-3-1600.webp 1600w" sizes="(min-width: 1024px) 58vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Dita dalam busana magenta menaiki tangga curam, dilihat dari atas" data-i18n-attr="alt:alt.4"></figure>
             <a class="continue reveal" href="https://1drv.ms/a/c/22beffb20649113e/IgDd1_KJTqcHTJS6udsKtA0hASVXK0JJr3grCJVy9A4Nn1Y?e=4aBprS" target="_blank" rel="noopener noreferrer">
-              <span class="continue__kicker">Room 01 · Bugis-Makassar</span>
-              <span class="continue__title">See the full collection</span>
-              <span class="continue__note">Every photograph from this room, on OneDrive</span>
+              <span class="continue__kicker"><span data-i18n="room.word">Ruang</span> 01 · Bugis-Makassar</span>
+              <span class="continue__title" data-i18n="cont.title">Lihat semua foto</span>
+              <span class="continue__note" data-i18n="cont.note">Semua foto dari ruang ini, di OneDrive</span>
               <span class="continue__arrow" aria-hidden="true"><svg><use href="#arrow"/></svg></span>
-              <span class="sr-only">(opens in a new tab)</span>
+              <span class="sr-only" data-i18n="cont.sr">(membuka tab baru)</span>
             </a>
           </div>
         </div>
       </article>
 
       <!-- Room 02: Jawa -->
-      <article class="room room--jawa" id="jawa" data-where="Adat · 02 / 03 · <b>Jawa</b>" aria-labelledby="jawa-title">
+      <article class="room room--jawa" id="jawa" data-where="room:jawa" aria-labelledby="jawa-title">
         <span class="jasmine jasmine--l" aria-hidden="true"><svg preserveAspectRatio="none"><use href="#strand"/></svg></span>
         <span class="jasmine jasmine--r" aria-hidden="true"><svg preserveAspectRatio="none"><use href="#strand"/></svg></span>
         <div class="room__inner">
           <div class="room__plaque reveal">
-            <p class="room__no">Room 02</p>
+            <p class="room__no" data-i18n="room.no.02">Ruang 02</p>
             <span class="room__script" lang="jv" aria-hidden="true" style="font-family: 'Noto Sans Javanese', serif">ꦗꦮ</span>
             <h3 id="jawa-title">Jawa</h3>
-            <span class="room__sub">From Her Mother</span>
+            <span class="room__sub" data-i18n="sub.jawa">Dari Keluarga Ibu</span>
             <div class="room__story">
-              <p>Dita's Javanese roots come from her mother's side of the family. This collection honours that inheritance through the quiet elegance of Javanese dress, its details, and the sense of grace carried across generations.</p>
-              <p class="room__credit">Photographed by @azharbaizan</p>
+              <p data-i18n="story.jawa">Akar Jawa Dita berasal dari keluarga ibunya. Koleksi ini untuk garis keluarga itu, lewat busana Jawa dan detail-detailnya yang tenang.</p>
+              <p class="room__credit"><span data-i18n="credit">Foto oleh</span> @azharbaizan</p>
             </div>
-            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgChawxCVLXoRJNTb3Hc2v_JAbyWfv0ssYr9_r9GdQLKFGA?e=yiXMC1" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Jawa, opens OneDrive in a new tab)</span></a>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgChawxCVLXoRJNTb3Hc2v_JAbyWfv0ssYr9_r9GdQLKFGA?e=yiXMC1" target="_blank" rel="noopener noreferrer"><span data-i18n="cta.view">Lihat semua foto</span> <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only" data-i18n="sr.jawa">(Jawa, membuka OneDrive di tab baru)</span></a>
           </div>
           <div class="triptych">
-            <figure class="photo reveal"><img src="assets/photos/jawa-2-800.webp" srcset="assets/photos/jawa-2-800.webp 800w, assets/photos/jawa-2-1600.webp 1600w" sizes="(min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli in a dark green Javanese jacket and batik, holding strands of jasmine"></figure>
-            <figure class="photo photo--center reveal"><img src="assets/photos/jawa-1-800.webp" srcset="assets/photos/jawa-1-800.webp 800w, assets/photos/jawa-1-1600.webp 1600w" sizes="(min-width: 700px) 38vw, 92vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli and Dita side by side in Javanese attire before a woven green backdrop"></figure>
-            <figure class="photo reveal"><img src="assets/photos/jawa-3-800.webp" srcset="assets/photos/jawa-3-800.webp 800w, assets/photos/jawa-3-1600.webp 1600w" sizes="(min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Dita in a green kemben and gold jewellery, jasmine falling from her hands"></figure>
-            <figure class="photo photo--detail reveal"><img src="assets/photos/jawa-4-800.webp" srcset="assets/photos/jawa-4-800.webp 800w" sizes="(min-width: 700px) 30vw, 58vw" width="800" height="1203" loading="lazy" decoding="async" alt="Dita's hand lifting long strands of jasmine"></figure>
+            <figure class="photo reveal"><img src="assets/photos/jawa-2-800.webp" srcset="assets/photos/jawa-2-800.webp 800w, assets/photos/jawa-2-1600.webp 1600w" sizes="(min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli dalam beskap hijau tua dan batik, memegang untaian melati" data-i18n-attr="alt:alt.5"></figure>
+            <figure class="photo photo--center reveal"><img src="assets/photos/jawa-1-800.webp" srcset="assets/photos/jawa-1-800.webp 800w, assets/photos/jawa-1-1600.webp 1600w" sizes="(min-width: 700px) 38vw, 92vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli dan Dita berdampingan dalam busana Jawa, dengan latar anyaman hijau" data-i18n-attr="alt:alt.6"></figure>
+            <figure class="photo reveal"><img src="assets/photos/jawa-3-800.webp" srcset="assets/photos/jawa-3-800.webp 800w, assets/photos/jawa-3-1600.webp 1600w" sizes="(min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Dita dalam kemben hijau dan perhiasan emas, untaian melati menjuntai dari tangannya" data-i18n-attr="alt:alt.7"></figure>
+            <figure class="photo photo--detail reveal"><img src="assets/photos/jawa-4-800.webp" srcset="assets/photos/jawa-4-800.webp 800w" sizes="(min-width: 700px) 30vw, 58vw" width="800" height="1203" loading="lazy" decoding="async" alt="Tangan Dita mengangkat untaian melati yang panjang" data-i18n-attr="alt:alt.8"></figure>
             <a class="continue reveal" href="https://1drv.ms/a/c/22beffb20649113e/IgChawxCVLXoRJNTb3Hc2v_JAbyWfv0ssYr9_r9GdQLKFGA?e=yiXMC1" target="_blank" rel="noopener noreferrer">
-              <span class="continue__kicker">Room 02 · Jawa</span>
-              <span class="continue__title">See the full collection</span>
-              <span class="continue__note">Every photograph from this room, on OneDrive</span>
+              <span class="continue__kicker"><span data-i18n="room.word">Ruang</span> 02 · Jawa</span>
+              <span class="continue__title" data-i18n="cont.title">Lihat semua foto</span>
+              <span class="continue__note" data-i18n="cont.note">Semua foto dari ruang ini, di OneDrive</span>
               <span class="continue__arrow" aria-hidden="true"><svg><use href="#arrow"/></svg></span>
-              <span class="sr-only">(opens in a new tab)</span>
+              <span class="sr-only" data-i18n="cont.sr">(membuka tab baru)</span>
             </a>
           </div>
         </div>
       </article>
 
       <!-- Room 03: Palembang -->
-      <article class="room room--palembang room--flip" id="palembang" data-where="Adat · 03 / 03 · <b>Palembang</b>" aria-labelledby="palembang-title">
+      <article class="room room--palembang room--flip" id="palembang" data-where="room:palembang" aria-labelledby="palembang-title">
         <img class="house" src="assets/art/house-palembang.webp" width="1400" height="756" alt="" loading="lazy">
         <div class="room__inner">
           <div class="room__plaque reveal">
-            <p class="room__no">Room 03</p>
+            <p class="room__no" data-i18n="room.no.03">Ruang 03</p>
             <h3 id="palembang-title">Palembang</h3>
-            <span class="room__sub">From Her Father</span>
+            <span class="room__sub" data-i18n="sub.palembang">Dari Keluarga Ayah</span>
             <div class="room__story">
-              <p>Through her father's side, Dita carries Palembang roots. Rich gold, structured silhouettes, and ceremonial detail become a portrait of that lineage and a tribute to the heritage at the heart of her family.</p>
-              <p class="room__credit">Photographed by @byjatidiriono</p>
+              <p data-i18n="story.palembang">Akar Palembang Dita berasal dari keluarga ayahnya. Emas, siluet busana adat yang tegas, dan mahkotanya kami potret sebagai gambaran garis keluarga itu.</p>
+              <p class="room__credit"><span data-i18n="credit">Foto oleh</span> @byjatidiriono</p>
             </div>
-            <div class="prints-toggle" role="group" aria-label="Print">
-              <button type="button" aria-pressed="true" data-print="colour">Colour</button>
+            <div class="prints-toggle" role="group" aria-label="Cetakan" data-i18n-attr="aria-label:print.label">
+              <button type="button" aria-pressed="true" data-print="colour" data-i18n="print.colour">Berwarna</button>
               <button type="button" aria-pressed="false" data-print="sepia">Sepia</button>
             </div>
             <br>
-            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgA6XKFXWqUBQIsKHjMyckVDAcH4ePiMx-l0IgbpabRVYts?e=27UhpN" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Palembang, opens OneDrive in a new tab)</span></a>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgA6XKFXWqUBQIsKHjMyckVDAcH4ePiMx-l0IgbpabRVYts?e=27UhpN" target="_blank" rel="noopener noreferrer"><span data-i18n="cta.view">Lihat semua foto</span> <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only" data-i18n="sr.palembang">(Palembang, membuka OneDrive di tab baru)</span></a>
           </div>
           <div class="gilded">
             <figure class="photo reveal"><div class="print">
-              <img src="assets/photos/palembang-1-800.webp" srcset="assets/photos/palembang-1-800.webp 800w, assets/photos/palembang-1-1600.webp 1600w" sizes="(min-width: 1024px) 34vw, (min-width: 700px) 55vw, 88vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli seated and Dita beside him in full gold Aesan Gede, crowns and songket">
+              <img src="assets/photos/palembang-1-800.webp" srcset="assets/photos/palembang-1-800.webp 800w, assets/photos/palembang-1-1600.webp 1600w" sizes="(min-width: 1024px) 34vw, (min-width: 700px) 55vw, 88vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli duduk dan Dita di sampingnya dalam Aesan Gede keemasan, lengkap dengan mahkota dan songket" data-i18n-attr="alt:alt.9">
               <img src="assets/photos/palembang-1-sepia-800.webp" srcset="assets/photos/palembang-1-sepia-800.webp 800w, assets/photos/palembang-1-sepia-1600.webp 1600w" sizes="(min-width: 1024px) 34vw, (min-width: 700px) 55vw, 88vw" width="800" height="1200" loading="lazy" decoding="async" alt="">
             </div></figure>
             <figure class="photo reveal"><div class="print">
-              <img src="assets/photos/palembang-2-800.webp" sizes="(min-width: 700px) 30vw, 46vw" srcset="assets/photos/palembang-2-800.webp 800w, assets/photos/palembang-2-1600.webp 1600w" width="800" height="1200" loading="lazy" decoding="async" alt="Dita smiling beneath the tall gold Palembang crown">
+              <img src="assets/photos/palembang-2-800.webp" sizes="(min-width: 700px) 30vw, 46vw" srcset="assets/photos/palembang-2-800.webp 800w, assets/photos/palembang-2-1600.webp 1600w" width="800" height="1200" loading="lazy" decoding="async" alt="Dita tersenyum di bawah mahkota Palembang yang tinggi keemasan" data-i18n-attr="alt:alt.10">
               <img src="assets/photos/palembang-2-sepia-800.webp" width="800" height="1200" loading="lazy" decoding="async" alt="">
             </div></figure>
             <figure class="photo reveal"><div class="print">
-              <img src="assets/photos/palembang-3-800.webp" sizes="(min-width: 700px) 30vw, 46vw" srcset="assets/photos/palembang-3-800.webp 800w, assets/photos/palembang-3-1600.webp 1600w" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli in a gold crown, Dita in profile beside him">
+              <img src="assets/photos/palembang-3-800.webp" sizes="(min-width: 700px) 30vw, 46vw" srcset="assets/photos/palembang-3-800.webp 800w, assets/photos/palembang-3-1600.webp 1600w" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli bermahkota emas, Dita dari samping di sebelahnya" data-i18n-attr="alt:alt.11">
               <img src="assets/photos/palembang-3-sepia-800.webp" width="800" height="1200" loading="lazy" decoding="async" alt="">
             </div></figure>
             <figure class="photo reveal"><div class="print">
-              <img src="assets/photos/palembang-4-800.webp" sizes="(min-width: 1024px) 58vw, 92vw" srcset="assets/photos/palembang-4-800.webp 800w, assets/photos/palembang-4-1600.webp 1600w" width="800" height="1200" loading="lazy" decoding="async" alt="A hand wearing a ring rests on gold-studded ceremonial cloth">
+              <img src="assets/photos/palembang-4-800.webp" sizes="(min-width: 1024px) 58vw, 92vw" srcset="assets/photos/palembang-4-800.webp 800w, assets/photos/palembang-4-1600.webp 1600w" width="800" height="1200" loading="lazy" decoding="async" alt="Tangan bercincin di atas kain adat bertabur emas" data-i18n-attr="alt:alt.12">
               <img src="assets/photos/palembang-4-sepia-800.webp" srcset="assets/photos/palembang-4-sepia-800.webp 800w, assets/photos/palembang-4-sepia-1600.webp 1600w" sizes="(min-width: 1024px) 58vw, 92vw" width="800" height="1200" loading="lazy" decoding="async" alt="">
             </div></figure>
             <a class="continue reveal" href="https://1drv.ms/a/c/22beffb20649113e/IgA6XKFXWqUBQIsKHjMyckVDAcH4ePiMx-l0IgbpabRVYts?e=27UhpN" target="_blank" rel="noopener noreferrer">
-              <span class="continue__kicker">Room 03 · Palembang</span>
-              <span class="continue__title">See the full collection</span>
-              <span class="continue__note">Every photograph from this room, on OneDrive</span>
+              <span class="continue__kicker"><span data-i18n="room.word">Ruang</span> 03 · Palembang</span>
+              <span class="continue__title" data-i18n="cont.title">Lihat semua foto</span>
+              <span class="continue__note" data-i18n="cont.note">Semua foto dari ruang ini, di OneDrive</span>
               <span class="continue__arrow" aria-hidden="true"><svg><use href="#arrow"/></svg></span>
-              <span class="sr-only">(opens in a new tab)</span>
+              <span class="sr-only" data-i18n="cont.sr">(membuka tab baru)</span>
             </a>
           </div>
         </div>
       </article>
     </section>
 
-    <div class="interlude" data-where="Between the wings">
-      <blockquote>Different traditions do not need to look the same to belong together.</blockquote>
+    <div class="interlude" data-where="between">
+      <blockquote data-i18n="interlude">Tradisi yang berbeda tidak harus serupa untuk bisa bersanding.</blockquote>
     </div>
 
     <!-- ============ NON-ADAT WING ============ -->
     <section id="non-adat" aria-labelledby="non-adat-title">
-      <div class="door door--modern" data-where="Non-Adat wing">
+      <div class="door door--modern" data-where="wing2">
         <div class="door__stage">
           <div class="door__frame">
             <div class="door__view"><img src="assets/photos/woven-1-800.webp" width="800" height="534" alt="" loading="lazy"></div>
             <div class="door__leaf" aria-hidden="true"></div>
           </div>
           <div class="door__text">
-            <p class="kicker">Wing II</p>
+            <p class="kicker" data-i18n="wing2.k">Sayap II</p>
             <h2 id="non-adat-title">Non-Adat</h2>
-            <p>Where we wander</p>
+            <p data-i18n="wing2.sub">Ke mana kami melangkah</p>
           </div>
         </div>
       </div>
 
-      <div class="wing-intro"><p>Tradition seen through our own eyes, the place we first met, and the ideas we chose simply because they felt like us.</p></div>
+      <div class="wing-intro"><p data-i18n="wing2.intro">Tradisi dari sudut pandang kami, tempat kami pertama bertemu, dan ide-ide yang kami pilih karena terasa seperti kami.</p></div>
 
       <!-- Room 04: Woven Together -->
-      <article class="room room--woven" id="woven" data-where="Non-Adat · 04 / 08 · <b>Woven Together</b>" aria-labelledby="woven-title">
+      <article class="room room--woven" id="woven" data-where="room:woven" aria-labelledby="woven-title">
         <div class="room__inner">
           <div class="room__plaque reveal">
-            <p class="room__no">Room 04</p>
+            <p class="room__no" data-i18n="room.no.04">Ruang 04</p>
             <h3 id="woven-title">Woven Together</h3>
-            <span class="room__sub">Traditional Contemporary I</span>
+            <span class="room__sub" data-i18n="sub.woven">Tradisional Kontemporer I</span>
             <div class="room__story">
-              <p>Bugis and Palembang textiles come from different traditions, each with its own patterns, techniques, and character. Yet both are bold in their use of colour, turning fabric into something expressive and unmistakably their own.</p>
-              <p>The fabrics do not need to look the same to belong together. Their differences sit side by side, complement one another, and create something even richer. In many ways, that also feels familiar to us.</p>
-              <p class="room__credit">Photographed by @byjatidiriono</p>
+              <p data-i18n="story.woven.1">Kain Bugis dan Palembang lahir dari tradisi yang berbeda, masing-masing dengan motif dan tekniknya sendiri. Keduanya sama-sama berani bermain warna.</p>
+              <p data-i18n="story.woven.2">Digantung berdampingan, kedua kain itu tidak sama, dan justru terlihat lebih kaya. Rasanya seperti kami berdua.</p>
+              <p class="room__credit"><span data-i18n="credit">Foto oleh</span> @byjatidiriono</p>
             </div>
-            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgBd8dxQgKl5Srn4SjsSvvbEAW8VmqZcald88VOVsgvAP_Q?e=J2WYXr" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Woven Together, opens OneDrive in a new tab)</span></a>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgBd8dxQgKl5Srn4SjsSvvbEAW8VmqZcald88VOVsgvAP_Q?e=J2WYXr" target="_blank" rel="noopener noreferrer"><span data-i18n="cta.view">Lihat semua foto</span> <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only" data-i18n="sr.woven-together">(Woven Together, membuka OneDrive di tab baru)</span></a>
           </div>
           <div class="line">
-            <figure class="photo reveal"><img src="assets/photos/woven-1-800.webp" srcset="assets/photos/woven-1-800.webp 800w, assets/photos/woven-1-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Rafli and Dita peeking over a line of Bugis and Palembang textiles"></figure>
-            <figure class="photo reveal"><img src="assets/photos/woven-2-800.webp" srcset="assets/photos/woven-2-800.webp 800w, assets/photos/woven-2-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="The couple holding up a striped songket between them"></figure>
-            <figure class="photo reveal"><img src="assets/photos/woven-3-800.webp" srcset="assets/photos/woven-3-800.webp 800w, assets/photos/woven-3-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Dita seated in white with jasmine, Rafli leaning in behind her"></figure>
-            <figure class="photo reveal"><img src="assets/photos/woven-4-800.webp" srcset="assets/photos/woven-4-800.webp 800w, assets/photos/woven-4-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 58vw" width="800" height="1200" loading="lazy" decoding="async" alt="Seen from behind, the couple hold hands beneath the hanging fabrics"></figure>
+            <figure class="photo reveal"><img src="assets/photos/woven-1-800.webp" srcset="assets/photos/woven-1-800.webp 800w, assets/photos/woven-1-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Rafli dan Dita mengintip dari balik deretan kain Bugis dan Palembang" data-i18n-attr="alt:alt.13"></figure>
+            <figure class="photo reveal"><img src="assets/photos/woven-2-800.webp" srcset="assets/photos/woven-2-800.webp 800w, assets/photos/woven-2-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli dan Dita membentangkan songket bergaris di antara mereka" data-i18n-attr="alt:alt.14"></figure>
+            <figure class="photo reveal"><img src="assets/photos/woven-3-800.webp" srcset="assets/photos/woven-3-800.webp 800w, assets/photos/woven-3-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Dita duduk berbaju putih dengan melati, Rafli mendekat dari belakang" data-i18n-attr="alt:alt.15"></figure>
+            <figure class="photo reveal"><img src="assets/photos/woven-4-800.webp" srcset="assets/photos/woven-4-800.webp 800w, assets/photos/woven-4-1600.webp 1600w" sizes="(min-width: 1024px) 18vw, (min-width: 700px) 30vw, 58vw" width="800" height="1200" loading="lazy" decoding="async" alt="Dari belakang, Rafli dan Dita bergandengan di bawah kain-kain yang tergantung" data-i18n-attr="alt:alt.16"></figure>
             <a class="continue reveal" href="https://1drv.ms/a/c/22beffb20649113e/IgBd8dxQgKl5Srn4SjsSvvbEAW8VmqZcald88VOVsgvAP_Q?e=J2WYXr" target="_blank" rel="noopener noreferrer">
-              <span class="continue__kicker">Room 04 · Woven Together</span>
-              <span class="continue__title">See the full collection</span>
-              <span class="continue__note">Every photograph from this room, on OneDrive</span>
+              <span class="continue__kicker"><span data-i18n="room.word">Ruang</span> 04 · Woven Together</span>
+              <span class="continue__title" data-i18n="cont.title">Lihat semua foto</span>
+              <span class="continue__note" data-i18n="cont.note">Semua foto dari ruang ini, di OneDrive</span>
               <span class="continue__arrow" aria-hidden="true"><svg><use href="#arrow"/></svg></span>
-              <span class="sr-only">(opens in a new tab)</span>
+              <span class="sr-only" data-i18n="cont.sr">(membuka tab baru)</span>
             </a>
           </div>
         </div>
       </article>
 
       <!-- Room 05: Projection of Our Roots -->
-      <article class="room room--projection room--flip" id="projection" data-where="Non-Adat · 05 / 08 · <b>Projection of Our Roots</b>" aria-labelledby="projection-title">
+      <article class="room room--projection room--flip" id="projection" data-where="room:projection" aria-labelledby="projection-title">
         <div class="glyphs" aria-hidden="true">
           <span class="lontara">ᨀ ᨁ ᨂ ᨃ ᨄ ᨅ ᨆ ᨇ ᨈ ᨉ ᨊ ᨋ ᨀ ᨁ ᨂ ᨃ</span>
           <span class="jawa">ꦲꦤꦕꦫꦏ ꦢꦠꦱꦮꦭ ꦥꦝꦗꦪꦚ ꦲꦤꦕꦫꦏ</span>
@@ -429,119 +459,119 @@
         </div>
         <div class="room__inner">
           <div class="room__plaque reveal">
-            <p class="room__no">Room 05</p>
+            <p class="room__no" data-i18n="room.no.05">Ruang 05</p>
             <span class="room__script" aria-hidden="true">ᨕᨘᨁᨗ · ꦗꦮ</span>
             <h3 id="projection-title">Projection of Our Roots</h3>
-            <span class="room__sub">Traditional Contemporary II</span>
+            <span class="room__sub" data-i18n="sub.projection">Tradisional Kontemporer II</span>
             <div class="room__story">
-              <p>Lontara and Javanese script appear as projections of the cultural roots we carry. Beyond representing where we come from, they reflect our appreciation for traditional scripts, from their visual beauty to the way they preserve language, memory, and identity.</p>
-              <p>Cast through light, they feel less like something belonging only to the past, and more like something that continues to live with us today.</p>
-              <p class="room__credit">Photographed by @byjatidiriono</p>
+              <p data-i18n="story.projection.1">Kami memproyeksikan aksara Lontara dan Jawa ke tubuh kami, dua aksara dari keluarga asal kami. Kami suka bentuknya, dan cara aksara menyimpan bahasa dan ingatan.</p>
+              <p data-i18n="story.projection.2">Disinari cahaya, huruf-huruf itu terasa dekat, seperti sesuatu yang masih kami pakai sehari-hari.</p>
+              <p class="room__credit"><span data-i18n="credit">Foto oleh</span> @byjatidiriono</p>
             </div>
-            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgDPHmUImkzYQbTYRf-XvKZjAbUVJNJdDTEeOwomKiT4rbg?e=N1Y1Yh" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Projection of Our Roots, opens OneDrive in a new tab)</span></a>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgDPHmUImkzYQbTYRf-XvKZjAbUVJNJdDTEeOwomKiT4rbg?e=N1Y1Yh" target="_blank" rel="noopener noreferrer"><span data-i18n="cta.view">Lihat semua foto</span> <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only" data-i18n="sr.projection-of-our-roots">(Projection of Our Roots, membuka OneDrive di tab baru)</span></a>
           </div>
           <div class="dark-room">
-            <figure class="photo reveal"><img src="assets/photos/projection-1-800.webp" srcset="assets/photos/projection-1-800.webp 800w, assets/photos/projection-1-1600.webp 1600w" sizes="(min-width: 1024px) 56vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Rafli and Dita in a dark room, Lontara script projected in light on the curtain beside them"></figure>
-            <figure class="photo reveal"><img src="assets/photos/projection-2-800.webp" srcset="assets/photos/projection-2-800.webp 800w, assets/photos/projection-2-1600.webp 1600w" sizes="(min-width: 1024px) 56vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Green Javanese characters projected across the couple's faces"></figure>
-            <figure class="photo reveal"><img src="assets/photos/projection-3-800.webp" srcset="assets/photos/projection-3-800.webp 800w, assets/photos/projection-3-1600.webp 1600w" sizes="(min-width: 1024px) 28vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Script glowing on a magenta songket shawl"></figure>
-            <figure class="photo reveal"><img src="assets/photos/projection-4-800.webp" srcset="assets/photos/projection-4-800.webp 800w, assets/photos/projection-4-1600.webp 1600w" sizes="(min-width: 1024px) 28vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="The couple in silhouette, a glowing script painted across them in light"></figure>
+            <figure class="photo reveal"><img src="assets/photos/projection-1-800.webp" srcset="assets/photos/projection-1-800.webp 800w, assets/photos/projection-1-1600.webp 1600w" sizes="(min-width: 1024px) 56vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Rafli dan Dita di ruang gelap, aksara Lontara terproyeksi di tirai sebelah mereka" data-i18n-attr="alt:alt.17"></figure>
+            <figure class="photo reveal"><img src="assets/photos/projection-2-800.webp" srcset="assets/photos/projection-2-800.webp 800w, assets/photos/projection-2-1600.webp 1600w" sizes="(min-width: 1024px) 56vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Aksara Jawa hijau terproyeksi di wajah Rafli dan Dita" data-i18n-attr="alt:alt.18"></figure>
+            <figure class="photo reveal"><img src="assets/photos/projection-3-800.webp" srcset="assets/photos/projection-3-800.webp 800w, assets/photos/projection-3-1600.webp 1600w" sizes="(min-width: 1024px) 28vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Aksara bercahaya di selendang songket magenta" data-i18n-attr="alt:alt.19"></figure>
+            <figure class="photo reveal"><img src="assets/photos/projection-4-800.webp" srcset="assets/photos/projection-4-800.webp 800w, assets/photos/projection-4-1600.webp 1600w" sizes="(min-width: 1024px) 28vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Siluet Rafli dan Dita dengan aksara bercahaya di tubuh mereka" data-i18n-attr="alt:alt.20"></figure>
             <a class="continue reveal" href="https://1drv.ms/a/c/22beffb20649113e/IgDPHmUImkzYQbTYRf-XvKZjAbUVJNJdDTEeOwomKiT4rbg?e=N1Y1Yh" target="_blank" rel="noopener noreferrer">
-              <span class="continue__kicker">Room 05 · Projection of Our Roots</span>
-              <span class="continue__title">See the full collection</span>
-              <span class="continue__note">Every photograph from this room, on OneDrive</span>
+              <span class="continue__kicker"><span data-i18n="room.word">Ruang</span> 05 · Projection of Our Roots</span>
+              <span class="continue__title" data-i18n="cont.title">Lihat semua foto</span>
+              <span class="continue__note" data-i18n="cont.note">Semua foto dari ruang ini, di OneDrive</span>
               <span class="continue__arrow" aria-hidden="true"><svg><use href="#arrow"/></svg></span>
-              <span class="sr-only">(opens in a new tab)</span>
+              <span class="sr-only" data-i18n="cont.sr">(membuka tab baru)</span>
             </a>
           </div>
         </div>
       </article>
 
       <!-- Room 06: Peranakan -->
-      <article class="room room--peranakan" id="peranakan" data-where="Non-Adat · 06 / 08 · <b>Peranakan</b>" aria-labelledby="peranakan-title">
+      <article class="room room--peranakan" id="peranakan" data-where="room:peranakan" aria-labelledby="peranakan-title">
         <div class="room__inner">
           <div class="room__plaque reveal">
-            <p class="room__no">Room 06</p>
+            <p class="room__no" data-i18n="room.no.06">Ruang 06</p>
             <h3 id="peranakan-title">Peranakan</h3>
-            <span class="room__sub">A Shared Appreciation</span>
+            <span class="room__sub" data-i18n="sub.peranakan">Kesukaan Bersama</span>
             <div class="room__story">
-              <p>We have always been drawn to the vibrant colours, intricate kebaya, decorative details, and food of Peranakan culture. For this series, we created our own interpretation of that visual richness.</p>
-              <p>The colour palette also takes inspiration from Taylor Swift's <em>Lover</em>, one of our favourite albums. Our families first met over a meal at a Peranakan restaurant, giving this theme a small personal connection of its own.</p>
-              <p class="room__credit">Photographed by @azharbaizan</p>
+              <p data-i18n="story.peranakan.1">Kami sudah lama menyukai warna, kebaya, ornamen, dan makanan Peranakan, jadi kami membuat versi kami sendiri.</p>
+              <p data-i18n="story.peranakan.2">Paletnya kami ambil dari <em>Lover</em>, album Taylor Swift favorit kami. Keluarga kami juga pertama kali bertemu saat makan di restoran Peranakan.</p>
+              <p class="room__credit"><span data-i18n="credit">Foto oleh</span> @azharbaizan</p>
             </div>
-            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgBtOvFoVzydSbFM6q9kkTFxARMrHGZUVGZ2VUVtxMQvdoo?e=BCGsHI" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Peranakan, opens OneDrive in a new tab)</span></a>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgBtOvFoVzydSbFM6q9kkTFxARMrHGZUVGZ2VUVtxMQvdoo?e=BCGsHI" target="_blank" rel="noopener noreferrer"><span data-i18n="cta.view">Lihat semua foto</span> <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only" data-i18n="sr.peranakan">(Peranakan, membuka OneDrive di tab baru)</span></a>
           </div>
           <div class="table">
-            <figure class="photo reveal"><img src="assets/photos/peranakan-1-800.webp" srcset="assets/photos/peranakan-1-800.webp 800w, assets/photos/peranakan-1-1600.webp 1600w" sizes="(min-width: 1024px) 24vw, (min-width: 700px) 38vw, 92vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli and Dita behind a laden table of fruit, flowers and Peranakan porcelain in a blue dining room"></figure>
-            <figure class="photo reveal"><img src="assets/photos/peranakan-2-800.webp" srcset="assets/photos/peranakan-2-800.webp 800w, assets/photos/peranakan-2-1600.webp 1600w" sizes="(min-width: 1024px) 17vw, (min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Dita in a floral pink kebaya holding a paper fan and bouquet"></figure>
-            <figure class="photo reveal"><img src="assets/photos/peranakan-3-800.webp" srcset="assets/photos/peranakan-3-800.webp 800w, assets/photos/peranakan-3-1600.webp 1600w" sizes="(min-width: 1024px) 58vw, 92vw" width="800" height="1202" loading="lazy" decoding="async" alt="A table spread of kueh, oranges and patterned bowls"></figure>
-            <figure class="photo reveal"><img src="assets/photos/peranakan-4-800.webp" srcset="assets/photos/peranakan-4-800.webp 800w, assets/photos/peranakan-4-1600.webp 1600w" sizes="(min-width: 1024px) 17vw, (min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Dita hides a smile behind her fan as Rafli leans close"></figure>
+            <figure class="photo reveal"><img src="assets/photos/peranakan-1-800.webp" srcset="assets/photos/peranakan-1-800.webp 800w, assets/photos/peranakan-1-1600.webp 1600w" sizes="(min-width: 1024px) 24vw, (min-width: 700px) 38vw, 92vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli dan Dita di balik meja penuh buah, bunga, dan porselen Peranakan di ruang makan biru" data-i18n-attr="alt:alt.21"></figure>
+            <figure class="photo reveal"><img src="assets/photos/peranakan-2-800.webp" srcset="assets/photos/peranakan-2-800.webp 800w, assets/photos/peranakan-2-1600.webp 1600w" sizes="(min-width: 1024px) 17vw, (min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Dita dalam kebaya merah muda bermotif bunga, memegang kipas kertas dan buket" data-i18n-attr="alt:alt.22"></figure>
+            <figure class="photo reveal"><img src="assets/photos/peranakan-3-800.webp" srcset="assets/photos/peranakan-3-800.webp 800w, assets/photos/peranakan-3-1600.webp 1600w" sizes="(min-width: 1024px) 58vw, 92vw" width="800" height="1202" loading="lazy" decoding="async" alt="Meja berisi kue, jeruk, dan mangkuk bermotif" data-i18n-attr="alt:alt.23"></figure>
+            <figure class="photo reveal"><img src="assets/photos/peranakan-4-800.webp" srcset="assets/photos/peranakan-4-800.webp 800w, assets/photos/peranakan-4-1600.webp 1600w" sizes="(min-width: 1024px) 17vw, (min-width: 700px) 28vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Dita menyembunyikan senyum di balik kipas, Rafli mendekat" data-i18n-attr="alt:alt.24"></figure>
             <a class="continue reveal" href="https://1drv.ms/a/c/22beffb20649113e/IgBtOvFoVzydSbFM6q9kkTFxARMrHGZUVGZ2VUVtxMQvdoo?e=BCGsHI" target="_blank" rel="noopener noreferrer">
-              <span class="continue__kicker">Room 06 · Peranakan</span>
-              <span class="continue__title">See the full collection</span>
-              <span class="continue__note">Every photograph from this room, on OneDrive</span>
+              <span class="continue__kicker"><span data-i18n="room.word">Ruang</span> 06 · Peranakan</span>
+              <span class="continue__title" data-i18n="cont.title">Lihat semua foto</span>
+              <span class="continue__note" data-i18n="cont.note">Semua foto dari ruang ini, di OneDrive</span>
               <span class="continue__arrow" aria-hidden="true"><svg><use href="#arrow"/></svg></span>
-              <span class="sr-only">(opens in a new tab)</span>
+              <span class="sr-only" data-i18n="cont.sr">(membuka tab baru)</span>
             </a>
           </div>
         </div>
       </article>
 
       <!-- Room 07: Bappenas, Menteng -->
-      <article class="room room--bappenas room--flip" id="bappenas" data-where="Non-Adat · 07 / 08 · <b>Bappenas, Menteng</b>" aria-labelledby="bappenas-title">
+      <article class="room room--bappenas room--flip" id="bappenas" data-where="room:bappenas" aria-labelledby="bappenas-title">
         <div class="room__inner">
           <div class="room__plaque reveal">
-            <p class="room__no">Room 07</p>
+            <p class="room__no" data-i18n="room.no.07">Ruang 07</p>
             <span class="sign" aria-hidden="true">Bappenas · Menteng</span>
             <h3 id="bappenas-title">Where It Began</h3>
             <span class="room__sub">Bappenas, Menteng</span>
             <div class="room__story">
-              <p>We first knew each other as coworkers at Bappenas. Back then, Menteng was simply part of our everyday routine: the office, the streets around it, and the small conversations in between.</p>
-              <p>These photographs return us to a time when we were still getting to know each other, without knowing that this ordinary part of our lives would eventually become the beginning of us.</p>
-              <p class="room__credit">Photographed by @fikriipra</p>
+              <p data-i18n="story.bappenas.1">Kami pertama kali saling kenal sebagai rekan kerja di Bappenas. Menteng adalah rute harian kami: kantor, jalan-jalan di sekitarnya, dan obrolan kecil di sela-selanya.</p>
+              <p data-i18n="story.bappenas.2">Foto-foto ini membawa kami kembali ke masa itu, saat kami belum tahu rutinitas biasa itu adalah awal kisah kami.</p>
+              <p class="room__credit"><span data-i18n="credit">Foto oleh</span> @fikriipra</p>
             </div>
-            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgBlGMB8CISOQaxVgBdttEFlAXq79kUHFcA7XfrtlJDH6nE?e=lmfNEu" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Bappenas, Menteng, opens OneDrive in a new tab)</span></a>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgBlGMB8CISOQaxVgBdttEFlAXq79kUHFcA7XfrtlJDH6nE?e=lmfNEu" target="_blank" rel="noopener noreferrer"><span data-i18n="cta.view">Lihat semua foto</span> <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only" data-i18n="sr.bappenas-menteng">(Bappenas, Menteng, membuka OneDrive di tab baru)</span></a>
           </div>
           <div class="strip">
-            <figure class="photo reveal"><img src="assets/photos/bappenas-1-800.webp" srcset="assets/photos/bappenas-1-800.webp 800w, assets/photos/bappenas-1-1600.webp 1600w" sizes="(min-width: 1024px) 22vw, (min-width: 700px) 38vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli and Dita in office wear with lanyards, making a heart with their hands outside the Bappenas building"><figcaption aria-hidden="true">07A</figcaption></figure>
-            <figure class="photo reveal"><img src="assets/photos/bappenas-3-800.webp" srcset="assets/photos/bappenas-3-800.webp 800w, assets/photos/bappenas-3-1600.webp 1600w" sizes="(min-width: 1024px) 22vw, (min-width: 700px) 38vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="The two waiting together at a green-roofed bus stop"><figcaption aria-hidden="true">07B</figcaption></figure>
-            <figure class="photo reveal"><img src="assets/photos/bappenas-2-800.webp" srcset="assets/photos/bappenas-2-800.webp 800w, assets/photos/bappenas-2-1600.webp 1600w" sizes="(min-width: 1024px) 34vw, (min-width: 700px) 55vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Dita swinging high in a Menteng park while Rafli laughs beside her"><figcaption aria-hidden="true">07C</figcaption></figure>
-            <figure class="photo reveal"><img src="assets/photos/bappenas-4-800.webp" srcset="assets/photos/bappenas-4-800.webp 800w, assets/photos/bappenas-4-1600.webp 1600w" sizes="(min-width: 1024px) 58vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Two hands linked by the little fingers against dark office jackets"><figcaption aria-hidden="true">07D</figcaption></figure>
+            <figure class="photo reveal"><img src="assets/photos/bappenas-1-800.webp" srcset="assets/photos/bappenas-1-800.webp 800w, assets/photos/bappenas-1-1600.webp 1600w" sizes="(min-width: 1024px) 22vw, (min-width: 700px) 38vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli dan Dita berbaju kantor dengan tanda pengenal, membentuk hati dengan tangan di depan gedung Bappenas" data-i18n-attr="alt:alt.25"><figcaption aria-hidden="true">07A</figcaption></figure>
+            <figure class="photo reveal"><img src="assets/photos/bappenas-3-800.webp" srcset="assets/photos/bappenas-3-800.webp 800w, assets/photos/bappenas-3-1600.webp 1600w" sizes="(min-width: 1024px) 22vw, (min-width: 700px) 38vw, 46vw" width="800" height="1200" loading="lazy" decoding="async" alt="Rafli dan Dita menunggu di halte beratap hijau" data-i18n-attr="alt:alt.27"><figcaption aria-hidden="true">07B</figcaption></figure>
+            <figure class="photo reveal"><img src="assets/photos/bappenas-2-800.webp" srcset="assets/photos/bappenas-2-800.webp 800w, assets/photos/bappenas-2-1600.webp 1600w" sizes="(min-width: 1024px) 34vw, (min-width: 700px) 55vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Dita berayun tinggi di taman Menteng, Rafli tertawa di sebelahnya" data-i18n-attr="alt:alt.26"><figcaption aria-hidden="true">07C</figcaption></figure>
+            <figure class="photo reveal"><img src="assets/photos/bappenas-4-800.webp" srcset="assets/photos/bappenas-4-800.webp 800w, assets/photos/bappenas-4-1600.webp 1600w" sizes="(min-width: 1024px) 58vw, 92vw" width="800" height="534" loading="lazy" decoding="async" alt="Dua tangan bertaut di jari kelingking, dengan latar jas kantor gelap" data-i18n-attr="alt:alt.28"><figcaption aria-hidden="true">07D</figcaption></figure>
             <a class="continue reveal" href="https://1drv.ms/a/c/22beffb20649113e/IgBlGMB8CISOQaxVgBdttEFlAXq79kUHFcA7XfrtlJDH6nE?e=lmfNEu" target="_blank" rel="noopener noreferrer">
-              <span class="continue__kicker">Room 07 · Bappenas, Menteng</span>
-              <span class="continue__title">See the full collection</span>
-              <span class="continue__note">Every photograph from this room, on OneDrive</span>
+              <span class="continue__kicker"><span data-i18n="room.word">Ruang</span> 07 · Bappenas, Menteng</span>
+              <span class="continue__title" data-i18n="cont.title">Lihat semua foto</span>
+              <span class="continue__note" data-i18n="cont.note">Semua foto dari ruang ini, di OneDrive</span>
               <span class="continue__arrow" aria-hidden="true"><svg><use href="#arrow"/></svg></span>
-              <span class="sr-only">(opens in a new tab)</span>
+              <span class="sr-only" data-i18n="cont.sr">(membuka tab baru)</span>
             </a>
           </div>
         </div>
       </article>
 
       <!-- Room 08: Out of Character -->
-      <article class="room room--ooc" id="out-of-character" data-where="Non-Adat · 08 / 08 · <b>Out of Character</b>" aria-labelledby="ooc-title">
+      <article class="room room--ooc" id="out-of-character" data-where="room:out-of-character" aria-labelledby="ooc-title">
         <div class="room__inner">
           <div class="room__plaque reveal">
-            <p class="room__no">Room 08</p>
+            <p class="room__no" data-i18n="room.no.08">Ruang 08</p>
             <h3 id="ooc-title">Out of Character</h3>
-            <span class="room__sub">Mid-Century</span>
+            <span class="room__sub" data-i18n="sub.ooc">Gaya Mid-Century</span>
             <div class="room__story">
-              <p>For this series, we tried something people would not normally expect from us. The mid-century styling, colours, and setting gave us a chance to step outside our usual character and play with a completely different idea.</p>
-              <p>Not every image had to explain who we already are. Some could simply be about curiosity, experimentation, and seeing ourselves in a new way.</p>
-              <p class="room__credit">Photographed by @azharbaizan</p>
+              <p data-i18n="story.ooc.1">Di sini kami mencoba hal yang tidak disangka orang dari kami: busana, warna, dan ruangan bergaya mid-century, dan versi diri kami yang lain.</p>
+              <p data-i18n="story.ooc.2">Foto-foto ini kami buat untuk bersenang-senang, dan untuk melihat diri kami dengan cara baru.</p>
+              <p class="room__credit"><span data-i18n="credit">Foto oleh</span> @azharbaizan</p>
             </div>
-            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgDtcc7u4t8lQI6hPx7mCob8AWHVm1dGVN_BELtdTV0W510?e=gmKwUw" target="_blank" rel="noopener noreferrer">View full collection <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only">(Out of Character, opens OneDrive in a new tab)</span></a>
+            <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgDtcc7u4t8lQI6hPx7mCob8AWHVm1dGVN_BELtdTV0W510?e=gmKwUw" target="_blank" rel="noopener noreferrer"><span data-i18n="cta.view">Lihat semua foto</span> <svg aria-hidden="true"><use href="#arrow"/></svg><span class="sr-only" data-i18n="sr.out-of-character">(Out of Character, membuka OneDrive di tab baru)</span></a>
           </div>
           <div class="collage">
-            <figure class="photo reveal"><img src="assets/photos/ooc-1-800.webp" srcset="assets/photos/ooc-1-800.webp 800w, assets/photos/ooc-1-1600.webp 1600w" sizes="(min-width: 1024px) 29vw, (min-width: 700px) 46vw, 76vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli and Dita face to face in soft focus, city lights behind them at night"></figure>
-            <figure class="photo reveal"><img src="assets/photos/ooc-2-800.webp" srcset="assets/photos/ooc-2-800.webp 800w, assets/photos/ooc-2-1600.webp 1600w" sizes="(min-width: 1024px) 29vw, (min-width: 700px) 46vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="The couple dancing in a warm-lit hotel room, Dita in a tartan shawl"></figure>
-            <figure class="photo reveal"><img src="assets/photos/ooc-3-800.webp" srcset="assets/photos/ooc-3-800.webp 800w, assets/photos/ooc-3-1600.webp 1600w" sizes="(min-width: 1024px) 20vw, (min-width: 700px) 30vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Laughing on the bed as confetti falls around them"></figure>
-            <figure class="photo reveal"><img src="assets/photos/ooc-4-800.webp" srcset="assets/photos/ooc-4-800.webp 800w, assets/photos/ooc-4-1600.webp 1600w" sizes="(min-width: 1024px) 29vw, (min-width: 700px) 46vw, 92vw" width="800" height="533" loading="lazy" decoding="async" alt="Side by side at a table of mahjong tiles, chins resting on their hands"></figure>
+            <figure class="photo reveal"><img src="assets/photos/ooc-1-800.webp" srcset="assets/photos/ooc-1-800.webp 800w, assets/photos/ooc-1-1600.webp 1600w" sizes="(min-width: 1024px) 29vw, (min-width: 700px) 46vw, 76vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli dan Dita berhadapan dalam fokus lembut, lampu kota malam di belakang mereka" data-i18n-attr="alt:alt.29"></figure>
+            <figure class="photo reveal"><img src="assets/photos/ooc-2-800.webp" srcset="assets/photos/ooc-2-800.webp 800w, assets/photos/ooc-2-1600.webp 1600w" sizes="(min-width: 1024px) 29vw, (min-width: 700px) 46vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Rafli dan Dita berdansa di kamar hotel bercahaya hangat, Dita memakai selendang tartan" data-i18n-attr="alt:alt.30"></figure>
+            <figure class="photo reveal"><img src="assets/photos/ooc-3-800.webp" srcset="assets/photos/ooc-3-800.webp 800w, assets/photos/ooc-3-1600.webp 1600w" sizes="(min-width: 1024px) 20vw, (min-width: 700px) 30vw, 46vw" width="800" height="1203" loading="lazy" decoding="async" alt="Tertawa di atas kasur sementara konfeti berjatuhan" data-i18n-attr="alt:alt.31"></figure>
+            <figure class="photo reveal"><img src="assets/photos/ooc-4-800.webp" srcset="assets/photos/ooc-4-800.webp 800w, assets/photos/ooc-4-1600.webp 1600w" sizes="(min-width: 1024px) 29vw, (min-width: 700px) 46vw, 92vw" width="800" height="533" loading="lazy" decoding="async" alt="Berdampingan di meja mahjong, dagu bertumpu di tangan" data-i18n-attr="alt:alt.32"></figure>
             <a class="continue reveal" href="https://1drv.ms/a/c/22beffb20649113e/IgDtcc7u4t8lQI6hPx7mCob8AWHVm1dGVN_BELtdTV0W510?e=gmKwUw" target="_blank" rel="noopener noreferrer">
-              <span class="continue__kicker">Room 08 · Out of Character</span>
-              <span class="continue__title">See the full collection</span>
-              <span class="continue__note">Every photograph from this room, on OneDrive</span>
+              <span class="continue__kicker"><span data-i18n="room.word">Ruang</span> 08 · Out of Character</span>
+              <span class="continue__title" data-i18n="cont.title">Lihat semua foto</span>
+              <span class="continue__note" data-i18n="cont.note">Semua foto dari ruang ini, di OneDrive</span>
               <span class="continue__arrow" aria-hidden="true"><svg><use href="#arrow"/></svg></span>
-              <span class="sr-only">(opens in a new tab)</span>
+              <span class="sr-only" data-i18n="cont.sr">(membuka tab baru)</span>
             </a>
           </div>
         </div>
@@ -549,13 +579,13 @@
     </section>
 
     <!-- ============ EPILOGUE ============ -->
-    <section class="epilogue" id="film" data-where="Epilogue · <b>In Motion</b>" aria-labelledby="film-title">
+    <section class="epilogue" id="film" data-where="room:film" aria-labelledby="film-title">
       <img src="assets/photos/film-800.webp" srcset="assets/photos/film-800.webp 800w, assets/photos/film-1600.webp 1600w" sizes="100vw" width="800" height="1203" alt="" loading="lazy" decoding="async">
       <div class="reveal">
-        <p class="kicker">Epilogue</p>
+        <p class="kicker" data-i18n="epi.k">Epilog</p>
         <h2 id="film-title">In Motion</h2>
-        <p>The still photographs end here. The story continues in our prewedding film.</p>
-        <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgCZ57MmwmzLS5rkImKph78EAV7Hts1eOPCqsnLNks5LZL4?e=oogzSY" target="_blank" rel="noopener noreferrer"><svg class="play" aria-hidden="true"><use href="#play"/></svg> Watch the film<span class="sr-only"> (opens OneDrive in a new tab)</span></a>
+        <p data-i18n="epi.p">Foto-foto berhenti di sini. Ceritanya berlanjut di film prewedding kami.</p>
+        <a class="cta" href="https://1drv.ms/a/c/22beffb20649113e/IgCZ57MmwmzLS5rkImKph78EAV7Hts1eOPCqsnLNks5LZL4?e=oogzSY" target="_blank" rel="noopener noreferrer"><svg class="play" aria-hidden="true"><use href="#play"/></svg> <span data-i18n="epi.cta">Tonton filmnya</span><span class="sr-only" data-i18n="epi.sr"> (membuka OneDrive di tab baru)</span></a>
       </div>
     </section>
   </main>
@@ -564,9 +594,10 @@
     <svg viewBox="0 0 1275.59 1275.59" aria-hidden="true"><use href="#monogram"/></svg>
     <p class="names">Dita &amp; Rafli</p>
     <p>12 · 09 · 2026</p>
-    <p class="credits">Photography by @fikriipra, @azharbaizan and @byjatidiriono. Illustrations from our wedding invitation.</p>
+    <p class="credits" data-i18n="foot.credits">Foto oleh @fikriipra, @azharbaizan, dan @byjatidiriono. Ilustrasi dari undangan pernikahan kami.</p>
   </footer>
 
+  <script src="i18n.js" defer></script>
   <script src="main.js" defer></script>
   <script src="map.js" defer></script>
   <script src="intro.js" defer></script>

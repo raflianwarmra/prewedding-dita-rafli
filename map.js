@@ -19,7 +19,9 @@
     { id: "film", no: "", name: "Cinema", x: 3.4, y: 0, w: 2, d: 3, side: "hall", walls: "n", n: ["film"], wide: true }
   ];
 
-  var SUB = { bugis: "Rafli's roots", jawa: "From her mother", palembang: "From her father", woven: "Traditional contemporary I", projection: "Traditional contemporary II", peranakan: "A shared appreciation", bappenas: "Where it began", "out-of-character": "Mid-century", film: "Epilogue: In Motion" };
+  function T(k, v) { return window.I18N ? I18N.t(k, v) : k; }
+  function sub(id) { return T("sub." + id); }
+  var SHORT = { projection: "Projection", bappenas: "Bappenas" };
   var mapview = document.querySelector(".mapview");
   var maq = document.querySelector("[data-maq]");
   var camera = document.querySelector("[data-camera]");
@@ -47,7 +49,8 @@
       localStorage.setItem(key, JSON.stringify(value));
     } catch (e) { return null; }
   }
-  function label(id) { var m = byId[id]; return m.no ? m.no + " · " + m.name : m.name; }
+  function label(id) { var m = byId[id]; return m.no ? m.no + " · " + m.name : T("cinema"); }
+  function enterLabel(id) { return id === "film" ? T("enter.film") : T("enter.room", { name: SHORT[id] || byId[id].name }); }
 
   /* ---------- Build the model ---------- */
   function box(cls, x, y, w, d) {
@@ -67,7 +70,7 @@
 
   var tags = el("div", "maq__tags");
   camera.appendChild(tags);
-  var entrance = el("span", "m-tag m-tag--entrance", "Entrance");
+  var entrance = el("span", "m-tag m-tag--entrance", T("entrance"));
   entrance.setAttribute("aria-hidden", "true");
   tags.appendChild(entrance);
   scene.appendChild(el("div", "m-ground"));
@@ -93,7 +96,7 @@
     var floor = el("button", "m-floor");
     floor.type = "button";
     floor.dataset.room = m.id;
-    floor.setAttribute("aria-label", m.id === "film" ? "Cinema, epilogue: In Motion" : "Room " + m.no + ", " + m.name);
+    floor.setAttribute("aria-label", m.id === "film" ? T("aria.film") : T("aria.floor", { no: m.no, name: m.name }));
     r.appendChild(floor);
     r.appendChild(el("span", "m-num", m.no || "&#9654;"));
     if (m.glyph) r.appendChild(el("span", "m-glyph", m.glyph));
@@ -157,9 +160,7 @@
     c = c || camera.getBoundingClientRect();
     var r = byId[selected].el.querySelector(".m-floor").getBoundingClientRect();
     var x = r.left + r.width / 2 - c.left, y = r.top + r.height * 0.42 - c.top;
-    hint.textContent = hintMode === "start"
-      ? (touch ? "Tap a room to preview" : "Point at a room to preview")
-      : (touch ? "Tap again to enter" : "Click to enter");
+    hint.textContent = T("hint." + hintMode + (touch ? ".touch" : ".mouse"));
     hint.style.left = x + "px"; hint.style.top = y + "px";
     hintDot.style.left = x + "px"; hintDot.style.top = y + "px";
   }
@@ -215,9 +216,7 @@
     });
     var count = visited.filter(function (id) { return id !== "film"; }).length;
     progress.classList.toggle("is-complete", count >= ROOMS);
-    progress.textContent = count === 0 ? "" :
-      count >= ROOMS ? "You have visited every room. Thank you for coming." :
-      count + " of " + ROOMS + " rooms visited";
+    progress.textContent = count === 0 ? "" : count >= ROOMS ? T("progress.done") : T("progress", { n: count });
   }
   function markVisited(id) {
     if (visited.indexOf(id) === -1) { visited.push(id); store("dr-visited", visited); }
@@ -289,9 +288,9 @@
     var m = byId[id], c = CURTAIN[id];
     curtain.style.setProperty("--c-bg", c[0]);
     curtain.style.setProperty("--c-ink", c[1]);
-    curtain.querySelector(".curtain__no").textContent = m.no ? "Room " + m.no : "Epilogue";
+    curtain.querySelector(".curtain__no").textContent = m.no ? T("room") + " " + m.no : T("epilogue");
     curtain.querySelector(".curtain__name").textContent = id === "film" ? "In Motion" : m.name;
-    curtain.querySelector(".curtain__sub").textContent = id === "film" ? "Our prewedding film" : SUB[id];
+    curtain.querySelector(".curtain__sub").textContent = sub(id);
     curtain.classList.add("is-on");
     if (calm.matches) { curtain.style.opacity = 1; return Promise.resolve(); }
     curtain.animate([{ opacity: 0 }, { opacity: 1 }], { duration: ms, easing: "ease-out", fill: "forwards" });
@@ -332,11 +331,14 @@
     body.replaceChildren(copy);
     dialog.scrollTop = 0;
     current = id;
-    title.textContent = id === "film" ? "Epilogue · In Motion" : "Room " + label(id);
-    var i = ORDER.indexOf(id);
-    prevName.textContent = i > 0 ? label(ORDER[i - 1]) : "Back to the map";
-    nextName.textContent = i < ORDER.length - 1 ? label(ORDER[i + 1]) : "Back to the map";
+    roomChrome(id);
     markVisited(id);
+  }
+  function roomChrome(id) {
+    title.textContent = id === "film" ? T("epilogue") + " · In Motion" : T("room") + " " + label(id);
+    var i = ORDER.indexOf(id);
+    prevName.textContent = i > 0 ? label(ORDER[i - 1]) : T("rv.toMap");
+    nextName.textContent = i < ORDER.length - 1 ? label(ORDER[i + 1]) : T("rv.toMap");
   }
   function urlFor(id) { var url = new URL(location.href); url.hash = id ? "#" + id : ""; return url; }
 
@@ -350,6 +352,7 @@
   function open(id, push) {
     if (busy || dialog.open) return;
     busy = true;
+    paintPeek();
     if (!learned) { learned = true; hintMode = "off"; store("dr-learned", 1); placeHint(); }
     if (push) history.pushState({ room: id }, "", urlFor(id));
     select(id);
@@ -365,7 +368,7 @@
     }).then(function () {
       revealRoom();
       return curtainOut(750);
-    }).then(function () { busy = false; });
+    }).then(function () { busy = false; paintPeek(); });
   }
   function closeNow() {
     var id = current;
@@ -385,7 +388,7 @@
       dialog.classList.add("is-entering");
       flyBack();
       return curtainOut(650);
-    }).then(function () { finish(); busy = false; });
+    }).then(function () { finish(); busy = false; paintPeek(); });
   }
   function close() {
     if (busy) return;
@@ -408,7 +411,7 @@
     }).then(function () {
       revealRoom();
       return curtainOut(650);
-    }).then(function () { busy = false; });
+    }).then(function () { busy = false; paintPeek(); });
   }
 
   /* ---------- Selection and the wall-label card ---------- */
@@ -421,10 +424,6 @@
     selected = id;
     var m = byId[id];
     m.el.classList.add("is-selected");
-    card.querySelector("[data-card-wing]").textContent = m.side === "left" ? "Wing I · Adat" : m.side === "right" ? "Wing II · Non-Adat" : "The cinema";
-    card.querySelector("[data-card-no]").textContent = m.no ? "Room " + m.no : "Epilogue";
-    card.querySelector("[data-card-name]").textContent = m.id === "film" ? "In Motion" : m.name;
-    card.querySelector("[data-card-sub]").textContent = m.id === "film" ? "Our prewedding film" : SUB[id];
     var names = (m.n || []).concat(m.e || []);
     if (id === "film") names = ["film", "ooc-1", "ooc-4"];
     cardPrints.classList.remove("is-swapping");
@@ -434,14 +433,52 @@
     }));
     void cardPrints.offsetWidth;
     cardPrints.classList.add("is-swapping");
-    placeHint();
-    card.querySelector("[data-enter]").setAttribute("aria-label", "Enter " + (m.no ? "room " + m.no + ", " + m.name : "the cinema"));
+    paintCard();
   }
+  function paintCard() {
+    var id = selected, m = byId[id];
+    if (!m) return;
+    card.querySelector("[data-card-wing]").textContent = m.side === "left" ? T("wing1.label") : m.side === "right" ? T("wing2.label") : T("cinema.label");
+    card.querySelector("[data-card-no]").textContent = m.no ? T("room") + " " + m.no : T("epilogue");
+    card.querySelector("[data-card-name]").textContent = m.id === "film" ? "In Motion" : m.name;
+    card.querySelector("[data-card-sub]").textContent = sub(id);
+    card.querySelector("[data-enter-label]").textContent = enterLabel(id);
+    placeHint();
+    paintPeek();
+  }
+
+  /* ---------- Phone preview: a small sheet so the Enter button is always in reach ---------- */
+  var peek = document.querySelector("[data-peek]");
+  var peekOff = false, userPicked = false, cardSeen = false;
+  var phone = window.matchMedia("(max-width: 1023px)");
+  function paintPeek() {
+    var id = selected, m = byId[id];
+    var show = !!m && userPicked && !peekOff && !cardSeen && phone.matches && root.dataset.view === "map" && !dialog.open && !busy && !flight;
+    if (show) {
+      var first = (m.n || [])[0] || "film";
+      peek.querySelector("[data-peek-img]").src = "assets/photos/" + first + "-360.webp";
+      peek.querySelector("[data-peek-no]").textContent = m.no ? T("peek.meta", { no: m.no, wing: m.side === "left" ? "I" : "II" }) : T("epilogue");
+      peek.querySelector("[data-peek-name]").textContent = m.id === "film" ? "In Motion" : m.name;
+      peek.querySelector("[data-peek-desc]").textContent = T("desc." + id);
+      peek.querySelector("[data-peek-label]").textContent = enterLabel(id);
+    }
+    if (show === !peek.hidden) return;
+    peek.hidden = !show;
+  }
+  function userPick(id) { select(id); userPicked = true; peekOff = false; setHint("again"); paintPeek(); }
+  peek.querySelector("[data-peek-close]").addEventListener("click", function () { peekOff = true; paintPeek(); });
+  peek.querySelector("[data-peek-enter]").addEventListener("click", function () { open(selected, true); });
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      cardSeen = entries[0].isIntersecting;
+      paintPeek();
+    }, { threshold: 1 }).observe(card.querySelector("[data-enter]"));  /* only when its Enter button is fully on screen */
+  }
+
   card.querySelectorAll("[data-card-step]").forEach(function (b) {
     b.addEventListener("click", function () {
       var i = (ORDER.indexOf(selected) + +b.dataset.cardStep + ORDER.length) % ORDER.length;
-      select(ORDER[i]);
-      setHint("again");
+      userPick(ORDER[i]);
     });
   });
   card.querySelector("[data-enter]").addEventListener("click", function () { open(selected, true); });
@@ -465,7 +502,7 @@
     var t = e.target.closest("[data-room]");
     var id = t ? t.dataset.room : roomAt(e.clientX, e.clientY);
     if (!id) return;
-    if (selected === id) open(selected, true); else { select(id); setHint("again"); }
+    if (selected === id) open(selected, true); else userPick(id);
   });
   document.querySelector(".roomlist").addEventListener("click", function (e) {
     var t = e.target.closest("[data-room]");
@@ -474,7 +511,7 @@
   if (window.matchMedia("(hover: hover)").matches) {
     scene.addEventListener("pointerover", function (e) {
       var t = e.target.closest("[data-room]");
-      if (t) { select(t.dataset.room); setHint("again"); }
+      if (t) userPick(t.dataset.room);
     });
   }
   dialog.querySelector("[data-close]").addEventListener("click", close);
@@ -492,6 +529,17 @@
     } else if (dialog.open) {
       closeNow();
     }
+  });
+
+  /* ---------- Language changes ---------- */
+  if (window.I18N) I18N.onChange(function () {
+    MODEL.forEach(function (m) {
+      m.el.querySelector(".m-floor").setAttribute("aria-label", m.id === "film" ? T("aria.film") : T("aria.floor", { no: m.no, name: m.name }));
+    });
+    entrance.textContent = T("entrance");
+    paintVisits();
+    paintCard();
+    if (dialog.open && current && !busy) render(current);
   });
 
   /* ---------- Start ---------- */
@@ -528,6 +576,6 @@
     curtainIn(start, 10).then(function () {
       dialog.classList.remove("is-entering");
       return wait(calm.matches ? 0 : 700);
-    }).then(function () { revealRoom(); return curtainOut(750); }).then(function () { busy = false; });
+    }).then(function () { revealRoom(); return curtainOut(750); }).then(function () { busy = false; paintPeek(); });
   }
 })();

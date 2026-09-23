@@ -24,7 +24,7 @@
   position: absolute; top: calc(env(safe-area-inset-top) + 8px); right: 12px; z-index: 3;
   min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px;
   background: color-mix(in oklch, var(--wall) 70%, transparent); color: var(--ink-soft);
-  font: inherit; font-size: .95rem; cursor: pointer;
+  font: inherit; font-size: var(--fs-sm); cursor: pointer;
 }
 
 /* ---------- Visual stage ---------- */
@@ -34,8 +34,8 @@
 .intro__model { opacity: 0; transform: translateY(24px) scale(.96); width: min(320px, 80vw); }
 .intro__card { opacity: 0; transform: translateY(24px); }
 .intro[data-scene="0"] .intro__hero { opacity: 1; transform: none; }
-.intro[data-scene="1"] .intro__model, .intro[data-scene="2"] .intro__model { opacity: 1; transform: none; }
-.intro[data-scene="3"] .intro__card { opacity: 1; transform: none; }
+.intro[data-scene="1"] .intro__model, .intro[data-scene="2"] .intro__model, .intro[data-scene="3"] .intro__model { opacity: 1; transform: none; }
+.intro[data-scene="4"] .intro__card { opacity: 1; transform: none; }
 
 .intro__mono {
   width: clamp(120px, 36vw, 190px); height: auto; color: var(--gold);
@@ -78,7 +78,7 @@
 .intro__bubble {
   position: absolute; left: 0; top: 0; z-index: 2; transform: translate(-50%, calc(-100% - 30px));
   padding: 7px 14px 6px; border-radius: 999px; white-space: nowrap;
-  background: var(--accent); color: var(--wall); font-size: .95rem;
+  background: var(--accent); color: var(--wall); font-size: var(--fs-sm);
   box-shadow: 0 10px 24px -12px oklch(20% 0.05 20 / .6);
   opacity: 0; transition: opacity .35s var(--ease-out);
   pointer-events: none;
@@ -92,26 +92,26 @@
   background: oklch(33% 0.07 150); color: oklch(96% 0.02 110);
   box-shadow: 0 30px 60px -30px oklch(15% 0.05 150 / .7);
 }
-.intro__card-no { margin: 0; font-size: .7rem; letter-spacing: .28em; text-transform: uppercase; opacity: .8; }
-.intro__card-name { margin: 2px 0 12px; font-size: 2rem; line-height: 1; }
+.intro__card-no { margin: 0; font-size: var(--fs-xs); letter-spacing: .28em; text-transform: uppercase; opacity: .8; }
+.intro__card-name { margin: 2px 0 12px; font-size: var(--fs-xl); line-height: 1; }
 .intro__card-prints { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .intro__card-prints img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
-.intro[data-scene="3"] .intro__card-prints img { animation: print-in .7s var(--ease-out) both; }
-.intro[data-scene="3"] .intro__card-prints img:nth-child(2) { animation-delay: .12s; }
-.intro[data-scene="3"] .intro__card-prints img:nth-child(3) { animation-delay: .24s; }
+.intro[data-scene="4"] .intro__card-prints img { animation: print-in .7s var(--ease-out) both; }
+.intro[data-scene="4"] .intro__card-prints img:nth-child(2) { animation-delay: .12s; }
+.intro[data-scene="4"] .intro__card-prints img:nth-child(3) { animation-delay: .24s; }
 .intro__card-line { display: block; height: 6px; margin: 12px auto 0; width: 86%; border-radius: 3px; background: oklch(96% 0.02 110 / .25); }
 .intro__card-line.is-short { width: 58%; margin-top: 6px; }
 .intro__card-cta {
   position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin-top: 14px; min-height: 44px; background: oklch(82% 0.08 120); color: oklch(24% 0.05 150); font-size: 1rem;
+  margin-top: 14px; min-height: 44px; background: oklch(82% 0.08 120); color: oklch(24% 0.05 150); font-size: var(--fs-md);
 }
 .intro__card-cta svg { width: 12px; height: 12px; }
 .intro__card-cta::after {
   content: ""; position: absolute; inset: 0; transform: translateX(-120%);
   background: linear-gradient(100deg, transparent 30%, oklch(100% 0 0 / .6) 50%, transparent 70%);
 }
-.intro[data-scene="3"] .intro__card-cta::after { animation: shimmer 2.4s 1s ease-in-out infinite; }
+.intro[data-scene="4"] .intro__card-cta::after { animation: shimmer 2.4s 1s ease-in-out infinite; }
 @keyframes shimmer { 60%, 100% { transform: translateX(120%); } }
 
 /* ---------- Text ---------- */
@@ -122,7 +122,7 @@
 .intro__step h2 { font-size: clamp(1.9rem, 8vw, 3rem); line-height: 1.02; text-wrap: balance; margin: 0 0 10px; }
 .intro__step[data-intro-step="0"] h2 { font-size: clamp(2.6rem, 12vw, 4.4rem); }
 .intro__step h2 .of { display: block; font-style: italic; font-size: .5em; color: var(--ink-soft); margin-bottom: .1em; }
-.intro__step p { margin: 0; color: var(--ink-soft); font-size: 1.06rem; text-wrap: pretty; }
+.intro__step p { margin: 0; color: var(--ink-soft); font-size: var(--fs-md); text-wrap: pretty; }
 .intro__step p b { font-weight: 500; color: var(--ink); }
 
 /* ---------- Navigation ---------- */
@@ -134,26 +134,26 @@
   display: flex; align-items: center; justify-content: center; gap: 10px;
   width: min(100%, 360px); min-height: 54px; border: 0; border-radius: 2px;
   background: var(--accent); color: var(--wall);
-  font: inherit; font-size: 1.15rem; letter-spacing: .02em; cursor: pointer;
+  font: inherit; font-size: var(--fs-md); letter-spacing: .02em; cursor: pointer;
   box-shadow: 0 16px 28px -16px color-mix(in oklch, var(--accent) 85%, transparent);
 }
-.intro__alt { visibility: hidden; min-height: 40px; border: 0; background: none; color: var(--ink-soft); font: inherit; font-size: .95rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
-.intro[data-scene="3"] .intro__alt { visibility: visible; }
+.intro__alt { visibility: hidden; min-height: 40px; border: 0; background: none; color: var(--ink-soft); font: inherit; font-size: var(--fs-sm); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.intro[data-scene="4"] .intro__alt { visibility: visible; }
 
 /* ---------- Map additions: "How to visit" and the tap hint ---------- */
 .mapview__how {
   display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; min-height: 40px; padding: 0 14px 0 6px;
   border: 1px solid var(--line); border-radius: 999px; background: color-mix(in oklch, var(--wall) 70%, transparent);
-  color: var(--ink-soft); font: inherit; font-size: .95rem; cursor: pointer;
+  color: var(--ink-soft); font: inherit; font-size: var(--fs-sm); cursor: pointer;
 }
-.mapview__how span { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: var(--wall); font-size: .85rem; }
+.mapview__how span { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: var(--wall); font-size: var(--fs-xs); }
 .mapview__progress + .mapview__how { margin-left: 10px; }
 
 .m-hint {
   position: absolute; left: 0; top: 0; z-index: 3; pointer-events: none;
   transform: translate(-50%, calc(-100% - 22px));
   padding: 7px 14px 6px; border-radius: 999px; white-space: nowrap;
-  background: var(--accent); color: var(--wall); font-size: .92rem;
+  background: var(--accent); color: var(--wall); font-size: var(--fs-sm);
   box-shadow: 0 10px 24px -12px oklch(20% 0.05 20 / .6);
   opacity: 0; transition: opacity .35s var(--ease-out);
 }
@@ -180,6 +180,68 @@
   .intro__model { width: min(420px, 38vw); }
   .intro__card { width: 340px; }
 }
+
+
+/* ---------- Language switch in the top bar ---------- */
+.lang {
+  flex: none; min-width: 44px; min-height: 44px; padding: 0 10px;
+  border: 1px solid var(--line); border-radius: 999px; background: none; color: var(--ink);
+  font: inherit; font-size: var(--fs-xs); letter-spacing: .14em; cursor: pointer;
+}
+.lang:hover { border-color: var(--accent); color: var(--accent); }
+.bar .lang { margin-left: auto; }
+.bar .lang + .switch { margin-left: 4px; }
+:root[lang="id"] .roomlist button.is-visited::after { content: "Dikunjungi"; }
+
+/* ---------- Phone preview sheet ---------- */
+.peek {
+  position: fixed; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 25;
+  display: grid; grid-template-columns: 64px 1fr 36px; grid-template-rows: auto auto; gap: 10px 12px; align-items: center;
+  padding: 12px; border-radius: 6px;
+  background: var(--wall); color: var(--ink);
+  box-shadow: 0 0 0 1px var(--line), 0 18px 40px -12px oklch(20% 0.05 250 / .45);
+  animation: peek-in .45s var(--ease-out);
+}
+.peek[hidden] { display: none; }
+@keyframes peek-in { from { opacity: 0; transform: translateY(24px); } }
+.peek__img { width: 64px; height: 80px; object-fit: cover; grid-row: 1; }
+.peek__body { min-width: 0; }
+.peek__no { margin: 0; font-size: var(--fs-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+.peek__name { margin: 1px 0 2px; font-size: var(--fs-lg); line-height: 1.1; text-wrap: balance; }
+.peek__desc { margin: 0; font-size: var(--fs-sm); line-height: 1.35; color: var(--ink-soft); text-wrap: pretty; }
+.peek__close {
+  align-self: start; width: 36px; height: 36px; margin: -4px -4px 0 0; display: grid; place-items: center;
+  border: 0; border-radius: 50%; background: var(--wall-2); color: var(--ink-soft); cursor: pointer;
+}
+.peek__close svg { width: 12px; height: 12px; }
+.peek__enter {
+  grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 50px; border: 0; border-radius: 3px; background: var(--accent); color: var(--wall);
+  font: inherit; font-size: var(--fs-md); cursor: pointer;
+}
+.peek__enter svg { width: 15px; height: 15px; }
+@media (min-width: 1024px) { .peek { display: none !important; } }
+
+/* Short phones: keep the mini card clear of the text below it. */
+@media (max-height: 760px) {
+  .intro__card { width: min(250px, 68vw); padding: 12px 12px 12px; }
+  .intro__card-name { font-size: var(--fs-xl); margin-bottom: 8px; }
+  .intro__card-line { display: none; }
+  .intro__card-cta { margin-top: 10px; min-height: 40px; }
+  .intro__mono { width: clamp(100px, 30vw, 160px); }
+}
+
+/* ---------- Landing: Back and Next side by side ---------- */
+.intro__buttons { display: flex; gap: 10px; width: min(100%, 420px); }
+.intro__buttons .intro__next { flex: 1; width: auto; }
+.intro__back[hidden] { display: none; }
+.intro__back {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 54px; padding: 0 18px; border: 1px solid var(--line); border-radius: 2px;
+  background: color-mix(in oklch, var(--wall) 70%, transparent); color: var(--ink);
+  font: inherit; font-size: var(--fs-md); cursor: pointer;
+}
+.intro__back svg { width: 14px; height: 14px; }
 
 @media (prefers-reduced-motion: reduce) {
   .intro *, .intro { animation: none !important; transition: none !important; }

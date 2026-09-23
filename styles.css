@@ -18,6 +18,14 @@
   --accent: var(--maroon);
 
   --serif: "EB Garamond", "Garamond", "Georgia", serif;
+
+  /* Type scale (about 1.2 between steps). Display sizes use clamp() where they are set. */
+  --fs-xs: .8125rem;   /* 13px: uppercase labels, kickers */
+  --fs-sm: .9375rem;   /* 15px: meta, captions, credits */
+  --fs-md: 1.125rem;   /* 18px: body copy, buttons, UI text */
+  --fs-lg: 1.375rem;   /* 22px: leads and subtitles */
+  --fs-xl: 1.75rem;    /* 28px: small headings */
+  --fs-sub: clamp(1.2rem, 4.6vw, 1.6rem);  /* italic subtitles under display titles */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --pad: clamp(20px, 5.5vw, 72px);
   --bar-h: 56px;
@@ -54,7 +62,7 @@ body {
   background: var(--wall);
   color: var(--ink);
   font-family: var(--serif);
-  font-size: 1.125rem;
+  font-size: var(--fs-md);
   line-height: 1.6;
   font-feature-settings: "onum", "kern", "liga";
   overflow-x: clip;
@@ -72,19 +80,21 @@ p { margin: 0 0 1em; }
 }
 .skip:focus { top: 12px; }
 
+.i18n-pending body { visibility: hidden; }  /* English visitors: wait one tick for the swap */
+
 /* ---------- Top bar ---------- */
 .bar {
   position: fixed; inset: 0 0 auto; z-index: 30;
   height: var(--bar-h);
   display: flex; align-items: center; gap: 12px;
   padding: 0 max(12px, env(safe-area-inset-left)) 0 max(16px, env(safe-area-inset-left));
-  background: color-mix(in oklch, var(--wall) 90%, transparent);
+  background: color-mix(in oklch, var(--wall) 97%, transparent);
   border-bottom: 1px solid var(--line);
   transition: background-color .6s var(--ease-out);
 }
 .bar__home { display: flex; align-items: center; gap: 10px; text-decoration: none; min-height: 44px; color: var(--accent); }
 .bar__home svg { width: 30px; height: 30px; }
-.bar__names { font-size: .95rem; letter-spacing: .08em; color: var(--ink); }
+.bar__names { font-size: var(--fs-sm); letter-spacing: .08em; color: var(--ink); }
 .bar__home { margin-right: auto; }
 
 /* View switch: Map | Scroll */
@@ -96,7 +106,7 @@ p { margin: 0 0 1em; }
 .views button {
   min-height: 38px; min-width: 64px; padding: 0 14px;
   border: 0; border-radius: 999px; background: none; color: var(--ink-soft);
-  font: inherit; font-size: .98rem; cursor: pointer;
+  font: inherit; font-size: var(--fs-sm); cursor: pointer;
   transition: background-color .3s var(--ease-out), color .3s var(--ease-out);
 }
 .views button[aria-pressed="true"] { background: var(--accent); color: var(--wall); }
@@ -107,7 +117,7 @@ p { margin: 0 0 1em; }
   position: fixed; left: 0; right: 0; top: var(--bar-h); z-index: 29;
   height: var(--strip-h); margin: 0; padding: 0 16px;
   display: flex; align-items: center; justify-content: center;
-  font-size: .88rem; color: var(--ink-soft);
+  font-size: var(--fs-sm); color: var(--ink-soft);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   background: color-mix(in oklch, var(--wall) 90%, transparent);
   border-bottom: 1px solid var(--line);
@@ -125,7 +135,7 @@ p { margin: 0 0 1em; }
   display: flex; align-items: center; gap: 10px;
   min-width: 44px; min-height: 44px; padding: 0 4px;
   background: none; border: 0; color: var(--ink-soft);
-  font: inherit; font-size: .85rem; cursor: pointer;
+  font: inherit; font-size: var(--fs-xs); cursor: pointer;
 }
 .switch__plate {
   position: relative; width: 26px; height: 38px;
@@ -161,7 +171,7 @@ p { margin: 0 0 1em; }
 .foyer__mono { width: clamp(84px, 22vw, 116px); margin: 0 auto 22px; color: var(--gold); }
 .kicker {
   margin: 0 0 12px;
-  font-size: .82rem; letter-spacing: .22em; text-transform: uppercase;
+  font-size: var(--fs-xs); letter-spacing: .22em; text-transform: uppercase;
   color: var(--ink-soft);
 }
 .foyer h1 {
@@ -170,7 +180,7 @@ p { margin: 0 0 1em; }
   text-wrap: balance;
 }
 .foyer h1 .of { display: block; font-style: italic; font-size: .42em; letter-spacing: 0; color: var(--ink-soft); margin-bottom: .18em; }
-.foyer__intro { max-width: 34ch; margin: 22px auto 0; color: var(--ink-soft); font-size: 1.15rem; text-wrap: pretty; }
+.foyer__intro { max-width: 34ch; margin: 22px auto 0; color: var(--ink-soft); font-size: var(--fs-md); text-wrap: pretty; }
 
 /* The arched window onto the illustrated sky. */
 .window {
@@ -203,20 +213,20 @@ p { margin: 0 0 1em; }
   border-radius: 4px;
   box-shadow: inset 0 0 0 1px oklch(100% 0 0 / .08), 0 30px 60px -30px oklch(20% 0.08 10 / .5);
 }
-.directory h2 { font-size: .82rem; letter-spacing: .24em; text-transform: uppercase; color: var(--board-soft); margin-bottom: 18px; }
+.directory h2 { font-size: var(--fs-xs); letter-spacing: .24em; text-transform: uppercase; color: var(--board-soft); margin-bottom: 18px; }
 .directory ol { list-style: none; margin: 0; padding: 0; }
 .directory__wing { margin-top: 22px; padding-top: 16px; border-top: 1px solid oklch(100% 0 0 / .14); }
 .directory__wing:first-of-type { margin-top: 0; }
-.directory__wing-name { font-size: 1.55rem; line-height: 1.1; margin-bottom: 2px; }
-.directory__wing-sub { font-style: italic; color: var(--board-soft); font-size: 1rem; margin-bottom: 8px; }
+.directory__wing-name { font-size: var(--fs-xl); line-height: 1.1; margin-bottom: 2px; }
+.directory__wing-sub { font-style: italic; color: var(--board-soft); font-size: var(--fs-md); margin-bottom: 8px; }
 .directory a {
   display: flex; align-items: baseline; gap: 12px;
   min-height: 44px; padding: 9px 0;
-  text-decoration: none; font-size: 1.12rem;
+  text-decoration: none; font-size: var(--fs-md);
 }
-.directory a span:first-child { font-variant-numeric: lining-nums tabular-nums; color: var(--gold-bright); font-size: .9rem; width: 1.6em; flex: none; }
+.directory a span:first-child { font-variant-numeric: lining-nums tabular-nums; color: var(--gold-bright); font-size: var(--fs-sm); width: 1.6em; flex: none; }
 .directory a .lead { flex: 1; border-bottom: 1px dotted oklch(100% 0 0 / .22); transform: translateY(-5px); }
-.directory a em { color: var(--board-soft); font-size: .95rem; white-space: nowrap; }
+.directory a em { color: var(--board-soft); font-size: var(--fs-sm); white-space: nowrap; }
 .directory a:hover .name { color: var(--gold-bright); }
 .directory a .name { transition: color .2s; }
 
@@ -233,7 +243,7 @@ p { margin: 0 0 1em; }
 .door__text { text-align: center; }
 .door__text .kicker { color: var(--ink-soft); }
 .door__text h2 { font-size: clamp(3rem, 15vw, 6.5rem); line-height: .95; }
-.door__text p { font-style: italic; font-size: clamp(1.15rem, 4.4vw, 1.6rem); color: var(--ink-soft); margin: .4em 0 0; }
+.door__text p { font-style: italic; font-size: var(--fs-sub); color: var(--ink-soft); margin: .4em 0 0; }
 
 /* Adat: the illustrator's arch, with a glimpse of the first room through its opening. */
 .door--adat .door__frame { width: min(92vw, 640px, 110svh); aspect-ratio: 1400 / 986; }
@@ -285,7 +295,7 @@ p { margin: 0 0 1em; }
 /* ---------- Wings ---------- */
 .wing-intro {
   max-width: 1240px; margin: 0 auto; padding: 0 var(--pad) clamp(24px, 6vw, 48px);
-  color: var(--ink-soft); font-size: 1.2rem; text-align: center;
+  color: var(--ink-soft); font-size: var(--fs-lg); text-align: center;
 }
 .wing-intro p { max-width: 36ch; margin: 0 auto; text-wrap: pretty; }
 .pattern-band {
@@ -314,7 +324,7 @@ p { margin: 0 0 1em; }
 .room__plaque { max-width: 40rem; }
 .room__no {
   display: flex; align-items: center; gap: 14px;
-  font-size: .82rem; letter-spacing: .22em; text-transform: uppercase; color: var(--room-soft);
+  font-size: var(--fs-xs); letter-spacing: .22em; text-transform: uppercase; color: var(--room-soft);
   margin-bottom: 18px;
 }
 .room__no::after { content: ""; flex: 1; max-width: 80px; height: 1px; background: currentColor; opacity: .5; }
@@ -326,15 +336,15 @@ p { margin: 0 0 1em; }
   font-size: clamp(2.6rem, 11vw, 5.2rem); line-height: .98; letter-spacing: -.01em;
   text-wrap: balance;
 }
-.room__sub { display: block; font-style: italic; font-size: clamp(1.25rem, 4.6vw, 1.7rem); color: var(--room-accent); margin: 10px 0 24px; }
+.room__sub { display: block; font-style: italic; font-size: var(--fs-sub); color: var(--room-accent); margin: 10px 0 24px; }
 .room__story p { color: var(--room-soft); max-width: 62ch; text-wrap: pretty; }
-.room__credit { font-size: .95rem; font-style: italic; color: var(--room-soft); opacity: .85; }
+.room__credit { font-size: var(--fs-sm); font-style: italic; color: var(--room-soft); opacity: .85; }
 .cta {
   display: flex; align-items: center; justify-content: center; gap: 12px;
   width: 100%; min-height: 54px; margin-top: 14px; padding: 14px 24px;
   background: var(--room-accent); color: var(--room-bg);
   border: 1px solid var(--room-accent); border-radius: 2px;
-  text-decoration: none; font-size: 1.12rem; font-weight: 500; letter-spacing: .03em;
+  text-decoration: none; font-size: var(--fs-md); font-weight: 500; letter-spacing: .03em;
   box-shadow: 0 14px 28px -16px color-mix(in oklch, var(--room-accent) 80%, transparent);
   transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out), filter .25s;
 }
@@ -357,9 +367,9 @@ p { margin: 0 0 1em; }
   transform: none !important; /* never tilted by gallery styles */
   transition: filter .25s, box-shadow .3s var(--ease-out);
 }
-.continue__kicker { font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; opacity: .8; }
+.continue__kicker { font-size: var(--fs-xs); letter-spacing: .2em; text-transform: uppercase; opacity: .8; }
 .continue__title { font-size: clamp(1.7rem, 7vw, 2.5rem); line-height: 1.05; }
-.continue__note { font-style: italic; font-size: 1rem; opacity: .85; }
+.continue__note { font-style: italic; font-size: var(--fs-md); opacity: .85; }
 .continue__arrow {
   position: absolute; right: clamp(20px, 5vw, 32px); top: 50%;
   width: 52px; height: 52px; margin-top: -26px;
@@ -473,7 +483,7 @@ p { margin: 0 0 1em; }
 .prints-toggle button {
   min-height: 42px; min-width: 88px; padding: 0 16px;
   border: 0; border-radius: 999px; background: none; color: var(--room-soft);
-  font: inherit; font-size: 1rem; cursor: pointer;
+  font: inherit; font-size: var(--fs-md); cursor: pointer;
   transition: background-color .3s var(--ease-out), color .3s var(--ease-out);
 }
 .prints-toggle button[aria-pressed="true"] { background: var(--room-accent); color: var(--room-bg); }
@@ -588,14 +598,14 @@ p { margin: 0 0 1em; }
   padding: 8px 14px 7px;
   background: var(--sign); color: oklch(98% 0.01 160);
   font-family: "Overpass", system-ui, sans-serif; font-weight: 800;
-  font-size: .95rem; letter-spacing: .32em; text-transform: uppercase;
+  font-size: var(--fs-sm); letter-spacing: .32em; text-transform: uppercase;
   box-shadow: inset 0 0 0 2px oklch(98% 0.01 160 / .85), 0 0 0 1px var(--sign);
 }
 .strip { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .strip .photo { background: oklch(16% 0.01 250); padding: 8px 8px 28px; }
 .strip .photo figcaption {
   position: absolute; left: 10px; bottom: 7px;
-  font-family: "Overpass", system-ui, sans-serif; font-size: .72rem; font-weight: 800; letter-spacing: .14em;
+  font-family: "Overpass", system-ui, sans-serif; font-size: var(--fs-xs); font-weight: 800; letter-spacing: .14em;
   color: oklch(78% 0.14 80);
 }
 .strip .photo:nth-child(3), .strip .photo:nth-child(4) { grid-column: 1 / -1; }
@@ -644,7 +654,7 @@ p { margin: 0 0 1em; }
 .epilogue::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse at 50% 55%, transparent 20%, oklch(8% 0.02 20 / .9) 80%); }
 .epilogue .kicker { color: oklch(84% 0.05 75); }
 .epilogue h2 { font-size: clamp(3.4rem, 16vw, 8rem); line-height: .95; font-style: italic; }
-.epilogue p { max-width: 30ch; margin: 18px auto 30px; color: oklch(88% 0.02 80); font-size: 1.2rem; }
+.epilogue p { max-width: 30ch; margin: 18px auto 30px; color: oklch(88% 0.02 80); font-size: var(--fs-lg); }
 .epilogue .cta { --room-accent: oklch(86% 0.07 78); --room-bg: oklch(15% 0.02 20); }
 .epilogue .cta .play { width: 12px; height: 12px; }
 
@@ -652,8 +662,8 @@ p { margin: 0 0 1em; }
 .footer { padding: 56px var(--pad) calc(40px + env(safe-area-inset-bottom)); text-align: center; background: var(--wall); color: var(--ink-soft); }
 .footer svg { width: 56px; height: 56px; margin: 0 auto 18px; color: var(--gold); }
 .footer p { margin: 0 0 6px; }
-.footer .names { font-size: 1.3rem; letter-spacing: .14em; color: var(--ink); text-transform: uppercase; }
-.footer .credits { margin-top: 18px; font-size: .98rem; font-style: italic; max-width: 44ch; margin-left: auto; margin-right: auto; }
+.footer .names { font-size: var(--fs-lg); letter-spacing: .14em; color: var(--ink); text-transform: uppercase; }
+.footer .credits { margin-top: 18px; font-size: var(--fs-sm); font-style: italic; max-width: 44ch; margin-left: auto; margin-right: auto; }
 
 /* ---------- Tablet ---------- */
 @media (min-width: 700px) {
