@@ -6,18 +6,18 @@
   var ROOMS = 8; /* the cinema is the epilogue, not counted as a room */
 
   /* Footprint in model units. x grows to the right, y towards the entrance. */
-  var W = 9.8, D = 17.6, HALL_X = 4.9;   /* the centre aisle is 3 units wide */
-  var EDGE = 2.6;   /* plinth margin outside each wing, where numbers and wing names are painted */
+  var W = 9.2, D = 17.6, HALL_X = 4.6;   /* the centre aisle is 2.4 units wide */
+  var EDGE = 2.2;   /* plinth margin outside each wing, where numbers and wing names are painted */
   var MODEL = [
     { id: "palembang", no: "03", name: "Palembang", x: 0, y: 0, w: 3.4, d: 5, side: "left", walls: "new", n: ["palembang-1", "palembang-2"], e: ["palembang-3"] },
     { id: "jawa", no: "02", name: "Jawa", x: 0, y: 5, w: 3.4, d: 5, side: "left", walls: "new", n: ["jawa-1", "jawa-3"], e: ["jawa-2"] },
     { id: "bugis", no: "01", name: "Bugis-Makassar", x: 0, y: 10, w: 3.4, d: 5, side: "left", walls: "new", n: ["bugis-1", "bugis-4"], e: ["bugis-2"] },
-    { id: "out-of-character", no: "08", name: "Out of Character", x: 6.4, y: 0, w: 3.4, d: 3, side: "right", walls: "new", n: ["ooc-1", "ooc-3"], e: ["ooc-2"] },
-    { id: "bappenas", no: "07", name: "Bappenas, Menteng", x: 6.4, y: 3, w: 3.4, d: 3, side: "right", walls: "new", n: ["bappenas-1", "bappenas-3"], e: ["bappenas-2"] },
-    { id: "peranakan", no: "06", name: "Peranakan", x: 6.4, y: 6, w: 3.4, d: 3, side: "right", walls: "new", n: ["peranakan-1", "peranakan-2"], e: ["peranakan-4"] },
-    { id: "projection", no: "05", name: "Projection of Our Roots", x: 6.4, y: 9, w: 3.4, d: 3, side: "right", walls: "new", n: ["projection-3", "projection-4"], e: ["projection-1"], glyph: "ᨀ ꦲ ᨁ" },
-    { id: "woven", no: "04", name: "Woven Together", x: 6.4, y: 12, w: 3.4, d: 3, side: "right", walls: "new", n: ["woven-2", "woven-3"], e: ["woven-4"] },
-    { id: "film", no: "", name: "Cinema", x: 2.7, y: -7.2, w: 4.4, d: 4.2, side: "hall", walls: "news", n: ["film"], theatre: true }
+    { id: "out-of-character", no: "08", name: "Out of Character", x: 5.8, y: 0, w: 3.4, d: 3, side: "right", walls: "new", n: ["ooc-1", "ooc-3"], e: ["ooc-2"] },
+    { id: "bappenas", no: "07", name: "Bappenas, Menteng", x: 5.8, y: 3, w: 3.4, d: 3, side: "right", walls: "new", n: ["bappenas-1", "bappenas-3"], e: ["bappenas-2"] },
+    { id: "peranakan", no: "06", name: "Peranakan", x: 5.8, y: 6, w: 3.4, d: 3, side: "right", walls: "new", n: ["peranakan-1", "peranakan-2"], e: ["peranakan-4"] },
+    { id: "projection", no: "05", name: "Projection of Our Roots", x: 5.8, y: 9, w: 3.4, d: 3, side: "right", walls: "new", n: ["projection-3", "projection-4"], e: ["projection-1"], glyph: "ᨀ ꦲ ᨁ" },
+    { id: "woven", no: "04", name: "Woven Together", x: 5.8, y: 12, w: 3.4, d: 3, side: "right", walls: "new", n: ["woven-2", "woven-3"], e: ["woven-4"] },
+    { id: "film", no: "", name: "Cinema", x: 2.4, y: -7.2, w: 4.4, d: 4.2, side: "hall", walls: "news", n: ["film"], theatre: true }
   ];
 
   function T(k, v) { return window.I18N ? I18N.t(k, v) : k; }
@@ -81,14 +81,14 @@
   var ground = el("div", "m-ground");
   scene.appendChild(ground);
   ground.appendChild(flat("m-plinth m-plinth--1", -EDGE, -0.45, EDGE + 3.4, 15.45));
-  ground.appendChild(flat("m-plinth m-plinth--2", 6.4, -0.45, EDGE + 3.4, 15.45));
+  ground.appendChild(flat("m-plinth m-plinth--2", 5.8, -0.45, EDGE + 3.4, 15.45));
   /* The cinema is its own building at the end of the aisle, on a velvet plinth with a marquee. */
-  ground.appendChild(flat("m-walk", 3.6, -2.2, 2.6, 2.3));   /* path from the aisle to the cinema door */
-  ground.appendChild(flat("m-plinth m-plinth--cinema", 2.3, -8, 5.2, 5.85));
-  var marquee = flat("m-paint m-marquee", 2.3, -2.95, 5.2, 0.75, "<span></span>");
+  ground.appendChild(flat("m-walk", 3.5, -2.2, 2.2, 2.3));   /* path from the aisle to the cinema door */
+  ground.appendChild(flat("m-plinth m-plinth--cinema", 2.0, -8, 5.2, 5.85));
+  var marquee = flat("m-paint m-marquee", 2.0, -2.95, 5.2, 0.75, "<span></span>");
   ground.appendChild(marquee);
-  var wingName1 = flat("m-paint m-wingname m-wingname--1", -EDGE + 0.1, 0, 1, 15, "<span></span>");
-  var wingName2 = flat("m-paint m-wingname m-wingname--2", W + EDGE - 1.1, 0, 1, 15, "<span></span>");
+  var wingName1 = flat("m-paint m-wingname m-wingname--1", -EDGE + 0.05, 0, 0.9, 15, "<span></span>");
+  var wingName2 = flat("m-paint m-wingname m-wingname--2", W + EDGE - 0.95, 0, 0.9, 15, "<span></span>");
   ground.appendChild(wingName1); ground.appendChild(wingName2);
   var entrance = flat("m-paint m-entrance", 0, D + 0.25, W, 1, "<span></span>");
   ground.appendChild(entrance);
@@ -100,7 +100,7 @@
   }
   paintNames();
 
-  var hall = box("m-hall", 3.4, 0, 3, 15);
+  var hall = box("m-hall", 3.4, 0, 2.4, 15);
   hall.appendChild(el("div", "m-floor"));
   hall.appendChild(el("span", "m-path"));
   scene.appendChild(hall);
@@ -123,7 +123,7 @@
     floor.dataset.room = m.id;
     floor.setAttribute("aria-label", m.id === "film" ? T("aria.film") : T("aria.floor", { no: m.no, name: m.name }));
     r.appendChild(floor);
-    if (m.no) { m.noEl = flat("m-paint m-no m-no--" + m.side, m.side === "left" ? -1.3 : W + 0.3, m.y + m.d / 2 - 0.5, 1, 1, m.no); ground.appendChild(m.noEl); }
+    if (m.no) { m.noEl = flat("m-paint m-no m-no--" + m.side, m.side === "left" ? -1.15 : W + 0.25, m.y + m.d / 2 - 0.45, 0.9, 0.9, m.no); ground.appendChild(m.noEl); }
     else r.appendChild(el("span", "m-num", "&#9654;"));
     if (m.glyph) r.appendChild(el("span", "m-glyph", m.glyph));
     if (m.walls.indexOf("n") !== -1) { var n = wall("n"); (m.n || []).forEach(function (p) { n.appendChild(print(p)); }); r.appendChild(n); }
@@ -140,12 +140,12 @@
   scene.appendChild(you);
 
   /* ---------- Fit the model to its container ---------- */
-  var SPIN = -20, TILT = 48;
+  var SPIN = -12, TILT = 48;
   function rad(a) { return a * Math.PI / 180; }
   function fit() {
     var desktop = window.matchMedia("(min-width: 1024px)").matches;
     var s = rad(Math.abs(SPIN)), t = rad(TILT);
-    var extX = (W + 2 * EDGE + 1.2) * Math.cos(s) + (D + 9) * Math.sin(s);   /* includes the theatre behind */
+    var extX = (W + 2 * EDGE + 0.4) * Math.cos(s) + (D + 9) * Math.sin(s);   /* includes the theatre behind */
     u = Math.max(18, Math.min(maq.clientWidth / extX, 44));
     var room = window.innerHeight - 56 - 40;
     for (var pass = 0; pass < 3; pass++) {
@@ -257,7 +257,7 @@
     if (!id) return { x: HALL_X, y: 16.9 };
     var m = byId[id];
     if (m.id === "film") return { x: HALL_X, y: -2.5 };
-    return { x: m.side === "left" ? 3.8 : 6.0, y: m.y + m.d / 2 };
+    return { x: m.side === "left" ? 3.75 : 5.45, y: m.y + m.d / 2 };
   }
   function at(p) { return { transform: "translate(" + (p.x * u) + "px," + (p.y * u) + "px) translateZ(2px)" }; }
   function placeHere() { you.style.transform = at(door(here)).transform; }
@@ -531,7 +531,7 @@
     var t = e.target.closest("[data-room]");
     var id = t ? t.dataset.room : roomAt(e.clientX, e.clientY);
     if (!id) return;
-    if (selected === id) open(selected, true); else userPick(id);
+    if (selected === id && userPicked) open(selected, true); else userPick(id);   /* the preset room still needs its own first tap */
   });
   document.querySelector(".roomlist").addEventListener("click", function (e) {
     var t = e.target.closest("[data-room]");
@@ -539,6 +539,7 @@
   });
   if (window.matchMedia("(hover: hover)").matches) {
     scene.addEventListener("pointerover", function (e) {
+      if (e.pointerType !== "mouse") return;   /* a touch must never count as the first of two taps */
       var t = e.target.closest("[data-room]");
       if (t) userPick(t.dataset.room);
     });

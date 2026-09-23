@@ -38,8 +38,8 @@
     modelBox.appendChild(mini);
   }
   function fitMini() {
-    var W = 9.8, D = 17.6, s = 20 * Math.PI / 180, t = 48 * Math.PI / 180;
-    var u = Math.max(10, (modelBox.clientWidth || 300) / ((W + 6.4) * Math.cos(s) + (D + 9) * Math.sin(s)));
+    var W = 9.2, D = 17.6, s = 12 * Math.PI / 180, t = 48 * Math.PI / 180;
+    var u = Math.max(10, (modelBox.clientWidth || 300) / ((W + 4.8) * Math.cos(s) + (D + 9) * Math.sin(s)));
     var avail = visual.clientHeight - 10;
     for (var pass = 0; pass < 3; pass++) {
       mini.style.setProperty("--u", u + "px");

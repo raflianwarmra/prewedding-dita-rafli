@@ -92,14 +92,15 @@
 
 /* ---------- The maquette ---------- */
 @property --tilt { syntax: "<angle>"; inherits: true; initial-value: 48deg; }
-@property --spin { syntax: "<angle>"; inherits: true; initial-value: -20deg; }
+@property --spin { syntax: "<angle>"; inherits: true; initial-value: -12deg; }
 
 .maq {
   --u: 26px;
-  --W: 9.8; --D: 17.6;
+  --W: 9.2; --D: 17.6;
   --h: calc(var(--u) * 1.3);    /* full wall height */
   --hl: calc(var(--u) * .3);     /* low wall (cutaway) */
   position: relative; width: 100%; height: var(--maq-h, 520px);
+  max-width: none;
   touch-action: manipulation;
 }
 .maq__camera { position: absolute; inset: 0; }
@@ -116,14 +117,14 @@
 
 /* Ground plate */
 .m-ground {
-  position: absolute; left: calc(var(--u) * -3); top: calc(var(--u) * -8.8); right: calc(var(--u) * -3); bottom: calc(var(--u) * -1.7);
+  position: absolute; left: calc(var(--u) * -2.4); top: calc(var(--u) * -8.8); right: calc(var(--u) * -2.4); bottom: calc(var(--u) * -1.7);
   background: var(--m-ground);
   background-image: linear-gradient(135deg, oklch(100% 0 0 / .18), transparent 55%); border-radius: calc(var(--u) * .3);
   box-shadow: 0 0 0 1px var(--m-line), 0 calc(var(--u) * 1.4) calc(var(--u) * 2.6) oklch(25% 0.05 20 / .18);
   transform: translateZ(-4px);
 }
 /* Flat pieces inside the ground plate: positions are in model units, offset by the plate's own origin. */
-.m-ground .m-flat { left: calc((var(--x) + 3) * var(--u)); top: calc((var(--y) + 8.8) * var(--u)); transform: none; }
+.m-ground .m-flat { left: calc((var(--x) + 2.4) * var(--u)); top: calc((var(--y) + 8.8) * var(--u)); transform: none; }
 .m-ground .m-wingname span, .m-ground .m-entrance span { transform-origin: center; }
 
 /* Flat pieces laid on the ground plane: plinths and painted labels. */
@@ -445,6 +446,11 @@ html:has(.roomview[open]) { overflow: hidden; }
 .roomview__step--next { align-items: flex-end; text-align: right; }
 .roomview__step:hover { background: var(--wall-2); }
 ::view-transition-group(root) { animation-duration: .3s; }
+
+/* Phones and tablets: let the model use the full screen width. */
+@media (max-width: 1023px) {
+  .mapview > .maq { width: auto; margin-inline: calc(-1 * clamp(12px, 4vw, 48px)); }
+}
 
 /* ---------- Desktop ---------- */
 @media (min-width: 1024px) {
