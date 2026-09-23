@@ -89,6 +89,7 @@
   MODEL.forEach(function (m) {
     var r = box("m-room--" + m.id, m.x, m.y, m.w, m.d);
     r.dataset.room = m.id;
+    r.dataset.wing = m.side === "left" ? "1" : m.side === "right" ? "2" : "0";
     var floor = el("button", "m-floor");
     floor.type = "button";
     floor.dataset.room = m.id;
@@ -135,13 +136,34 @@
     pinTags();
   }
 
-  /* The entrance caption sits in a flat layer, pinned under the lobby. */
+  /* The entrance caption and the tap hint sit in a flat layer above the model. */
+  var hint = el("span", "m-hint"), hintDot = el("span", "m-hint-dot");
+  hint.setAttribute("aria-hidden", "true"); hintDot.setAttribute("aria-hidden", "true");
+  tags.appendChild(hintDot); tags.appendChild(hint);
+  var touch = window.matchMedia("(hover: none)").matches;
+  var learned = !!store("dr-learned");
+  var hintMode = learned ? "off" : "start";
   function pinTags() {
     if (flight) return;
     var c = camera.getBoundingClientRect(), lr = lobby.getBoundingClientRect();
     entrance.style.left = (lr.left + lr.width / 2 - c.left) + "px";
     entrance.style.top = (lr.bottom - c.top + 10) + "px";
+    placeHint(c);
   }
+  function placeHint(c) {
+    var on = hintMode !== "off" && selected && root.dataset.view === "map";
+    hint.classList.toggle("is-on", !!on); hintDot.classList.toggle("is-on", !!on);
+    if (!on) return;
+    c = c || camera.getBoundingClientRect();
+    var r = byId[selected].el.querySelector(".m-floor").getBoundingClientRect();
+    var x = r.left + r.width / 2 - c.left, y = r.top + r.height * 0.42 - c.top;
+    hint.textContent = hintMode === "start"
+      ? (touch ? "Tap a room to preview" : "Point at a room to preview")
+      : (touch ? "Tap again to enter" : "Click to enter");
+    hint.style.left = x + "px"; hint.style.top = y + "px";
+    hintDot.style.left = x + "px"; hintDot.style.top = y + "px";
+  }
+  function setHint(mode) { if (!learned) { hintMode = mode; placeHint(); } }
 
   /* ---------- Pointer tilt (desktop only) ---------- */
   var tgt = { s: SPIN, t: TILT }, now = { s: SPIN, t: TILT }, raf = 0;
@@ -328,6 +350,7 @@
   function open(id, push) {
     if (busy || dialog.open) return;
     busy = true;
+    if (!learned) { learned = true; hintMode = "off"; store("dr-learned", 1); placeHint(); }
     if (push) history.pushState({ room: id }, "", urlFor(id));
     select(id);
     byId[id].el.classList.add("is-hot");
@@ -411,12 +434,14 @@
     }));
     void cardPrints.offsetWidth;
     cardPrints.classList.add("is-swapping");
+    placeHint();
     card.querySelector("[data-enter]").setAttribute("aria-label", "Enter " + (m.no ? "room " + m.no + ", " + m.name : "the cinema"));
   }
   card.querySelectorAll("[data-card-step]").forEach(function (b) {
     b.addEventListener("click", function () {
       var i = (ORDER.indexOf(selected) + +b.dataset.cardStep + ORDER.length) % ORDER.length;
       select(ORDER[i]);
+      setHint("again");
     });
   });
   card.querySelector("[data-enter]").addEventListener("click", function () { open(selected, true); });
@@ -440,7 +465,7 @@
     var t = e.target.closest("[data-room]");
     var id = t ? t.dataset.room : roomAt(e.clientX, e.clientY);
     if (!id) return;
-    if (selected === id) open(selected, true); else select(id);
+    if (selected === id) open(selected, true); else { select(id); setHint("again"); }
   });
   document.querySelector(".roomlist").addEventListener("click", function (e) {
     var t = e.target.closest("[data-room]");
@@ -449,7 +474,7 @@
   if (window.matchMedia("(hover: hover)").matches) {
     scene.addEventListener("pointerover", function (e) {
       var t = e.target.closest("[data-room]");
-      if (t) select(t.dataset.room);
+      if (t) { select(t.dataset.room); setHint("again"); }
     });
   }
   dialog.querySelector("[data-close]").addEventListener("click", close);
@@ -476,6 +501,18 @@
   if (document.fonts) document.fonts.ready.then(pinTags);
   var resizeTimer;
   window.addEventListener("resize", function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(fit, 120); });
+
+  /* Hooks for the landing (intro.js). */
+  window.DRMap = {
+    scene: scene,
+    unit: function () { return u; },
+    refit: fit,
+    arrive: function () {
+      fit();
+      if (calm.matches || !maq.animate) return;
+      maq.animate([{ opacity: 0, transform: "translateY(30px) scale(.95)" }, { opacity: 1, transform: "none" }], { duration: 1100, easing: "cubic-bezier(.22,1,.36,1)" });
+    }
+  };
 
   /* Deep link (#jawa): open it, with the map underneath for Back. */
   var start = location.hash.slice(1);

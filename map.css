@@ -382,7 +382,7 @@ html:has(.roomview[open]) { overflow: hidden; }
   .mapview__head { text-align: left; grid-column: 1; grid-row: 1; }
   .mapview__mono { margin-left: 0; }
   .mapview__intro { margin-left: 0; }
-  .maq { grid-column: 2; grid-row: 1 / 4; align-self: start; position: sticky; top: calc(var(--bar-h) + 16px); }
+  .mapview > .maq { grid-column: 2; grid-row: 1 / 4; align-self: start; position: sticky; top: calc(var(--bar-h) + 16px); }
   .maqcard { grid-column: 1; grid-row: 2; margin: 0; }
   .roomlist { grid-column: 1; grid-row: 3; margin: 0; align-self: start; }
 }

@@ -20,6 +20,9 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
       document.documentElement.classList.add("js");
       document.documentElement.dataset.view = new URLSearchParams(location.search).get("view") === "scroll" ? "scroll" : "map";
+      var introSeen = false;
+      try { introSeen = localStorage.getItem("dr-intro-seen") === "1"; } catch (e) {}
+      if (document.documentElement.dataset.view === "map" && !introSeen && location.hash.length < 2) document.documentElement.dataset.firstVisit = "1";
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,6 +33,7 @@
   <link rel="preload" as="image" href="assets/art/foyer-900.webp" imagesrcset="assets/art/foyer-900.webp 900w, assets/art/foyer-1600.webp 1600w" imagesizes="(min-width: 1024px) 520px, 90vw">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="map.css">
+  <link rel="stylesheet" href="intro.css">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -67,6 +71,56 @@
   </header>
   <p class="where" aria-hidden="true" data-where-label><b>Foyer</b></p>
 
+  <div class="intro" data-intro tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="intro-title" hidden>
+    <button class="intro__skip" type="button" data-intro-skip>Skip</button>
+    <div class="intro__visual" data-intro-visual aria-hidden="true">
+      <div class="intro__hero">
+        <svg class="intro__mono" viewBox="0 0 1275.59 1275.59"><use href="#monogram"/></svg>
+      </div>
+      <div class="intro__model" data-intro-model></div>
+      <span class="intro__finger" data-intro-finger></span>
+      <span class="intro__bubble" data-intro-bubble></span>
+      <div class="intro__card">
+        <p class="intro__card-no">Room 02</p>
+        <p class="intro__card-name">Jawa</p>
+        <div class="intro__card-prints">
+          <img src="assets/photos/jawa-1-360.webp" alt="" width="360" height="450">
+          <img src="assets/photos/jawa-3-360.webp" alt="" width="360" height="450">
+          <img src="assets/photos/jawa-2-360.webp" alt="" width="360" height="450">
+        </div>
+        <span class="intro__card-line"></span><span class="intro__card-line is-short"></span>
+        <span class="intro__card-cta">See the full collection <svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></span>
+      </div>
+    </div>
+    <div class="intro__text">
+      <div class="intro__step" data-intro-step="0">
+        <p class="kicker">A digital photo exhibition</p>
+        <h2 id="intro-title"><span class="of">Prewedding of</span> Dita dan Rafli</h2>
+        <p>Our prewedding photographs, hung as a small exhibition you can walk through on your phone.</p>
+      </div>
+      <div class="intro__step" data-intro-step="1">
+        <p class="kicker">The exhibition</p>
+        <h2>Two wings, eight rooms.</h2>
+        <p><b>Wing I · Adat</b> holds where we come from: Rafli's Bugis-Makassar roots and both sides of Dita's family. <b>Wing II · Non-Adat</b> is where we wander: tradition through our eyes, where we met, and ideas we simply loved.</p>
+      </div>
+      <div class="intro__step" data-intro-step="2">
+        <p class="kicker">How to visit</p>
+        <h2>Tap a room to see it. Tap again to step inside.</h2>
+        <p>The card under the model shows the room first. You can also use its arrows, or the list of rooms below.</p>
+      </div>
+      <div class="intro__step" data-intro-step="3">
+        <p class="kicker">Inside each room</p>
+        <h2>Every room opens its full album.</h2>
+        <p>Read the story behind each theme, see its highlights, then tap <b>See the full collection</b> for every photograph. The film waits in the cinema at the end.</p>
+      </div>
+    </div>
+    <div class="intro__nav">
+      <div class="intro__dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <button class="intro__next" type="button" data-intro-next>Begin</button>
+      <button class="intro__alt" type="button" data-intro-scroll>Prefer scrolling? Open the simple view</button>
+    </div>
+  </div>
+
   <section class="mapview" aria-labelledby="map-title">
     <div class="mapview__head">
       <svg class="mapview__mono" viewBox="0 0 1275.59 1275.59" role="img" aria-label="Dita and Rafli monogram"><use href="#monogram"/></svg>
@@ -74,6 +128,7 @@
       <h1 id="map-title"><span class="of">Prewedding of</span> Dita dan Rafli</h1>
       <p class="mapview__intro">A model of our exhibition in two wings. Tap a room to see it, tap again to step inside.</p>
       <p class="mapview__progress" data-progress aria-live="polite"></p>
+      <button class="mapview__how" type="button" data-intro-open><span aria-hidden="true">?</span> How to visit</button>
     </div>
 
     <div class="maq" data-maq>
@@ -514,5 +569,6 @@
 
   <script src="main.js" defer></script>
   <script src="map.js" defer></script>
+  <script src="intro.js" defer></script>
 </body>
 </html>
