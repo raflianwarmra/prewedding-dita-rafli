@@ -3,6 +3,40 @@
 
 :root[data-view="map"] .skip { display: none; }
 
+:root[data-view="map"] { --wall: oklch(97.2% 0.013 85); --wall-2: oklch(93.5% 0.02 82); }
+:root[data-view="map"][data-theme="dark"] {
+  --wall: oklch(19.5% 0.045 258); --wall-2: oklch(25% 0.05 258);
+  --ink: oklch(94% 0.015 85); --ink-soft: oklch(80% 0.03 85);
+  --line: oklch(94% 0.015 85 / .14); --accent: var(--gold-bright);
+}
+:root[data-view="map"] body {
+  background:
+    linear-gradient(180deg, oklch(89% 0.045 232) 0, oklch(93.5% 0.028 215) 26%, oklch(97.2% 0.013 85) 58%) fixed;
+}
+:root[data-view="map"][data-theme="dark"] body {
+  background:
+    radial-gradient(ellipse 70% 40% at 70% 0%, oklch(40% 0.08 250 / .45), transparent 70%),
+    linear-gradient(180deg, oklch(15% 0.05 265) 0, oklch(21% 0.055 252) 55%, oklch(19.5% 0.045 258)) fixed;
+}
+
+/* Lanterns from the invitation drifting behind the map. */
+.sky { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+:root[data-view="scroll"] .sky { display: none; }
+.sky img {
+  position: absolute; width: clamp(90px, 20vw, 190px); height: auto; opacity: .55;
+  filter: drop-shadow(0 0 22px oklch(88% 0.14 85 / .5));
+  animation: rise 46s linear infinite;
+}
+.sky img:nth-child(1) { left: -2%; top: 58%; }
+.sky img:nth-child(2) { right: 2%; top: 80%; width: clamp(60px, 12vw, 120px); animation-duration: 58s; animation-delay: -21s; }
+.sky img:nth-child(3) { left: 44%; top: 96%; width: clamp(50px, 9vw, 90px); animation-duration: 64s; animation-delay: -40s; opacity: .4; }
+:root[data-theme="dark"] .sky img { opacity: .85; filter: drop-shadow(0 0 26px oklch(85% 0.16 80 / .75)); }
+@keyframes rise {
+  0% { transform: translate3d(0, 0, 0) rotate(-3deg); }
+  50% { transform: translate3d(3vw, -60vh, 0) rotate(3deg); }
+  100% { transform: translate3d(-1vw, -120vh, 0) rotate(-2deg); }
+}
+
 :root {
   --m-paper: oklch(97.5% 0.008 80);      /* wall faces lit from the front */
   --m-shade: oklch(91.5% 0.014 75);      /* side faces */
@@ -11,13 +45,13 @@
   --m-ground: oklch(93% 0.016 75);
   --m-hall: oklch(95.5% 0.01 78);
 }
-:root[data-theme="dark"] {
-  --m-paper: oklch(30% 0.03 15);
-  --m-shade: oklch(24% 0.028 15);
-  --m-rim: oklch(38% 0.035 20);
-  --m-line: oklch(93% 0.017 78 / .12);
-  --m-ground: oklch(20% 0.03 12);
-  --m-hall: oklch(23% 0.03 14);
+:root[data-theme="dark"] {           /* moonlit ivory model on a night-blue plinth */
+  --m-paper: oklch(43% 0.02 80);
+  --m-shade: oklch(35% 0.02 80);
+  --m-rim: oklch(55% 0.025 82);
+  --m-line: oklch(94% 0.015 85 / .12);
+  --m-ground: oklch(25% 0.04 255);
+  --m-hall: oklch(29% 0.025 250);
 }
 
 /* ---------- Page ---------- */
@@ -64,7 +98,8 @@
 /* Ground plate */
 .m-ground {
   position: absolute; left: calc(var(--u) * -.9); top: calc(var(--u) * -.9); right: calc(var(--u) * -.9); bottom: calc(var(--u) * -1.8);
-  background: var(--m-ground); border-radius: calc(var(--u) * .3);
+  background: var(--m-ground);
+  background-image: linear-gradient(135deg, oklch(100% 0 0 / .18), transparent 55%); border-radius: calc(var(--u) * .3);
   box-shadow: 0 0 0 1px var(--m-line), 0 calc(var(--u) * 1.4) calc(var(--u) * 2.6) oklch(25% 0.05 20 / .18);
   transform: translateZ(-2px);
 }
@@ -78,7 +113,8 @@
 }
 .m-floor {
   position: absolute; inset: 0; margin: 0; padding: 0; border: 0; border-radius: 0;
-  background: var(--floor); cursor: pointer;
+  background-color: var(--floor); background-image: var(--pat, none); background-size: var(--pat-size, auto);
+  background-position: var(--pat-pos, 0 0); background-repeat: var(--pat-repeat, repeat); cursor: pointer;
   box-shadow: inset 0 0 0 1px var(--m-line);
   -webkit-tap-highlight-color: transparent;
   transition: background-color .3s var(--ease-out), box-shadow .3s var(--ease-out);
@@ -103,14 +139,51 @@
 .m-print img { width: 100%; height: 100%; object-fit: cover; display: block; }
 :root[data-theme="dark"] .m-print { background: oklch(88% 0.03 80); box-shadow: 0 0 0 1px oklch(0% 0 0 / .4), 0 0 12px oklch(85% 0.1 80 / .35); }
 
-/* Room floors: a faint tint of each theme; the rooms carry the rest. */
-.m-room--bugis { --floor: oklch(93% 0.035 358); }
-.m-room--jawa { --floor: oklch(92.5% 0.035 145); }
-.m-room--palembang { --floor: oklch(92.5% 0.045 85); }
-.m-room--woven { --floor: oklch(96% 0.02 60); }
-.m-room--peranakan { --floor: oklch(93.5% 0.035 330); }
-.m-room--bappenas { --floor: oklch(93% 0.01 240); }
-.m-room--projection { --floor: oklch(16% 0.015 280); }
+/* Room floors: a base tint plus each theme's motif, laid in like a floor inlay. */
+.m-room--bugis {            /* lipa' sabbe plaid */
+  --floor: oklch(93% 0.035 358);
+  --pat:
+    linear-gradient(90deg, oklch(52% 0.19 358 / .2) 0 28%, transparent 28% 44%, oklch(62% 0.12 150 / .2) 44% 52%, transparent 52% 64%, oklch(80% 0.14 95 / .28) 64% 70%, transparent 70%),
+    linear-gradient(0deg, oklch(52% 0.19 358 / .16) 0 28%, transparent 28% 44%, oklch(45% 0.1 250 / .14) 44% 52%, transparent 52%);
+  --pat-size: calc(var(--u) * .95) calc(var(--u) * .95);
+}
+.m-room--jawa {             /* kawung */
+  --floor: oklch(92.5% 0.035 145);
+  --pat: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg fill='%23ffffff' fill-opacity='.62' stroke='%234d7a52' stroke-opacity='.28' stroke-width='.8'%3E%3Cellipse cx='20' cy='9' rx='6' ry='9'/%3E%3Cellipse cx='20' cy='31' rx='6' ry='9'/%3E%3Cellipse cx='9' cy='20' rx='9' ry='6'/%3E%3Cellipse cx='31' cy='20' rx='9' ry='6'/%3E%3C/g%3E%3Ccircle cx='20' cy='20' r='1.8' fill='%234d7a52' fill-opacity='.45'/%3E%3C/svg%3E");
+  --pat-size: calc(var(--u) * 1.1) calc(var(--u) * 1.1);
+}
+.m-room--palembang {        /* songket lattice with gold points */
+  --floor: oklch(92.5% 0.045 85);
+  --pat:
+    radial-gradient(circle, oklch(70% 0.13 80 / .55) 12%, transparent 15%),
+    repeating-linear-gradient(45deg, oklch(66% 0.12 78 / .3) 0 1px, transparent 1px calc(var(--u) * .5)),
+    repeating-linear-gradient(-45deg, oklch(66% 0.12 78 / .3) 0 1px, transparent 1px calc(var(--u) * .5));
+  --pat-size: calc(var(--u) * .707) calc(var(--u) * .707), auto, auto;
+}
+.m-room--woven {            /* bands of Bugis and Palembang cloth */
+  --floor: oklch(96% 0.02 60);
+  --pat: linear-gradient(oklch(96% 0.02 60 / .62), oklch(96% 0.02 60 / .62)), var(--textiles);
+  --pat-size: auto, calc(var(--u) * 1.7) 100%;
+}
+.m-room--peranakan {        /* Peranakan tiles */
+  --floor: oklch(93.5% 0.035 330);
+  --pat: linear-gradient(oklch(95% 0.03 340 / .45), oklch(95% 0.03 340 / .45)), var(--tile);
+  --pat-size: auto, calc(var(--u) * .9) calc(var(--u) * .9);
+}
+.m-room--bappenas {         /* paving grid and a zebra crossing */
+  --floor: oklch(92% 0.01 240);
+  --pat:
+    repeating-linear-gradient(90deg, oklch(99% 0 0 / .9) 0 calc(var(--u) * .22), transparent 0 calc(var(--u) * .44)),
+    linear-gradient(90deg, oklch(45% 0.02 240 / .16) 1px, transparent 1px),
+    linear-gradient(0deg, oklch(45% 0.02 240 / .16) 1px, transparent 1px);
+  --pat-size: 70% calc(var(--u) * .55), calc(var(--u) * .6) calc(var(--u) * .6), calc(var(--u) * .6) calc(var(--u) * .6);
+  --pat-pos: 90% 82%, 0 0, 0 0;
+  --pat-repeat: no-repeat, repeat, repeat;
+}
+.m-room--projection {       /* dark room with scan lines of projected light */
+  --floor: oklch(16% 0.015 280);
+  --pat: repeating-linear-gradient(0deg, oklch(86% 0.13 150 / .07) 0 1px, transparent 1px 6px);
+}
 .m-room--projection .m-wall { background: oklch(21% 0.015 280); border-color: oklch(30% 0.02 280); }
 .m-room--projection .m-glyph {
   position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none;
@@ -118,22 +191,37 @@
   color: oklch(86% 0.13 150 / .8); text-shadow: 0 0 8px oklch(86% 0.13 150 / .9);
   transform: translateZ(1px);
 }
-.m-room--out-of-character { --floor: oklch(30% 0.06 45); }
-.m-room--out-of-character .m-floor { background: radial-gradient(ellipse at 60% 30%, oklch(62% 0.13 60 / .75), transparent 65%), var(--floor); }
+.m-room--out-of-character { /* lamp-lit hotel carpet */
+  --floor: oklch(30% 0.06 45);
+  --pat:
+    radial-gradient(ellipse at 60% 30%, oklch(62% 0.13 60 / .7), transparent 65%),
+    repeating-conic-gradient(oklch(42% 0.09 40 / .55) 0 25%, transparent 0 50%);
+  --pat-size: auto, calc(var(--u) * .7) calc(var(--u) * .7);
+}
 .m-room--out-of-character .m-wall { background: oklch(34% 0.05 40); border-color: oklch(45% 0.06 45); }
-.m-room--film { --floor: oklch(17% 0.02 20); }
+.m-room--film {             /* rows of seats */
+  --floor: oklch(17% 0.02 20);
+  --pat: radial-gradient(ellipse 36% 30% at 50% 50%, oklch(48% 0.12 25 / .75) 80%, transparent 100%);
+  --pat-size: calc(var(--u) * .4) calc(var(--u) * .42);
+  --pat-pos: center calc(var(--u) * .9);
+}
 .m-room--film .m-wall { background: oklch(20% 0.02 20); border-color: oklch(30% 0.03 20); }
 .m-room--film .m-wall--n .m-print { height: 74%; aspect-ratio: 16 / 9; padding: 0; box-shadow: 0 0 14px oklch(85% 0.08 80 / .55); }
-:root[data-theme="dark"] .m-room:not(.m-room--projection):not(.m-room--out-of-character):not(.m-room--film) { --floor: color-mix(in oklch, var(--floor-dark, oklch(40% 0.03 30)) 30%, oklch(22% 0.03 14)); }
+:root[data-theme="dark"] .m-room:not(.m-room--projection):not(.m-room--out-of-character):not(.m-room--film) { --floor: color-mix(in oklch, var(--floor-dark, oklch(40% 0.03 30)) 38%, oklch(27% 0.012 70)); }
 :root[data-theme="dark"] .m-room--bugis { --floor-dark: oklch(55% 0.15 358); }
 :root[data-theme="dark"] .m-room--jawa { --floor-dark: oklch(55% 0.1 145); }
 :root[data-theme="dark"] .m-room--palembang { --floor-dark: oklch(62% 0.11 80); }
+:root[data-theme="dark"] .m-room--jawa .m-floor { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg fill='%23ffffff' fill-opacity='.28' stroke='%23cfe8c8' stroke-opacity='.3' stroke-width='.8'%3E%3Cellipse cx='20' cy='9' rx='6' ry='9'/%3E%3Cellipse cx='20' cy='31' rx='6' ry='9'/%3E%3Cellipse cx='9' cy='20' rx='9' ry='6'/%3E%3Cellipse cx='31' cy='20' rx='9' ry='6'/%3E%3C/g%3E%3C/svg%3E"); }
 :root[data-theme="dark"] .m-room--peranakan { --floor-dark: oklch(58% 0.1 330); }
 :root[data-theme="dark"] .m-room--bappenas { --floor-dark: oklch(55% 0.03 240); }
+:root[data-theme="dark"] .m-room--woven { --floor-dark: oklch(62% 0.1 50); --pat: linear-gradient(oklch(25% 0.02 255 / .6), oklch(25% 0.02 255 / .6)), var(--textiles); }
+:root[data-theme="dark"] .m-room--peranakan { --pat: linear-gradient(oklch(26% 0.04 330 / .72), oklch(26% 0.04 330 / .72)), var(--tile); }
+:root[data-theme="dark"] .m-room--bappenas { --pat: repeating-linear-gradient(90deg, oklch(90% 0 0 / .35) 0 calc(var(--u) * .22), transparent 0 calc(var(--u) * .44)), linear-gradient(90deg, oklch(90% 0 0 / .08) 1px, transparent 1px), linear-gradient(0deg, oklch(90% 0 0 / .08) 1px, transparent 1px); }
 :root[data-theme="dark"] .m-room.is-visited .m-floor { box-shadow: inset 0 0 calc(var(--u) * 1.2) oklch(80% 0.1 75 / .35), inset 0 0 0 1px var(--m-line); }
 
 /* Hall and lobby */
-.m-hall .m-floor, .m-lobby .m-floor { cursor: default; background: var(--m-hall); }
+.m-hall .m-floor, .m-lobby .m-floor { cursor: default; background-color: var(--m-hall); }
+.m-lobby .m-floor { background-image: repeating-conic-gradient(oklch(50% 0.02 80 / .07) 0 25%, transparent 0 50%); background-size: calc(var(--u) * 1.2) calc(var(--u) * 1.2); }
 .m-hall .m-path { position: absolute; left: 50%; top: 0; bottom: 0; width: 0; border-left: 1.5px dashed color-mix(in oklch, var(--accent) 45%, transparent); transform: translateZ(1px); pointer-events: none; }
 .m-lobby .m-mono { position: absolute; left: 50%; top: 50%; width: calc(var(--u) * 1.5); height: calc(var(--u) * 1.5); margin: calc(var(--u) * -.75) 0 0 calc(var(--u) * -.75); color: var(--gold); transform: translateZ(1px); pointer-events: none; }
 
@@ -169,10 +257,12 @@
 :root[data-theme="dark"] .m-num { color: oklch(92% 0.02 80 / .6); }
 
 /* Selected room: lit floor, gold rims, glowing prints. */
-.m-room.is-selected .m-floor { background: color-mix(in oklch, var(--accent) 22%, var(--floor)); box-shadow: inset 0 0 0 2px var(--accent), inset 0 0 calc(var(--u) * 1.4) color-mix(in oklch, var(--accent) 35%, transparent); }
+.m-room.is-selected .m-floor { background-color: color-mix(in oklch, var(--accent) 22%, var(--floor)); box-shadow: inset 0 0 0 2px var(--accent), inset 0 0 calc(var(--u) * 1.4) color-mix(in oklch, var(--accent) 35%, transparent); }
 .m-room--projection.is-selected .m-floor, .m-room--out-of-character.is-selected .m-floor, .m-room--film.is-selected .m-floor { box-shadow: inset 0 0 0 2px var(--gold-bright), inset 0 0 calc(var(--u) * 1.4) oklch(80% 0.1 80 / .45); }
 .m-room.is-selected .m-wall { border-color: var(--gold); }
 .m-room.is-selected .m-num { color: var(--accent); }
+.m-room.is-hot .m-num { animation: num-glow 1.2s var(--ease-out) both; }
+@keyframes num-glow { 40% { text-shadow: 0 0 12px var(--gold-bright), 0 0 26px var(--gold-bright); color: var(--gold-bright); } 100% { text-shadow: 0 0 6px var(--gold-bright); } }
 .m-room.is-selected .m-print { box-shadow: 0 0 0 1px var(--gold), 0 0 10px oklch(85% 0.1 80 / .6); }
 
 /* ---------- Wall label card ---------- */
@@ -237,10 +327,19 @@ html:has(.roomview[open]) { overflow: hidden; }
   overflow-y: auto; overscroll-behavior: contain;
 }
 .roomview::backdrop { background: transparent; }
-.roomview[open] { animation: room-in .38s var(--ease-out); }
-.roomview.is-closing { animation: room-out .24s ease-in forwards; }
-@keyframes room-in { from { opacity: 0; transform: translateY(18px); } }
-@keyframes room-out { to { opacity: 0; transform: translateY(12px); } }
+.curtain {
+  position: fixed; inset: 0; z-index: 20; pointer-events: none;
+  display: grid; place-content: center; text-align: center; gap: 6px; padding: 24px;
+  background: var(--c-bg, var(--wall)); color: var(--c-ink, var(--ink));
+  opacity: 0; visibility: hidden;
+}
+.curtain.is-on { visibility: visible; }
+.roomview.is-entering { background: transparent; }
+.roomview.is-entering .roomview__bar, .roomview.is-entering .roomview__body, .roomview.is-entering .roomview__nav { visibility: hidden; }
+.curtain__no { margin: 0; font-size: .8rem; letter-spacing: .32em; text-transform: uppercase; opacity: .8; }
+.curtain__name { margin: 0; font-size: clamp(2.8rem, 13vw, 6.5rem); line-height: .98; text-wrap: balance; }
+.curtain__sub { margin: 4px 0 0; font-style: italic; font-size: clamp(1.1rem, 4.4vw, 1.6rem); opacity: .85; }
+.curtain__rule { width: 64px; height: 1px; margin: 14px auto 0; background: currentColor; opacity: .5; transform-origin: center; }
 .roomview__bar {
   position: sticky; top: 0; z-index: 10;
   display: flex; align-items: center; gap: 12px; height: var(--bar-h); padding: 0 12px;
@@ -289,5 +388,5 @@ html:has(.roomview[open]) { overflow: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .roomview[open], .roomview.is-closing { animation: none; }
+  .sky img { animation: none; }
 }

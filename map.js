@@ -221,29 +221,82 @@
   }
 
   /* ---------- Camera ---------- */
+  var FLY = 1350; /* slow and deliberate: the visit should feel like walking in */
   function flyTo(id) {
     if (calm.matches || !camera.animate) return Promise.resolve();
     var r = byId[id].el.querySelector(".m-floor").getBoundingClientRect();
     if (r.bottom < 0 || r.top > window.innerHeight) return Promise.resolve(); /* model is off-screen */
     var c = camera.getBoundingClientRect();
     var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-    var k = Math.min(3.4, Math.max(1.8, window.innerWidth * 0.7 / r.width));
+    var k = Math.min(6.5, Math.max(2.6, window.innerWidth * 1.15 / r.width));
     camera.style.transformOrigin = (cx - c.left) + "px " + (cy - c.top) + "px";
     maq.classList.add("is-flying");
     mapview.classList.add("is-flying");
+    /* Glide towards the room and turn to square up with it, like walking through its door. */
     flight = camera.animate([
-      { transform: "none" },
-      { transform: "translate(" + (window.innerWidth / 2 - cx) + "px," + (window.innerHeight / 2 - cy) + "px) scale(" + k + ")" }
-    ], { duration: 680, easing: "cubic-bezier(.65,0,.35,1)", fill: "forwards" });
-    return new Promise(function (res) { setTimeout(res, 470); }); /* open the room as the camera arrives */
+      { transform: "translate(0,0) rotate(0deg) scale(1)" },
+      { transform: "translate(" + (window.innerWidth / 2 - cx) * 0.35 + "px," + (window.innerHeight / 2 - cy) * 0.35 + "px) rotate(" + (-SPIN * 0.3) + "deg) scale(" + (1 + (k - 1) * 0.18) + ")", offset: 0.4 },
+      { transform: "translate(" + (window.innerWidth / 2 - cx) + "px," + (window.innerHeight / 2 - cy) + "px) rotate(" + (-SPIN) + "deg) scale(" + k + ")" }
+    ], { duration: FLY, easing: "cubic-bezier(.55,0,.25,1)", fill: "forwards" });
+    return new Promise(function (res) { setTimeout(res, FLY * 0.6); });
   }
   function flyBack() {
-    if (!flight) return;
+    if (!flight) { maq.classList.remove("is-flying"); mapview.classList.remove("is-flying"); return; }
     var f = flight;
     flight = null;
-    f.updatePlaybackRate(1.35);
+    f.updatePlaybackRate(1.1);
     f.reverse();
     f.finished.then(function () { f.cancel(); camera.style.transformOrigin = ""; maq.classList.remove("is-flying"); mapview.classList.remove("is-flying"); pinTags(); }).catch(function () {});
+  }
+
+  /* ---------- Curtain: a colour field with a title card between rooms ---------- */
+  var CURTAIN = {
+    bugis: ["oklch(42% 0.17 358)", "oklch(97% 0.015 80)"],
+    jawa: ["oklch(33% 0.07 150)", "oklch(96% 0.02 110)"],
+    palembang: ["oklch(66% 0.11 80)", "oklch(22% 0.05 60)"],
+    woven: ["oklch(55% 0.16 38)", "oklch(97% 0.015 80)"],
+    projection: ["oklch(12% 0.012 280)", "oklch(88% 0.12 150)"],
+    peranakan: ["oklch(52% 0.12 250)", "oklch(96% 0.03 340)"],
+    bappenas: ["oklch(42% 0.09 160)", "oklch(97% 0.01 160)"],
+    "out-of-character": ["oklch(24% 0.05 45)", "oklch(84% 0.12 70)"],
+    film: ["oklch(10% 0.02 20)", "oklch(94% 0.02 80)"]
+  };
+  var curtain = dialog.querySelector("[data-curtain]");
+  function wait(ms) { return new Promise(function (res) { setTimeout(res, ms); }); }
+  function curtainIn(id, ms) {
+    var m = byId[id], c = CURTAIN[id];
+    curtain.style.setProperty("--c-bg", c[0]);
+    curtain.style.setProperty("--c-ink", c[1]);
+    curtain.querySelector(".curtain__no").textContent = m.no ? "Room " + m.no : "Epilogue";
+    curtain.querySelector(".curtain__name").textContent = id === "film" ? "In Motion" : m.name;
+    curtain.querySelector(".curtain__sub").textContent = id === "film" ? "Our prewedding film" : SUB[id];
+    curtain.classList.add("is-on");
+    if (calm.matches) { curtain.style.opacity = 1; return Promise.resolve(); }
+    curtain.animate([{ opacity: 0 }, { opacity: 1 }], { duration: ms, easing: "ease-out", fill: "forwards" });
+    var ease = "cubic-bezier(.22,1,.36,1)";
+    curtain.querySelector(".curtain__no").animate([{ opacity: 0, letterSpacing: ".6em" }, { opacity: .8, letterSpacing: ".32em" }], { duration: 900, delay: ms * 0.3, easing: ease, fill: "both" });
+    curtain.querySelector(".curtain__name").animate([{ opacity: 0, transform: "translateY(22px)" }, { opacity: 1, transform: "none" }], { duration: 900, delay: ms * 0.45, easing: ease, fill: "both" });
+    curtain.querySelector(".curtain__sub").animate([{ opacity: 0 }, { opacity: .85 }], { duration: 700, delay: ms * 0.7, easing: ease, fill: "both" });
+    curtain.querySelector(".curtain__rule").animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 800, delay: ms * 0.8, easing: ease, fill: "both" });
+    return wait(ms);
+  }
+  function curtainOut(ms) {
+    if (calm.matches) { curtain.classList.remove("is-on"); curtain.style.opacity = 0; return Promise.resolve(); }
+    var a = curtain.animate([{ opacity: 1 }, { opacity: 0 }], { duration: ms, easing: "ease-in-out", fill: "forwards" });
+    return a.finished.then(function () {
+      curtain.classList.remove("is-on");
+      curtain.getAnimations({ subtree: true }).forEach(function (x) { x.cancel(); });
+      curtain.style.opacity = 0;
+    });
+  }
+  /* The room arrives piece by piece once the curtain lifts. */
+  function revealRoom() {
+    if (calm.matches) return;
+    var pieces = body.querySelectorAll(".room__plaque, .photo, .continue, .epilogue > div, .house");
+    pieces.forEach(function (p, i) {
+      p.animate([{ opacity: 0, transform: "translateY(28px)" }, { opacity: 1, transform: "none" }],
+        { duration: 900, delay: 120 + Math.min(i, 6) * 90, easing: "cubic-bezier(.22,1,.36,1)", fill: "backwards" });
+    });
   }
 
   /* ---------- Room page ---------- */
@@ -265,52 +318,74 @@
   }
   function urlFor(id) { var url = new URL(location.href); url.hash = id ? "#" + id : ""; return url; }
 
-  var opening = false;
+  var busy = false;
+  function show(id) {
+    render(id);
+    dialog.classList.add("is-entering");      /* transparent until the curtain covers the model */
+    if (!dialog.open) dialog.showModal();
+    dialog.querySelector("[data-close]").focus({ preventScroll: true });
+  }
   function open(id, push) {
-    if (opening || dialog.open) return;
-    opening = true;
+    if (busy || dialog.open) return;
+    busy = true;
     if (push) history.pushState({ room: id }, "", urlFor(id));
+    select(id);
     byId[id].el.classList.add("is-hot");
     walkTo(id);
     flyTo(id).then(function () {
+      show(id);
+      return curtainIn(id, 650);
+    }).then(function () {
+      dialog.classList.remove("is-entering");
       byId[id].el.classList.remove("is-hot");
-      render(id);
-      dialog.classList.remove("is-closing");
-      dialog.showModal();
-      dialog.querySelector("[data-close]").focus({ preventScroll: true });
-      opening = false;
-    });
+      return wait(calm.matches ? 0 : 420);
+    }).then(function () {
+      revealRoom();
+      return curtainOut(750);
+    }).then(function () { busy = false; });
   }
   function closeNow() {
     var id = current;
     var finish = function () {
       dialog.close();
-      dialog.classList.remove("is-closing");
+      dialog.classList.remove("is-entering");
       body.replaceChildren();
       current = null;
-      flyBack();
       var f = id && byId[id].el.querySelector(".m-floor");
       if (f && root.dataset.view === "map") f.focus({ preventScroll: true });
     };
     if (!dialog.open) { flyBack(); return; }
-    if (calm.matches) { finish(); return; }
-    dialog.classList.add("is-closing");
-    setTimeout(finish, 200);
+    if (calm.matches || !id) { finish(); flyBack(); return; }
+    busy = true;
+    /* Mirror of entering: curtain over the room, then lift it off the model as the camera pulls back. */
+    curtainIn(id, 420).then(function () {
+      dialog.classList.add("is-entering");
+      flyBack();
+      return curtainOut(650);
+    }).then(function () { finish(); busy = false; });
   }
   function close() {
+    if (busy) return;
     if (history.state && history.state.room) history.back();
     else { history.replaceState(null, "", urlFor("")); closeNow(); }
   }
   function step(dir) {
+    if (busy) return;
     var i = ORDER.indexOf(current) + dir;
     if (i < 0 || i >= ORDER.length) { close(); return; }
     var id = ORDER[i];
+    busy = true;
     history.replaceState({ room: id }, "", urlFor(id));
     here = id;
     placeHere();
     select(id);
-    if (document.startViewTransition && !calm.matches) document.startViewTransition(function () { render(id); });
-    else render(id);
+    curtainIn(id, 480).then(function () {
+      render(id);
+      return wait(calm.matches ? 0 : 300);
+    }).then(function () {
+      revealRoom();
+      return curtainOut(650);
+    }).then(function () { busy = false; });
   }
 
   /* ---------- Selection and the wall-label card ---------- */
@@ -388,7 +463,7 @@
     var id = location.hash.slice(1);
     if (ORDER.indexOf(id) !== -1) {
       select(id);
-      if (dialog.open) render(id); else open(id, false);
+      if (dialog.open) { if (id !== current) render(id); } else open(id, false);
     } else if (dialog.open) {
       closeNow();
     }
@@ -409,7 +484,13 @@
     history.pushState({ room: start }, "", urlFor(start));
     here = start;
     placeHere();
-    render(start);
-    dialog.showModal();
+    select(start);
+    busy = true;
+    show(start);
+    curtain.classList.add("is-on");
+    curtainIn(start, 10).then(function () {
+      dialog.classList.remove("is-entering");
+      return wait(calm.matches ? 0 : 700);
+    }).then(function () { revealRoom(); return curtainOut(750); }).then(function () { busy = false; });
   }
 })();

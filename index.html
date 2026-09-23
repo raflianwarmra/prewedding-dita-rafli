@@ -116,7 +116,19 @@
     </nav>
   </section>
 
+  <div class="sky" aria-hidden="true">
+    <img src="assets/art/lanterns.webp" alt="" width="700" height="812">
+    <img src="assets/art/lanterns.webp" alt="" width="700" height="812">
+    <img src="assets/art/lanterns.webp" alt="" width="700" height="812">
+  </div>
+
   <dialog class="roomview" aria-labelledby="roomview-title" data-roomview>
+    <div class="curtain" data-curtain aria-hidden="true">
+      <p class="curtain__no"></p>
+      <p class="curtain__name"></p>
+      <p class="curtain__sub"></p>
+      <span class="curtain__rule"></span>
+    </div>
     <header class="roomview__bar">
       <button class="roomview__back" type="button" data-close><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Map</button>
       <p class="roomview__title" id="roomview-title"></p>
