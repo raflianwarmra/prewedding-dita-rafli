@@ -323,7 +323,7 @@
     if (calm.matches) { curtain.style.opacity = 1; return Promise.resolve(); }
     curtain.animate([{ opacity: 0 }, { opacity: 1 }], { duration: ms, easing: "ease-out", fill: "forwards" });
     var ease = "cubic-bezier(.22,1,.36,1)";
-    curtain.querySelector(".curtain__no").animate([{ opacity: 0, letterSpacing: ".6em" }, { opacity: .8, letterSpacing: ".32em" }], { duration: 900, delay: ms * 0.3, easing: ease, fill: "both" });
+    curtain.querySelector(".curtain__no").animate([{ opacity: 0, transform: "scale(1.12)" }, { opacity: .8, transform: "none" }], { duration: 900, delay: ms * 0.3, easing: ease, fill: "both" });
     curtain.querySelector(".curtain__name").animate([{ opacity: 0, transform: "translateY(22px)" }, { opacity: 1, transform: "none" }], { duration: 900, delay: ms * 0.45, easing: ease, fill: "both" });
     curtain.querySelector(".curtain__sub").animate([{ opacity: 0 }, { opacity: .85 }], { duration: 700, delay: ms * 0.7, easing: ease, fill: "both" });
     curtain.querySelector(".curtain__rule").animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 800, delay: ms * 0.8, easing: ease, fill: "both" });

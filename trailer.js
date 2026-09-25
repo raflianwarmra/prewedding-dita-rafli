@@ -28,6 +28,8 @@
   var idleTimer = 0, waitTimer = 0, failTimer = 0, raf = 0;
 
   function T(k) { return window.I18N ? I18N.t(k) : k; }
+  /* On short screens only the button shows (no poster to grow from), so the player fades in instead. */
+  function compact() { return getComputedStyle(poster).display === "none"; }
   function icon(id) { return '<svg aria-hidden="true" viewBox="0 0 12 12"><use href="#' + id + '"/></svg>'; }
 
   /* ---------- Which cut fits this screen ---------- */
@@ -132,7 +134,7 @@
     if (intro) intro.inert = true;
     trailer.classList.add("is-lifted");
     player.classList.add("is-opening");
-    if (calm.matches) {
+    if (calm.matches || compact()) {
       player.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 150 });
       player.classList.remove("is-opening");
     } else {
@@ -168,7 +170,7 @@
       if (begin) begin.focus({ preventScroll: true });
     };
     if (flight) { flight.cancel(); flight = null; }
-    if (calm.matches) { player.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150 }).onfinish = done; return; }
+    if (calm.matches || compact()) { player.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150 }).onfinish = done; return; }
     var f = target();
     backdrop.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 550, easing: EASE, fill: "forwards" });
     frame.animate([FULL, fromPoster(f)], { duration: 550, easing: EASE, fill: "forwards" }).onfinish = function () {

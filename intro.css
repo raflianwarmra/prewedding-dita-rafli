@@ -28,7 +28,7 @@
 }
 
 /* ---------- Visual stage ---------- */
-.intro__visual { position: relative; min-height: 0; display: grid; place-items: center; }
+.intro__visual { position: relative; min-height: 0; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; container-type: size; }   /* one cell, exactly the space the step leaves */
 .intro__hero, .intro__model, .intro__card { grid-area: 1 / 1; transition: opacity .7s var(--ease-out), transform .9s var(--ease-out); }
 .intro__hero { opacity: 0; transform: scale(.9); }
 .intro__model { opacity: 0; transform: translateY(24px) scale(.96); width: min(320px, 80vw); }
@@ -134,12 +134,12 @@
   font: inherit; font-size: var(--fs-md); letter-spacing: .02em; cursor: pointer;
   box-shadow: 0 16px 28px -16px color-mix(in oklch, var(--accent) 85%, transparent);
 }
-.intro__alt { visibility: hidden; min-height: 40px; border: 0; background: none; color: var(--ink-soft); font: inherit; font-size: var(--fs-sm); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.intro__alt { visibility: hidden; min-height: 44px; border: 0; background: none; color: var(--ink-soft); font: inherit; font-size: var(--fs-sm); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .intro[data-scene="6"] .intro__alt { visibility: visible; }
 
 /* ---------- Map additions: "How to visit" and the tap hint ---------- */
 .mapview__how {
-  display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; min-height: 40px; padding: 0 14px 0 6px;
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; min-height: 44px; padding: 0 14px 0 8px;
   border: 1px solid var(--line); border-radius: 999px; background: color-mix(in oklch, var(--wall) 70%, transparent);
   color: var(--ink-soft); font: inherit; font-size: var(--fs-sm); cursor: pointer;
 }
@@ -209,7 +209,9 @@
 .peek__close {
   align-self: start; width: 36px; height: 36px; margin: -4px -4px 0 0; display: grid; place-items: center;
   border: 0; border-radius: 50%; background: var(--wall-2); color: var(--ink-soft); cursor: pointer;
+  position: relative;
 }
+.peek__close::after { content: ""; position: absolute; inset: -4px; }   /* 44px hit area */
 .peek__close svg { width: 12px; height: 12px; }
 .peek__enter {
   grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -238,6 +240,28 @@
   font: inherit; font-size: var(--fs-md); cursor: pointer;
 }
 .intro__back svg { width: 14px; height: 14px; }
+
+/* Short phones (iPhone SE and smaller): give the picture room by tightening the copy, and only
+   reserve space for the "prefer scrolling?" link on the step that shows it. */
+@media (max-height: 640px) and (max-width: 899px) {
+  .intro { padding-top: calc(env(safe-area-inset-top) + 50px); }
+  .intro__step .kicker { margin-bottom: 4px; }
+  .intro__step h2 { font-size: 1.6rem; margin-bottom: 6px; }
+  .intro__step[data-intro-step="0"] h2 { font-size: 2.3rem; }
+  .intro__step p { line-height: 1.45; }
+  .intro__nav { margin-top: 12px; gap: 8px; }
+  .intro__alt { display: none; min-height: 32px; font-size: var(--fs-xs); position: relative; }
+  .intro__alt::after { content: ""; position: absolute; inset: -7px 0; }   /* 46px hit area */
+  .intro[data-scene="6"] .intro__alt { display: block; }
+}
+/* The sample room card shrinks to the height the step leaves it. */
+@container (max-height: 260px) {
+  .intro__card { width: max(200px, min(250px, 68vw, calc((100cqh - 132px) * 2.4 + 36px))); padding: 10px 12px; }
+  .intro__card-name { font-size: var(--fs-lg); margin-bottom: 6px; }
+  .intro__card-line { display: none; }
+  .intro__card-cta { margin-top: 8px; min-height: 36px; }
+}
+@container (max-height: 200px) { .intro__card-prints { display: none; } }
 
 @media (prefers-reduced-motion: reduce) {
   .intro *, .intro { animation: none !important; transition: none !important; }

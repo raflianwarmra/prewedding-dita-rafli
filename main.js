@@ -13,7 +13,11 @@
     meta.forEach(function (m) { m.setAttribute("content", dark ? "#1c1012" : "#f6f0e6"); m.removeAttribute("media"); });
   }
   toggle.addEventListener("click", function () {
+    /* Flip every colour in one frame, like a light switch, rather than running many colour transitions at once. */
+    root.classList.add("is-relighting");
     root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+    void getComputedStyle(root).color;
+    requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.remove("is-relighting"); }); });
     try { localStorage.setItem("dr-theme", root.dataset.theme); } catch (e) {}
     if (navigator.vibrate) navigator.vibrate(8);
     syncToggle();

@@ -2,16 +2,16 @@
    The player is drawn by the page (playsinline), never the phone's own video player. */
 
 /* ---------- Poster frame in the welcome step ---------- */
-.intro__hero { width: 100%; height: 100%; display: grid; place-items: center; }
+.intro__hero { width: 100%; height: 100%; display: grid; place-items: center; container-type: size; }
 .trailer {
   position: relative; isolation: isolate;
-  height: min(calc(100% - 26px), 560px); aspect-ratio: 9 / 16; max-width: 78vw;
+  height: min(calc(100cqh - 26px), 560px); aspect-ratio: 9 / 16; max-width: 78vw;   /* sized to the space the step leaves */
   border-radius: 999px 999px 6px 6px;
   box-shadow: 0 0 0 1px var(--gold), 0 0 0 7px var(--wall), 0 0 0 8px color-mix(in oklch, var(--gold) 60%, transparent),
     0 30px 60px -30px oklch(30% 0.06 30 / .45);
   background: var(--wall-2);
 }
-.trailer--landscape { height: auto; width: min(100%, 680px); max-width: none; aspect-ratio: 16 / 9; border-radius: 6px; }
+.trailer--landscape { height: auto; width: min(100cqw, 680px, (100cqh - 26px) * 16 / 9); max-width: none; aspect-ratio: 16 / 9; border-radius: 6px; }
 .trailer__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 .trailer.is-lifted { visibility: hidden; }
 
@@ -107,3 +107,11 @@
 /* Only the welcome step shows the poster; hide it (and its button) from the other steps. */
 .intro__hero { visibility: hidden; transition: opacity .7s var(--ease-out), transform .9s var(--ease-out), visibility 0s .7s; }
 .intro[data-scene="0"] .intro__hero { visibility: visible; transition-delay: 0s; }
+
+/* Short screens (small phones): too little room for a readable poster, so the step shows just the play button. */
+@container (max-height: 200px) {
+  .trailer, .trailer--landscape { height: auto; width: auto; aspect-ratio: auto; max-width: none; box-shadow: none; background: none; border-radius: 999px; }
+  .trailer__poster { display: none; }
+  .trailer__play, .trailer--landscape .trailer__play { position: static; transform: none; }
+  .trailer__play:hover, .trailer--landscape .trailer__play:hover { transform: translateY(-2px); }
+}

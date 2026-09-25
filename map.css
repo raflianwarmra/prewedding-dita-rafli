@@ -91,8 +91,9 @@
 .mapview__progress.is-complete::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px color-mix(in oklch, var(--gold) 30%, transparent); }
 
 /* ---------- The maquette ---------- */
-@property --tilt { syntax: "<angle>"; inherits: true; initial-value: 48deg; }
-@property --spin { syntax: "<angle>"; inherits: true; initial-value: -12deg; }
+/* Not inherited: only the scene uses them, so a pointer tilt re-styles one element, not the whole model. */
+@property --tilt { syntax: "<angle>"; inherits: false; initial-value: 48deg; }
+@property --spin { syntax: "<angle>"; inherits: false; initial-value: -12deg; }
 
 .maq {
   --u: 26px;

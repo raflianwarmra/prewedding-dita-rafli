@@ -49,7 +49,7 @@
       if (g.width > mb.width - 4 && pass < 2) { u = Math.max(8, u * (mb.width - 8) / g.width); continue; }
       mini.style.setProperty("--shift", Math.round(mb.left + mb.width / 2 - (g.left + g.width / 2)) + "px");
       var top = g.top - mb.top - 1.3 * u * Math.sin(t) - 6, h = g.bottom - mb.top + 6 - top;
-      if (avail > 100 && h > avail && pass < 2) { u *= avail / h; continue; }
+      if (avail > 40 && h > avail && pass < 2) { u *= avail / h; continue; }
       mini.style.setProperty("--maq-h", Math.round(h) + "px");
       mini.style.setProperty("--nudge", Math.round(-top - (h - mb.height) / 2) + "px");
       break;
@@ -150,6 +150,7 @@
     outside.forEach(function (n) { if (n) n.inert = true; });
     go(from || 0);
     intro.focus({ preventScroll: true });
+    if (!mini) (window.requestIdleCallback || function (fn) { return setTimeout(fn, 300); })(function () { buildMini(); }, { timeout: 1500 });
   }
   function finish(toScroll) {
     clear(); quiet();
