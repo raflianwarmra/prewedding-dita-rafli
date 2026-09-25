@@ -479,6 +479,10 @@ p { margin: 0 0 1em; }
 .print img + img { position: absolute; inset: 0; height: 100%; opacity: 0; transition: opacity .9s var(--ease-out); }
 .gilded .photo:first-child .print img + img { inset: 0; }
 .room--palembang.is-sepia .print img + img { opacity: 1; }
+
+/* Living photos: a silent loop laid exactly over a room's lead photo (rooms.js sets its box and corners). */
+.living { position: absolute; display: block; object-fit: cover; pointer-events: none; background: transparent; transition: filter .9s var(--ease-out); }
+.room--palembang.is-sepia .living { filter: sepia(.85) saturate(.8) contrast(1.03); }
 .prints-toggle {
   display: inline-flex; margin: 4px 0 18px; padding: 3px;
   border: 1px solid var(--room-accent); border-radius: 999px;

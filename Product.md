@@ -208,6 +208,7 @@ An intimate museum exhibition with editorial typography, quiet spacing, and cere
 - Sections reveal with a small vertical movement and fade.
 - Motion must respect `prefers-reduced-motion`.
 - Avoid parallax, aggressive scroll effects, autoplay, and continuous animation.
+- Exception (26 September 2026): each room's lead photo is a muted living photo, a 3 to 5 second loop from the photographer's film. It loads only near the screen, plays only while on screen, and never plays for reduced motion or Data Saver, which keep the still photo.
 
 ## 9. Interaction requirements
 

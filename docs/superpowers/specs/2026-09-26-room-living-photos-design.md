@@ -12,7 +12,7 @@ Give each of the eight rooms one "living photo": a 3 to 5 second silent clip fro
 - Meaning: a living photo, not a video to watch. No sound, no controls, same frame as the photos around it.
 - Placement: replaces the lead photo of each room, in the same position, shape and frame. Each room keeps its own layout.
 - Rooms: the eight rooms. The cinema (In Motion) is unchanged; it already stands for the full film.
-- Moments: for each room, a shortlist of 2 to 3 moments is rendered as real looping previews and Rafli picks one.
+- Moments: for each room, a shortlist of 2 to 3 moments is rendered as real looping previews. Built end to end on 26 September with Claude's pick per room; the alternatives stay in `brag-output/rooms/` so any room can be swapped.
 - Approach: a muted, looping, inline `<video>` with a poster. Animated WebP or AVIF was rejected (3 to 5 times larger files; older iPhones do not animate AVIF).
 
 ## Sources
@@ -39,7 +39,10 @@ All films live in the couple's OneDrive under `Wedding Planner/00 Foto/`. They a
 
 ## Clip format
 
-- Length 3 to 5 s. The loop is seamless: the last 0.5 s is cross-dissolved into the first 0.5 s, and the file is trimmed so it ends where it begins.
+- Length 3 to 5 s. The films cut fast (most shots are 1 to 3 s), so two loop types are used:
+  - shots of 3.4 s or more: a straight loop, with the last 0.5 s cross-dissolved into the first 0.5 s;
+  - shorter shots: a bounce loop (forward, then backward to the first frame), which is seamless by construction and suits gentle motion.
+- Seams are checked by comparing the last and first frames against an ordinary frame step (PSNR); every chosen clip's seam is as smooth as a normal frame step.
 - Portrait: 720×1080. Landscape: 1080×720.
 - H.264 High, no audio track, `+faststart`, source frame rate kept, target about 0.6 to 1 MB each (about 5 to 8 MB for all eight, loaded one room at a time).
 - Poster: the clip's first frame as WebP, same size as the frame, shown until the clip plays and whenever it does not play.
@@ -48,7 +51,7 @@ All films live in the couple's OneDrive under `Wedding Planner/00 Foto/`. They a
 
 ## Behaviour
 
-- Markup: the lead `<figure>` keeps its `<img>` (as the poster and for no-video cases) and gains a `<video muted loop playsinline preload="none" poster=…>` layered on top, with `aria-hidden="true"`. The `<img>` keeps its existing alt text.
+- Markup: the lead `<figure>` carries `data-living="<room>"` and keeps its `<img>` and alt text. `rooms.js` adds a `<video muted loop playsinline preload="none" aria-hidden="true">` laid exactly over the image (its box and corners, not a caption), so visitors without script, with reduced motion or with Data Saver never get a video element at all. The still (first frame) is set together with the source, so nothing downloads before the room is near.
 - Loading: nothing downloads before a visitor enters the room. On room pages, the clip loads when the room page opens. In the scroll view it loads when the room comes within one screen of the viewport.
 - Playback: plays only while at least a third of it is on screen (IntersectionObserver), pauses otherwise, and pauses when the room page closes or the tab is hidden.
 - Reduced motion (`prefers-reduced-motion: reduce`) and Data Saver (`navigator.connection.saveData`): the video is not loaded; the still shows, so the room looks exactly as it does today.
@@ -62,7 +65,7 @@ All films live in the couple's OneDrive under `Wedding Planner/00 Foto/`. They a
 
 ## Code
 
-- `index.html`: the video element in each of the eight lead figures.
+- `index.html`: `data-living` on each of the eight lead figures, and the `rooms.js` script tag.
 - New `rooms.js`: loading, visibility-based play and pause, reduced-motion and Data Saver handling, error fallback. It works for both the room page (cloned articles) and the scroll view.
 - `styles.css`: the video fills its figure exactly like the image (`object-fit: cover`, same radius), and the sepia state covers it.
 - `PRODUCT.md`: the exception above.
@@ -77,3 +80,18 @@ All films live in the couple's OneDrive under `Wedding Planner/00 Foto/`. They a
 - The sepia toggle covers the living photo.
 - Loop seam: frame-by-frame check of the last and first frames.
 - The overlap scan and the frame-timing measurement from the 25 September audit still pass.
+
+## Chosen clips (26 September 2026)
+
+| Room | Moment | Source | Loop | Size |
+|---|---|---|---|---|
+| Bugis-Makassar | the twirl in the colonial hall | Fikri 8.18–10.88 s | bounce | 0.71 MB |
+| Jawa | Dita raising jasmine strands to her face | Azhar 23.15–24.82 s | bounce | 0.39 MB |
+| Palembang | Rafli's crown in the foreground, Dita smiling | Jatidiriono vertical 8.40–10.30 s | bounce | 0.75 MB |
+| Woven Together | holding hands before the hung textiles | Jatidiriono 57.45–60.05 s | bounce | 0.89 MB |
+| Projection of Our Roots | the kiss in the spotlight, script on the curtain | Jatidiriono 98.95–101.55 s | bounce | 0.42 MB |
+| Peranakan | the restaurant with the red fans | Azhar 65.50–69.90 s | straight | 0.47 MB |
+| Bappenas, Menteng | the train passing behind them | Fikri 176.0–180.4 s | straight | 1.04 MB |
+| Out of Character | laughing together on the bed | Azhar 108.84–111.30 s | bounce | 0.53 MB |
+
+Cut list and cutter: `brag-output/work/films/cuts.json` and `cut.py`.
