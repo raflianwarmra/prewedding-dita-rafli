@@ -1,5 +1,5 @@
 /* Landing: four short scenes that introduce the exhibition and how to walk through it.
-   Shown on the first visit to the map (not for deep links), and again from "How to visit". */
+   Shown every time the map is opened (not for deep links), and again from "How to visit". */
 (function () {
   "use strict";
   var root = document.documentElement;
@@ -22,7 +22,6 @@
   var back = intro.querySelector("[data-intro-back]");
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
   function clear() { timers.forEach(clearTimeout); timers = []; }
-  function seen(v) { try { if (v) localStorage.setItem("dr-intro-seen", "1"); return localStorage.getItem("dr-intro-seen") === "1"; } catch (e) { return false; } }
 
   /* ---------- A mini copy of the real maquette ---------- */
   function buildMini() {
@@ -154,7 +153,6 @@
   }
   function finish(toScroll) {
     clear(); quiet();
-    seen(true);
     outside.forEach(function (n) { if (n) n.inert = false; });
     if (toScroll) {
       intro.hidden = true;
@@ -186,8 +184,8 @@
   if (how) how.addEventListener("click", function () { show(1); });
   window.addEventListener("resize", function () { if (!intro.hidden && mini && (scene >= 1 && scene <= 5)) fitMini(); });
 
-  /* First visit to the map, arriving without a room link: open with the landing. */
+  /* Every time the map is opened without a room link: open with the landing. */
   var deep = location.hash.length > 1;
-  if (root.dataset.view === "map" && !deep && !seen()) show(0);
+  if (root.dataset.view === "map" && !deep) show(0);
   else root.removeAttribute("data-first-visit");
 })();

@@ -30,9 +30,7 @@
         setTimeout(function () { document.documentElement.classList.remove("i18n-pending"); }, 1500);
       }
       document.documentElement.dataset.view = new URLSearchParams(location.search).get("view") === "scroll" ? "scroll" : "map";
-      var introSeen = false;
-      try { introSeen = localStorage.getItem("dr-intro-seen") === "1"; } catch (e) {}
-      if (document.documentElement.dataset.view === "map" && !introSeen && location.hash.length < 2) document.documentElement.dataset.firstVisit = "1";
+      if (document.documentElement.dataset.view === "map" && location.hash.length < 2) document.documentElement.dataset.firstVisit = "1";
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">

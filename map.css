@@ -139,8 +139,8 @@
 .m-marquee { color: var(--ink-gold); }
 .m-walk { background: var(--m-hall); background-image: linear-gradient(90deg, transparent calc(50% - .75px), color-mix(in oklch, var(--accent) 45%, transparent) calc(50% - .75px) calc(50% + .75px), transparent 0); }
 .m-marquee span {
-  font-size: calc(var(--u) * .36); letter-spacing: .28em; text-transform: uppercase;
-  padding: calc(var(--u) * .08) calc(var(--u) * .3);
+  font-size: calc(var(--u) * .3); letter-spacing: .2em; text-transform: uppercase;
+  padding: calc(var(--u) * .08) calc(var(--u) * .2);
   border: 1px dotted currentColor; border-radius: 2px;
 }
 .m-plinth--2 { background: var(--plinth-2); box-shadow: 0 calc(var(--u) * .14) 0 color-mix(in oklch, var(--plinth-2) 70%, black); }
