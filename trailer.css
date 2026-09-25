@@ -1,0 +1,109 @@
+/* Entrance trailer: a framed poster in the landing's welcome step that grows into a full-page player.
+   The player is drawn by the page (playsinline), never the phone's own video player. */
+
+/* ---------- Poster frame in the welcome step ---------- */
+.intro__hero { width: 100%; height: 100%; display: grid; place-items: center; }
+.trailer {
+  position: relative; isolation: isolate;
+  height: min(calc(100% - 26px), 560px); aspect-ratio: 9 / 16; max-width: 78vw;
+  border-radius: 999px 999px 6px 6px;
+  box-shadow: 0 0 0 1px var(--gold), 0 0 0 7px var(--wall), 0 0 0 8px color-mix(in oklch, var(--gold) 60%, transparent),
+    0 30px 60px -30px oklch(30% 0.06 30 / .45);
+  background: var(--wall-2);
+}
+.trailer--landscape { height: auto; width: min(100%, 680px); max-width: none; aspect-ratio: 16 / 9; border-radius: 6px; }
+.trailer__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.trailer.is-lifted { visibility: hidden; }
+
+.trailer__play {
+  position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
+  min-height: 48px; padding: 0 16px 0 6px; border: 0; border-radius: 999px;
+  background: color-mix(in oklch, var(--wall) 90%, transparent); color: var(--ink);
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--gold) 55%, transparent), 0 10px 24px -12px oklch(25% 0.06 20 / .5);
+  font: inherit; font-size: var(--fs-sm); cursor: pointer; touch-action: manipulation;
+  transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
+}
+.trailer__play:hover { transform: translateX(-50%) translateY(-2px); }
+/* On the landscape poster the pill sits in the empty space under the headline, clear of the phone. */
+.trailer--landscape .trailer__play { left: 7%; bottom: 9%; transform: none; }
+.trailer--landscape .trailer__play:hover { transform: translateY(-2px); }
+.trailer__play:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
+.trailer__icon {
+  display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%;
+  background: var(--maroon); color: oklch(96% 0.015 80);
+}
+.trailer__icon svg { width: 12px; height: 12px; margin-left: 2px; }
+.trailer__time { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.trailer__time::before { content: "·"; margin-right: 8px; }
+
+/* The monogram stays in the opening view as a small mark above the kicker. */
+.intro__mark { display: block; width: 46px; height: 46px; margin: 0 auto 10px; color: var(--gold); }
+@media (min-width: 900px) { .intro__mark { margin-left: 0; } }
+@media (max-height: 700px) { .intro__mark { display: none; } }
+
+/* ---------- Full-page player ---------- */
+.player { position: fixed; inset: 0; z-index: 60; color: oklch(95% 0.015 80); }
+.player[hidden] { display: none; }
+.player__backdrop { position: absolute; inset: 0; background: oklch(14% 0.02 20); }
+.player__frame { position: absolute; overflow: hidden; background: oklch(14% 0.02 20); transform-origin: 0 0; }
+.player__video, .player__still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.player__still { transition: opacity .25s var(--ease-out); }
+.player.is-playing .player__still { opacity: 0; }
+
+.player__bar {
+  position: absolute; left: 0; right: 0; display: flex; align-items: center; gap: 12px;
+  padding: 12px max(14px, env(safe-area-inset-left)) 12px max(14px, env(safe-area-inset-right));
+  transition: opacity .4s var(--ease-out);
+}
+.player__bar--top { top: 0; padding-top: calc(12px + env(safe-area-inset-top)); }
+.player__bar--bottom { bottom: 0; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+.player.is-idle .player__bar { opacity: 0; }
+.player.is-idle { cursor: none; }
+.player.is-opening .player__bar, .player.is-closing .player__bar { opacity: 0; transition: none; }
+
+.player__btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-width: 44px; min-height: 44px; padding: 0 12px; border: 0; border-radius: 999px;
+  background: oklch(24% 0.02 20 / .72); color: inherit; font: inherit; font-size: var(--fs-sm);
+  cursor: pointer; touch-action: manipulation;
+}
+.player__btn:hover { background: oklch(32% 0.03 20 / .85); }
+.player__btn:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
+.player__btn svg { width: 16px; height: 16px; flex: none; }
+.player__btn--icon { padding: 0; width: 44px; }
+.player__progress { flex: 1; height: 2px; border-radius: 2px; background: oklch(95% 0.015 80 / .22); overflow: hidden; }
+.player__progress i { display: block; height: 100%; background: var(--gold-bright); transform-origin: 0 50%; transform: scaleX(0); }
+
+.player__wait {
+  position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px;
+  border-radius: 50%; display: grid; place-items: center; pointer-events: none;
+  background: oklch(14% 0.02 20 / .55); color: oklch(95% 0.015 80);
+}
+.player__wait[hidden] { display: none; }
+.player__wait svg { width: 16px; height: 16px; margin-left: 3px; }
+.player__wait::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid oklch(95% 0.015 80 / .18); border-top-color: var(--gold-bright);
+  animation: player-spin .9s linear infinite;
+}
+@keyframes player-spin { to { transform: rotate(1turn); } }
+
+.player__error {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); margin: 0;
+  width: min(86vw, 360px); padding: 18px 20px; border-radius: 6px; text-align: center;
+  background: oklch(20% 0.02 20 / .92); font-size: var(--fs-md);
+}
+.player__error[hidden] { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .player__wait::before { animation-duration: 2.4s; }
+  .trailer__play, .player__bar, .player__still { transition: none; }
+}
+
+/* The panduan's demo layers share the poster's grid cell and are purely decorative: let taps reach the poster. */
+.intro__model, .intro__card, .intro__finger, .intro__bubble { pointer-events: none; }
+
+/* Only the welcome step shows the poster; hide it (and its button) from the other steps. */
+.intro__hero { visibility: hidden; transition: opacity .7s var(--ease-out), transform .9s var(--ease-out), visibility 0s .7s; }
+.intro[data-scene="0"] .intro__hero { visibility: visible; transition-delay: 0s; }

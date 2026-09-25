@@ -38,16 +38,6 @@
 .intro[data-scene="4"] .intro__model, .intro[data-scene="5"] .intro__model { opacity: 1; transform: none; }
 .intro[data-scene="6"] .intro__card { opacity: 1; transform: none; }
 
-.intro__mono {
-  width: clamp(120px, 36vw, 190px); height: auto; color: var(--gold);
-  filter: drop-shadow(0 0 0 transparent);
-}
-.intro[data-scene="0"] .intro__mono { animation: mono-glow 3.6s var(--ease-out) both; }
-@keyframes mono-glow {
-  0% { opacity: 0; transform: scale(.82) rotate(-6deg); filter: drop-shadow(0 0 0 oklch(85% 0.12 80 / 0)); }
-  45% { opacity: 1; transform: scale(1.02) rotate(0); filter: drop-shadow(0 0 26px oklch(85% 0.12 80 / .75)); }
-  100% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 12px oklch(85% 0.12 80 / .45)); }
-}
 
 /* Mini maquette: a clone of the real one, lit wing by wing. */
 .intro__model .maq { pointer-events: none; }
@@ -235,7 +225,6 @@
   .intro__card-name { font-size: var(--fs-xl); margin-bottom: 8px; }
   .intro__card-line { display: none; }
   .intro__card-cta { margin-top: 10px; min-height: 40px; }
-  .intro__mono { width: clamp(100px, 30vw, 160px); }
 }
 
 /* ---------- Landing: Back and Next side by side ---------- */

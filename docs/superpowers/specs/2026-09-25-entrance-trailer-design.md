@@ -21,8 +21,9 @@ Show the 22-second launch trailer (made with /brag) at the entrance of the exhib
 - The poster takes the place of the large monogram in `.intro__hero`.
 - The monogram stays in the opening viewport as a small mark above the kicker "Pameran foto digital".
 - Frame treatment reuses the `.window` look: gold hairline ring, gap, second ring. Portrait screens get the arched top (`999px 999px 6px 6px`). Landscape screens get a 16:9 frame with the same rings and 6px corners.
-- Poster image: the "Bukan link. Museum." frame of each cut.
-- One button over the lower part of the frame: "▶ Putar cuplikan · 0:22". It is the only control on the poster. Minimum tap target 44×44px.
+- Poster image: the "Bukan link. Museum." frame of each cut. The portrait poster is a variant of that frame with the headline centred, so the arch does not clip it.
+- One button over the lower part of the frame: "▶ Putar cuplikan · 0:22". It is the only control on the poster. Minimum tap target 44×44px. On the landscape poster it sits bottom left, under the headline, clear of the phone mockup.
+- The panduan's demo layers (mini maquette, sample card, finger, bubble) share the poster's grid cell; they are decorative and take no taps. `aria-hidden` moves from the whole visual area to those layers, so the play button is reachable by screen readers.
 - Desktop (the intro's two-column layout from 900px): the landscape frame sits in the left visual column, text and buttons stay in the right column.
 
 ## Playback
@@ -48,10 +49,10 @@ Show the 22-second launch trailer (made with /brag) at the entrance of the exhib
 
 | File | Size | Encoding |
 |---|---|---|
-| `assets/video/trailer-9x16.mp4` | 720×1280, about 4 MB | H.264 High, AAC 128k, faststart |
-| `assets/video/trailer-16x9.mp4` | 1920×1080, about 7 MB | H.264 High, AAC 128k, faststart |
-| `assets/video/trailer-9x16.webp` | 720×1280, about 80 KB | poster |
-| `assets/video/trailer-16x9.webp` | 1280×720, about 80 KB | poster |
+| `assets/video/trailer-9x16.mp4` | 720×1280, 2.5 MB | H.264 High, AAC 128k, faststart |
+| `assets/video/trailer-16x9.mp4` | 1920×1080, 4.8 MB | H.264 High, AAC 128k, faststart |
+| `assets/video/trailer-9x16.webp` | 720×1280, 35 KB | poster |
+| `assets/video/trailer-16x9.webp` | 1280×720, 33 KB | poster |
 
 - `preload="none"`: nothing but the poster downloads until the tap.
 - The vertical cut is a new 1080×1920 layout of the same captured footage and the same 22.4 s soundtrack. It is rendered with the /brag pipeline in `brag-output/`, which stays out of the repository. Only the four files above are committed.
@@ -60,7 +61,7 @@ Show the 22-second launch trailer (made with /brag) at the entrance of the exhib
 ## States
 
 - Idle: poster and "▶ Putar cuplikan · 0:22".
-- Starting: if the video is not playing 300 ms after the tap, a thin gold ring turns around the play icon until it is.
+- Starting: if the video is not playing 300 ms after the tap, a thin gold ring turns around a play icon in the middle of the player until it is.
 - Playing, paused: as above.
 - Ended: back in the frame, "↻ Putar lagi".
 - Error (the `error` event, or no playback after 15 s): the player shows "Cuplikan tidak bisa diputar." with Tutup. The panduan works as normal.
@@ -68,7 +69,7 @@ Show the 22-second launch trailer (made with /brag) at the entrance of the exhib
 ## Accessibility
 
 - The play button has a label naming what it plays ("Putar cuplikan pameran, 22 detik"). Every icon button has a label.
-- While the player is open, focus stays inside it and the panduan's keyboard shortcuts (arrows, Esc to finish the panduan) are ignored. Space toggles pause.
+- While the player is open, focus stays inside it and the panduan is `inert`, so its keyboard shortcuts (arrows, Esc to finish the panduan) cannot fire. Space toggles pause.
 - The trailer has no speech, so it needs no captions.
 - Reduced motion: no expansion. The player fades in and out (150 ms). Playback still starts only on tap.
 
@@ -81,6 +82,8 @@ New `I18N` keys (Indonesian / English):
 | `trailer.play` | Putar cuplikan | Play trailer |
 | `trailer.replay` | Putar lagi | Play again |
 | `trailer.label` | Putar cuplikan pameran, 22 detik | Play the exhibition trailer, 22 seconds |
+| `trailer.replay.label` | Putar lagi cuplikan pameran, 22 detik | Play the exhibition trailer again, 22 seconds |
+| `trailer.name` | Cuplikan pameran | Exhibition trailer |
 | `trailer.close` | Tutup | Close |
 | `trailer.pause` | Jeda | Pause |
 | `trailer.resume` | Putar | Play |
@@ -91,14 +94,16 @@ New `I18N` keys (Indonesian / English):
 ## Code
 
 - New files: `trailer.css` (poster frame and player) and `trailer.js` (file choice, expansion, controls, history, focus).
-- `index.html`: the poster frame markup in `.intro__hero`, the small monogram in step 0, and the two new file links.
-- `intro.js`: a hook so its keydown handler ignores keys while the player is open.
+- `index.html`: the poster frame markup in `.intro__hero`, the small monogram in step 0, the player markup (a sibling of the landing, not inside it), the new icons (pause, replay, sound on and off, close) and the two new file links.
+- `intro.css`: the rules for the large landing monogram are removed.
 - `i18n.js`: the keys above.
+- `intro.js` is unchanged: because the player sits outside the landing and the landing is `inert` while it plays, no keyboard hook is needed.
 
 ## Verification
 
 - Chromium and WebKit (iPhone emulation) at 390×844 and 1440×900, light and dark, Indonesian and English.
 - No request for either `.mp4` before the tap.
+- Seeking needs HTTP Range support. GitHub Pages has it; Python's `http.server` does not, so local tests let the video play to its natural end instead of seeking.
 - After the tap: the player covers the viewport, the video is playing with sound, and neither `document.fullscreenElement` nor WebKit's native full screen is active.
 - The end, Tutup, Esc and Back each close the player and put focus on Mulai.
 - Reduced motion: fade instead of expansion.
