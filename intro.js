@@ -161,7 +161,7 @@
       if (b) b.click();
       return;
     }
-    if (calm.matches) { intro.hidden = true; window.DRMap.refit(); return; }
+    if (calm.matches) { intro.hidden = true; requestAnimationFrame(function () { window.DRMap.refit(); }); return; }
     intro.classList.add("is-leaving");
     setTimeout(function () {
       intro.hidden = true;

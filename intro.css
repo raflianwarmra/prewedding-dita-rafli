@@ -129,7 +129,7 @@
 .intro__dots i.is-on { opacity: .8; width: 22px; border-radius: 4px; }
 .intro__next {
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: min(100%, 360px); min-height: 54px; border: 0; border-radius: 2px;
+  width: min(100%, 360px); min-height: 54px; border: 0; border-radius: var(--r-btn);
   background: var(--accent); color: var(--wall);
   font: inherit; font-size: var(--fs-md); letter-spacing: .02em; cursor: pointer;
   box-shadow: 0 16px 28px -16px color-mix(in oklch, var(--accent) 85%, transparent);
@@ -206,7 +206,7 @@
 .intro__back[hidden] { display: none; }
 .intro__back {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  min-height: 54px; padding: 0 18px; border: 1px solid var(--line); border-radius: 2px;
+  min-height: 54px; padding: 0 18px; border: 1px solid var(--line); border-radius: var(--r-btn);
   background: color-mix(in oklch, var(--wall) 70%, transparent); color: var(--ink);
   font: inherit; font-size: var(--fs-md); cursor: pointer;
 }

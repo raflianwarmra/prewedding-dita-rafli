@@ -155,6 +155,12 @@
       maq.style.setProperty("--maq-h", "900px");
       /* Measure the rendered model and trim the frame to it: back walls above, entrance caption below. */
       var g = scene.querySelector(".m-ground").getBoundingClientRect(), mb = maq.getBoundingClientRect();
+      /* WebKit can report a nonsense box for the 3D plate in the frame it becomes visible: measure again next frame. */
+      if (!(g.height > 0 && g.height < window.innerHeight * 6 && Math.abs(g.top - mb.top) < 3000)) {
+        if ((fit.retries = (fit.retries || 0) + 1) < 8) requestAnimationFrame(fit);
+        return;
+      }
+      fit.retries = 0;
       if (g.width > mb.width - 4 && pass < 2) { u = Math.max(12, u * (mb.width - 8) / g.width); continue; }
       maq.style.setProperty("--shift", Math.round(mb.left + mb.width / 2 - (g.left + g.width / 2)) + "px");
       var top = g.top - mb.top - 1.3 * u * Math.sin(t) - 8;
@@ -380,17 +386,28 @@
     copy.querySelectorAll(".reveal").forEach(function (n) { n.classList.add("is-in"); });
     copy.querySelectorAll('img[loading="lazy"]').forEach(function (img, i) { if (i < 3) img.loading = "eager"; });
     body.replaceChildren(copy);
-    /* The room bar takes on the room's own colour, like a material lit by the room. */
-    var cs = getComputedStyle(copy);
-    dialog.style.setProperty("--rv-tint", cs.backgroundColor);
-    dialog.style.setProperty("--rv-ink", cs.color);
+    if (dialog.open) tint();
     dialog.scrollTop = 0;
     current = id;
     roomChrome(id);
     markVisited(id);
   }
+  /* The room bar and page take on the room's own colour, like a material lit by the room.
+     Read once the page is open (WebKit reports "transparent" for a closed dialog's contents). */
+  function tint() {
+    var room = body.firstElementChild;
+    if (!room) return;
+    var cs = getComputedStyle(room), bg = cs.backgroundColor;
+    if (!bg || bg === "transparent" || /rgba\(0, 0, 0, 0\)/.test(bg)) { requestAnimationFrame(tint); return; }
+    dialog.style.setProperty("--rv-tint", bg);
+    dialog.style.setProperty("--rv-ink", cs.color);
+  }
   function roomChrome(id) {
-    title.textContent = id === "film" ? T("epilogue") + " · In Motion" : T("room") + " " + label(id);
+    var m = byId[id];
+    title.innerHTML = "";
+    var no = el("span", "roomview__no", id === "film" ? T("epilogue") + " · " : T("room") + " " + m.no + " · ");
+    title.appendChild(no);
+    title.appendChild(document.createTextNode(id === "film" ? "In Motion" : m.name));
     var i = ORDER.indexOf(id);
     prevName.textContent = i > 0 ? label(ORDER[i - 1]) : T("rv.toMap");
     nextName.textContent = i < ORDER.length - 1 ? label(ORDER[i + 1]) : T("rv.toMap");
@@ -401,7 +418,8 @@
     render(id);
     dialog.classList.add("is-entering");      /* transparent until the curtain covers the model */
     if (!dialog.open) dialog.showModal();
-    dialog.querySelector("[data-close]").focus({ preventScroll: true });
+    tint();
+    title.focus({ preventScroll: true });   /* focus the room name, not Close: no ring after a tap, and screen readers hear where they are */
   }
   function open(id, push) {
     if (dialog.open || phase) return;

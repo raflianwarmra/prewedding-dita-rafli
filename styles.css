@@ -18,6 +18,9 @@
   --accent: var(--maroon);
 
   --serif: "EB Garamond", "Garamond", "Georgia", serif;
+  /* Shape: pills for toggles, 12px for buttons, 16px for panels; photos keep their own frames. */
+  --r-btn: 12px;
+  --r-card: 16px;
 
   /* Type scale (about 1.2 between steps). Display sizes use clamp() where they are set. */
   --fs-xs: .8125rem;   /* 13px: uppercase labels, kickers */
@@ -192,6 +195,7 @@ p { margin: 0 0 1em; }
   text-wrap: balance;
 }
 .foyer h1 .of { display: block; font-style: italic; font-size: .42em; letter-spacing: 0; color: var(--ink-soft); margin-bottom: .18em; }
+@media (max-width: 359px) { .kicker { letter-spacing: .14em; } }
 .foyer__intro { max-width: 34ch; margin: 22px auto 0; color: var(--ink-soft); font-size: var(--fs-md); text-wrap: pretty; }
 
 /* The arched window onto the illustrated sky. */
@@ -355,7 +359,7 @@ p { margin: 0 0 1em; }
   display: flex; align-items: center; justify-content: center; gap: 12px;
   width: 100%; min-height: 54px; margin-top: 14px; padding: 14px 24px;
   background: var(--room-accent); color: var(--room-bg);
-  border: 1px solid var(--room-accent); border-radius: 2px;
+  border: 1px solid var(--room-accent); border-radius: var(--r-btn);
   text-decoration: none; font-size: var(--fs-md); font-weight: 500; letter-spacing: .03em;
   box-shadow: 0 14px 28px -16px color-mix(in oklch, var(--room-accent) 80%, transparent);
   transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out), filter .25s;
@@ -374,7 +378,7 @@ p { margin: 0 0 1em; }
   padding: clamp(22px, 5vw, 32px) calc(clamp(22px, 5vw, 36px) + 64px) clamp(22px, 5vw, 32px) clamp(22px, 5vw, 36px);
   background: var(--room-accent); color: var(--room-bg);
   text-decoration: none; text-align: left;
-  border-radius: 2px;
+  border-radius: var(--r-card);
   box-shadow: 0 24px 44px -26px color-mix(in oklch, var(--room-accent) 90%, transparent);
   transform: none !important; /* never tilted by gallery styles */
   transition: filter .25s, box-shadow .3s var(--ease-out);
@@ -447,6 +451,8 @@ p { margin: 0 0 1em; }
 .jasmine { position: absolute; top: 0; width: 18px; height: min(58%, 560px); pointer-events: none; z-index: -1; color: oklch(97% 0.01 100); }
 :root:not([data-theme="dark"]) .jasmine { color: oklch(99% 0.005 100); filter: drop-shadow(0 1px 1px oklch(40% 0.05 150 / .35)); }
 .jasmine--l { left: clamp(10px, 4vw, 60px); }
+/* On narrow screens the strands frame the text instead of crossing it. */
+@media (max-width: 699px) { .room--jawa .room__inner { padding-inline: 44px; } .jasmine--l { left: 12px; } .jasmine--r { right: 12px; } }
 .jasmine--r { right: clamp(10px, 4vw, 60px); height: min(44%, 420px); }
 .jasmine svg { width: 100%; height: 100%; transform-origin: 50% 0; animation: sway 9s ease-in-out infinite alternate; }
 .jasmine--r svg { animation-duration: 11s; animation-delay: -4s; }

@@ -346,7 +346,7 @@
 .maqcard {
   width: 100%; max-width: 560px; margin: 0 auto;
   padding: 16px 16px 18px;
-  background: var(--wall); border-top: 2px solid var(--accent);
+  background: var(--wall); border-radius: var(--r-card);
   box-shadow: 0 0 0 1px var(--line), 0 24px 40px -30px oklch(25% 0.06 15 / .5);
 }
 .maqcard__wing { margin: 0 0 6px; text-align: center; font-size: var(--fs-xs); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
@@ -371,7 +371,7 @@
 @keyframes print-in { from { opacity: 0; transform: translateY(8px); } }
 .maqcard__enter {
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; min-height: 52px; border: 0; border-radius: 12px;
+  width: 100%; min-height: 52px; border: 0; border-radius: var(--r-btn);
   background: var(--accent); color: var(--wall);
   font: inherit; font-size: var(--fs-md); letter-spacing: .02em; cursor: pointer;
   box-shadow: 0 14px 26px -16px color-mix(in oklch, var(--accent) 85%, transparent);
@@ -434,8 +434,11 @@ html:has(.roomview[open]) { overflow: hidden; }
   font: inherit; font-size: var(--fs-md); cursor: pointer;
 }
 .roomview__back svg { width: 14px; height: 14px; }
+.roomview__title:focus { outline: none; }
 .roomview__title { margin: 0; flex: 1; min-width: 0; text-align: right; font-size: var(--fs-sm); color: inherit; opacity: .72; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .roomview .room { padding-top: clamp(40px, 9vw, 96px); }
+.roomview .room { transition: none; }   /* the page reads this colour for its bar; no fade-in from transparent */
+@media (max-width: 380px) { .roomview__no { display: none; } }   /* narrow phones: the room name alone */
 .roomview .room__plaque { top: calc(var(--bar-h) + 40px); }
 .roomview .epilogue { min-height: calc(100svh - var(--bar-h)); }
 .roomview__nav {
@@ -455,6 +458,9 @@ html:has(.roomview[open]) { overflow: hidden; }
 .roomview__step--next { align-items: flex-end; text-align: right; }
 @media (hover: hover) and (pointer: fine) { .roomview__step:hover { background: color-mix(in oklch, var(--rv-tint, var(--wall)) 92%, var(--rv-ink, var(--ink))); } }
 ::view-transition-group(root) { animation-duration: .3s; }
+
+/* Landscape phones: size the title by height so the header and panel both fit. */
+@media (max-height: 500px) and (max-width: 1023px) { .mapview h1 { font-size: clamp(1.8rem, 10vh, 2.6rem); } .mapview { padding-top: calc(var(--bar-h) + 14px); } }
 
 /* Phones and tablets: let the model use the full screen width. */
 @media (max-width: 1023px) {
@@ -490,6 +496,9 @@ html:has(.roomview[open]) { overflow: hidden; }
   .sheet[data-state="list"] .sheet__all svg { rotate: 180deg; }
   .sheet__scroll { flex: 1; min-height: 0; overflow: hidden; padding: 0 16px calc(24px + env(safe-area-inset-bottom)); }
   .sheet[data-state="list"] .sheet__scroll { overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; }
+  .sheet[data-state="rest"] .sheet__scroll { visibility: hidden; }
+  .sheet__all { white-space: nowrap; flex: none; }
+  .sheet__prompt { min-width: 0; line-height: 1.25; }
   .sheet:not(.has-room) .maqcard, .sheet[data-state="list"] .maqcard { display: none; }
   .sheet .maqcard { max-width: 520px; padding: 2px 0 6px; background: none; border: 0; box-shadow: none; }
   .sheet .maqcard__name { min-height: 0; }
@@ -498,6 +507,17 @@ html:has(.roomview[open]) { overflow: hidden; }
   .sheet .maqcard__wing { margin-bottom: 2px; }
   .sheet .roomlist { margin-top: 4px; }
 
+  /* Short screens: the panel keeps to name, subtitle and Enter, so the model stays in view. */
+  @media (max-height: 740px) {
+    .sheet .maqcard__wing, .sheet .maqcard__desc { display: none; }
+    .sheet .maqcard__prints { grid-template-columns: repeat(3, 1fr); margin: 8px 0; }
+    .sheet .maqcard__prints img { aspect-ratio: 16 / 10; }
+    .sheet .maqcard__enter { min-height: 48px; }
+  }
+  @media (max-height: 600px) {
+    .sheet .maqcard__prints { display: none; }
+    .sheet .maqcard__name { padding-bottom: 8px; }
+  }
   /* Room pages lead with photographs on small screens. */
   .roomview .room .house { display: none; }
   .roomview .room { padding-top: 28px; }
@@ -509,6 +529,7 @@ html:has(.roomview[open]) { overflow: hidden; }
 }
 
 /* ---------- Desktop ---------- */
+@media (min-width: 1024px) and (max-height: 920px) { .mapview__mono { display: none; } .mapview__intro { margin-top: 10px; } }
 @media (min-width: 1024px) {
   .mapview {
     grid-template-columns: minmax(280px, 380px) minmax(0, 1fr); align-items: start; column-gap: clamp(32px, 4vw, 64px);
@@ -519,6 +540,9 @@ html:has(.roomview[open]) { overflow: hidden; }
   .mapview__intro { margin-left: 0; }
   .mapview > .maq { grid-column: 2; grid-row: 1 / 4; align-self: start; position: sticky; top: calc(var(--bar-h) + 16px); }
   .sheet { grid-column: 1; grid-row: 2 / 4; display: grid; gap: 22px; align-self: start; }
+  .mapview h1 { font-size: clamp(2.6rem, 3.6vw, 3.6rem); }
+  .maqcard__prints img { aspect-ratio: 1; border-radius: 8px; }
+  .maqcard { padding: 14px 16px 16px; }
   .sheet__grip { display: none; }
   .roomview .room .house { height: clamp(90px, 12vw, 150px); }
 }
