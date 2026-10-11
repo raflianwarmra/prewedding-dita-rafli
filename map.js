@@ -96,7 +96,7 @@
     wingName1.firstChild.textContent = T("wing1.paint");
     wingName2.firstChild.textContent = T("wing2.paint");
     entrance.firstChild.textContent = T("entrance");
-    marquee.firstChild.textContent = T("cinema") + " · In Motion";
+    marquee.firstChild.textContent = "In Motion";
   }
   paintNames();
 
@@ -176,7 +176,7 @@
   tags.appendChild(hintDot); tags.appendChild(hint);
   var touch = window.matchMedia("(hover: none)").matches;
   var learned = !!store("dr-learned");
-  var hintMode = learned ? "off" : "start";
+  var hintMode = "off";   /* the panel says "tap a room"; the floating hint only explains the second tap */
   function pinTags() {
     if (flight) return;
     placeHint(camera.getBoundingClientRect());
@@ -227,7 +227,7 @@
     if (view === "scroll") url.searchParams.set("view", "scroll"); else url.searchParams.delete("view");
     history.replaceState(null, "", url);
     window.scrollTo(0, 0);
-    if (view === "map") fit();
+    if (view === "map") { fit(); layoutSheet(); }
   }
   viewButtons.forEach(function (b) {
     b.addEventListener("click", function () { if (root.dataset.view !== b.dataset.viewSet) setView(b.dataset.viewSet); });
@@ -269,12 +269,28 @@
     you.animate([at(from), at({ x: HALL_X, y: from.y }), at({ x: HALL_X, y: to.y }), at(to)], { duration: 600, easing: "cubic-bezier(.45,0,.2,1)" });
   }
 
+  /* ---------- Entry state ----------
+     Every entry, exit and room change gets a generation number. Anything that starts a new one
+     (Close, Back, Prev/Next) bumps it, and the older chain stops at its next step. Nothing locks input. */
+  var gen = 0, phase = null, entries = 0, skipper = null;
+  var CANCEL = {};
+  function live(my) { if (my !== gen) throw CANCEL; }
+  function quiet(err) { if (err !== CANCEL) throw err; }
+  function wait(ms) {
+    return new Promise(function (res) {
+      var t = setTimeout(res, ms);
+      skipper = function () { clearTimeout(t); res(); };
+    });
+  }
+  /* The first room of a visit gets the full entrance; after that, a shorter one. */
+  function dur(first, later) { return entries > 1 ? later : first; }
+
   /* ---------- Camera ---------- */
-  var FLY = 1350; /* slow and deliberate: the visit should feel like walking in */
   function flyTo(id) {
     if (calm.matches || !camera.animate) return Promise.resolve();
     var r = byId[id].el.querySelector(".m-floor").getBoundingClientRect();
     if (r.bottom < 0 || r.top > window.innerHeight) return Promise.resolve(); /* model is off-screen */
+    var FLY = dur(1350, 820);
     var c = camera.getBoundingClientRect();
     var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     var k = Math.min(6.5, Math.max(2.6, window.innerWidth * 1.15 / r.width));
@@ -287,13 +303,14 @@
       { transform: "translate(" + (window.innerWidth / 2 - cx) * 0.35 + "px," + (window.innerHeight / 2 - cy) * 0.35 + "px) rotate(" + (-SPIN * 0.3) + "deg) scale(" + (1 + (k - 1) * 0.18) + ")", offset: 0.4 },
       { transform: "translate(" + (window.innerWidth / 2 - cx) + "px," + (window.innerHeight / 2 - cy) + "px) rotate(" + (-SPIN) + "deg) scale(" + k + ")" }
     ], { duration: FLY, easing: "cubic-bezier(.55,0,.25,1)", fill: "forwards" });
-    return new Promise(function (res) { setTimeout(res, FLY * 0.6); });
+    return wait(FLY * 0.6);
   }
+  /* Reverse from wherever the camera is now, so an interrupted flight turns back smoothly. */
   function flyBack() {
     if (!flight) { maq.classList.remove("is-flying"); mapview.classList.remove("is-flying"); return; }
     var f = flight;
     flight = null;
-    f.updatePlaybackRate(1.1);
+    f.updatePlaybackRate(1.15);
     f.reverse();
     f.finished.then(function () { f.cancel(); camera.style.transformOrigin = ""; maq.classList.remove("is-flying"); mapview.classList.remove("is-flying"); pinTags(); }).catch(function () {});
   }
@@ -311,7 +328,6 @@
     film: ["oklch(10% 0.02 20)", "oklch(94% 0.02 80)"]
   };
   var curtain = dialog.querySelector("[data-curtain]");
-  function wait(ms) { return new Promise(function (res) { setTimeout(res, ms); }); }
   function curtainIn(id, ms) {
     var m = byId[id], c = CURTAIN[id];
     curtain.style.setProperty("--c-bg", c[0]);
@@ -322,31 +338,38 @@
     curtain.classList.add("is-on");
     if (calm.matches) { curtain.style.opacity = 1; return Promise.resolve(); }
     curtain.animate([{ opacity: 0 }, { opacity: 1 }], { duration: ms, easing: "ease-out", fill: "forwards" });
-    var ease = "cubic-bezier(.22,1,.36,1)";
-    curtain.querySelector(".curtain__no").animate([{ opacity: 0, transform: "scale(1.12)" }, { opacity: .8, transform: "none" }], { duration: 900, delay: ms * 0.3, easing: ease, fill: "both" });
-    curtain.querySelector(".curtain__name").animate([{ opacity: 0, transform: "translateY(22px)" }, { opacity: 1, transform: "none" }], { duration: 900, delay: ms * 0.45, easing: ease, fill: "both" });
-    curtain.querySelector(".curtain__sub").animate([{ opacity: 0 }, { opacity: .85 }], { duration: 700, delay: ms * 0.7, easing: ease, fill: "both" });
-    curtain.querySelector(".curtain__rule").animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 800, delay: ms * 0.8, easing: ease, fill: "both" });
+    var ease = "cubic-bezier(.22,1,.36,1)", k = ms / 650;
+    curtain.querySelector(".curtain__no").animate([{ opacity: 0, transform: "scale(1.12)" }, { opacity: .8, transform: "none" }], { duration: 900 * k, delay: ms * 0.3, easing: ease, fill: "both" });
+    curtain.querySelector(".curtain__name").animate([{ opacity: 0, transform: "translateY(22px)" }, { opacity: 1, transform: "none" }], { duration: 900 * k, delay: ms * 0.45, easing: ease, fill: "both" });
+    curtain.querySelector(".curtain__sub").animate([{ opacity: 0 }, { opacity: .85 }], { duration: 700 * k, delay: ms * 0.7, easing: ease, fill: "both" });
+    curtain.querySelector(".curtain__rule").animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 800 * k, delay: ms * 0.8, easing: ease, fill: "both" });
     return wait(ms);
   }
   function curtainOut(ms) {
-    if (calm.matches) { curtain.classList.remove("is-on"); curtain.style.opacity = 0; return Promise.resolve(); }
+    if (calm.matches) { dropCurtain(); return Promise.resolve(); }
     var a = curtain.animate([{ opacity: 1 }, { opacity: 0 }], { duration: ms, easing: "ease-in-out", fill: "forwards" });
-    return a.finished.then(function () {
-      curtain.classList.remove("is-on");
-      curtain.getAnimations({ subtree: true }).forEach(function (x) { x.cancel(); });
-      curtain.style.opacity = 0;
-    });
+    return a.finished.then(dropCurtain);
+  }
+  function dropCurtain() {
+    curtain.getAnimations({ subtree: true }).forEach(function (x) { x.cancel(); });
+    curtain.classList.remove("is-on");
+    curtain.style.opacity = 0;
   }
   /* The room arrives piece by piece once the curtain lifts. */
   function revealRoom() {
     if (calm.matches) return;
-    var pieces = body.querySelectorAll(".room__plaque, .photo, .continue, .epilogue > div, .house");
+    var pieces = body.querySelectorAll(".room__plaque, .photo, .continue, .epilogue > div");
     pieces.forEach(function (p, i) {
       p.animate([{ opacity: 0, transform: "translateY(28px)" }, { opacity: 1, transform: "none" }],
-        { duration: 900, delay: 120 + Math.min(i, 6) * 90, easing: "cubic-bezier(.22,1,.36,1)", fill: "backwards" });
+        { duration: 700, delay: 60 + Math.min(i, 6) * 60, easing: "cubic-bezier(.22,1,.36,1)", fill: "backwards" });
     });
   }
+  /* A tap while the curtain is up skips straight to the room. */
+  dialog.addEventListener("pointerdown", function () {
+    if (phase !== "entering" && phase !== "stepping") return;
+    curtain.getAnimations({ subtree: true }).forEach(function (x) { try { x.finish(); } catch (e) {} });
+    if (skipper) skipper();
+  });
 
   /* ---------- Room page ---------- */
   function render(id) {
@@ -357,6 +380,10 @@
     copy.querySelectorAll(".reveal").forEach(function (n) { n.classList.add("is-in"); });
     copy.querySelectorAll('img[loading="lazy"]').forEach(function (img, i) { if (i < 3) img.loading = "eager"; });
     body.replaceChildren(copy);
+    /* The room bar takes on the room's own colour, like a material lit by the room. */
+    var cs = getComputedStyle(copy);
+    dialog.style.setProperty("--rv-tint", cs.backgroundColor);
+    dialog.style.setProperty("--rv-ink", cs.color);
     dialog.scrollTop = 0;
     current = id;
     roomChrome(id);
@@ -370,7 +397,6 @@
   }
   function urlFor(id) { var url = new URL(location.href); url.hash = id ? "#" + id : ""; return url; }
 
-  var busy = false;
   function show(id) {
     render(id);
     dialog.classList.add("is-entering");      /* transparent until the curtain covers the model */
@@ -378,68 +404,90 @@
     dialog.querySelector("[data-close]").focus({ preventScroll: true });
   }
   function open(id, push) {
-    if (busy || dialog.open) return;
-    busy = true;
-    paintPeek();
+    if (dialog.open || phase) return;
+    var my = ++gen;
+    phase = "entering";
+    entries++;
+    sheetAway();
     if (!learned) { learned = true; hintMode = "off"; store("dr-learned", 1); placeHint(); }
     if (push) history.pushState({ room: id }, "", urlFor(id));
     select(id);
     byId[id].el.classList.add("is-hot");
     walkTo(id);
     flyTo(id).then(function () {
+      live(my);
       show(id);
-      return curtainIn(id, 650);
+      return curtainIn(id, dur(650, 380));
     }).then(function () {
+      live(my);
       dialog.classList.remove("is-entering");
       byId[id].el.classList.remove("is-hot");
-      return wait(calm.matches ? 0 : 420);
+      return wait(calm.matches ? 0 : dur(420, 160));
     }).then(function () {
+      live(my);
       revealRoom();
-      return curtainOut(750);
-    }).then(function () { busy = false; paintPeek(); });
+      return curtainOut(dur(750, 420));
+    }).then(function () { live(my); phase = null; }).catch(quiet);
   }
   function closeNow() {
     var id = current;
+    var my = ++gen;                       /* stops any entry or room change still running */
+    if (id) byId[id].el.classList.remove("is-hot");
     var finish = function () {
-      dialog.close();
+      if (dialog.open) dialog.close();
       dialog.classList.remove("is-entering");
+      dropCurtain();
       body.replaceChildren();
       current = null;
+      phase = null;
+      sheetBack();
       var f = id && byId[id].el.querySelector(".m-floor");
       if (f && root.dataset.view === "map") f.focus({ preventScroll: true });
     };
-    if (!dialog.open) { flyBack(); return; }
+    if (!dialog.open) {                   /* Back or Close during the camera flight: just turn around */
+      if (selected) byId[selected].el.classList.remove("is-hot");
+      flyBack();
+      phase = null;
+      sheetBack();
+      return;
+    }
+    dropCurtain();
     if (calm.matches || !id) { finish(); flyBack(); return; }
-    busy = true;
+    phase = "closing";
     /* Mirror of entering: curtain over the room, then lift it off the model as the camera pulls back. */
-    curtainIn(id, 420).then(function () {
+    curtainIn(id, 300).then(function () {
+      live(my);
       dialog.classList.add("is-entering");
       flyBack();
-      return curtainOut(650);
-    }).then(function () { finish(); busy = false; paintPeek(); });
+      return curtainOut(380);
+    }).then(function () { live(my); finish(); }).catch(quiet);
   }
   function close() {
-    if (busy) return;
+    if (phase === "closing") return;
     if (history.state && history.state.room) history.back();
     else { history.replaceState(null, "", urlFor("")); closeNow(); }
   }
   function step(dir) {
-    if (busy) return;
+    if (!dialog.open || phase === "closing") return;
     var i = ORDER.indexOf(current) + dir;
     if (i < 0 || i >= ORDER.length) { close(); return; }
     var id = ORDER[i];
-    busy = true;
+    var my = ++gen;                       /* a second tap on Next overtakes the first */
+    dropCurtain();
+    phase = "stepping";
     history.replaceState({ room: id }, "", urlFor(id));
     here = id;
     placeHere();
     select(id);
-    curtainIn(id, 480).then(function () {
+    curtainIn(id, 340).then(function () {
+      live(my);
       render(id);
-      return wait(calm.matches ? 0 : 300);
+      return wait(calm.matches ? 0 : 120);
     }).then(function () {
+      live(my);
       revealRoom();
-      return curtainOut(650);
-    }).then(function () { busy = false; paintPeek(); });
+      return curtainOut(400);
+    }).then(function () { live(my); phase = null; }).catch(quiet);
   }
 
   /* ---------- Selection and the wall-label card ---------- */
@@ -472,37 +520,168 @@
     card.querySelector("[data-card-name]").textContent = m.id === "film" ? "In Motion" : m.name;
     card.querySelector("[data-card-sub]").textContent = sub(id);
     card.querySelector("[data-enter-label]").textContent = enterLabel(id);
+    card.querySelector("[data-card-desc]").textContent = T("desc." + id);
     placeHint();
-    paintPeek();
   }
 
-  /* ---------- Phone preview: a small sheet so the Enter button is always in reach ---------- */
-  var peek = document.querySelector("[data-peek]");
-  var peekOff = false, userPicked = false, cardSeen = false;
+  /* ---------- The panel ----------
+     Phones and tablets: one bottom panel holds the chosen room and the list of all rooms, like the place
+     panel in Apple Maps. It follows the finger from where it was grabbed, settles on a critically damped
+     spring that starts from its current position and the release velocity, and resists past the top.
+     Desktop: the same panel sits still in the left column. */
+  var sheet = document.querySelector("[data-sheet]");
+  var grip = sheet.querySelector("[data-sheet-grip]");
+  var scroller = sheet.querySelector("[data-sheet-scroll]");
+  var allBtn = sheet.querySelector("[data-sheet-all]");
   var phone = window.matchMedia("(max-width: 1023px)");
-  function paintPeek() {
-    var id = selected, m = byId[id];
-    var show = !!m && userPicked && !peekOff && !cardSeen && phone.matches && root.dataset.view === "map" && !dialog.open && !busy && !flight;
-    if (show) {
-      var first = (m.n || [])[0] || "film";
-      peek.querySelector("[data-peek-img]").src = "assets/photos/" + first + "-360.webp";
-      peek.querySelector("[data-peek-no]").textContent = m.no ? T("peek.meta", { no: m.no, wing: m.side === "left" ? "I" : "II" }) : T("epilogue");
-      peek.querySelector("[data-peek-name]").textContent = m.id === "film" ? "In Motion" : m.name;
-      peek.querySelector("[data-peek-desc]").textContent = T("desc." + id);
-      peek.querySelector("[data-peek-label]").textContent = enterLabel(id);
+  var userPicked = false;
+  var state = "rest", parked = "rest";       /* parked: where to return after a room closes */
+  var y = 0, vel = 0, springRaf = 0, away = false;
+
+  function sheetMax() { return Math.round(window.innerHeight * 0.88); }
+  function visibleFor(s) {
+    var g = grip.offsetHeight;
+    if (s === "list") return sheetMax();
+    if (s === "room") return Math.min(sheetMax(), g + card.offsetHeight + 12);
+    return g;
+  }
+  function yFor(s) { return sheetMax() - visibleFor(s); }
+  function apply() {
+    sheet.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
+  }
+  /* Critically damped spring (Apple: damping 1.0, response about 0.35 s). */
+  function springTo(target, v0, done) {
+    cancelAnimationFrame(springRaf);
+    if (calm.matches) { y = target; vel = 0; apply(); if (done) done(); return; }
+    if (v0 !== undefined) vel = v0;
+    var k = Math.pow(2 * Math.PI / 0.35, 2), c = 2 * Math.sqrt(k), last = performance.now();
+    (function frame(now) {
+      var dt = Math.min(0.032, (now - last) / 1000); last = now;
+      var a = -k * (y - target) - c * vel;
+      vel += a * dt; y += vel * dt;
+      if (Math.abs(y - target) < 0.4 && Math.abs(vel) < 8) { y = target; vel = 0; apply(); if (done) done(); return; }
+      apply();
+      springRaf = requestAnimationFrame(frame);
+    })(last);
+  }
+  function setState(s, v0) {
+    state = s;
+    sheet.dataset.state = s;
+    allBtn.setAttribute("aria-expanded", String(s === "list"));
+    if (s !== "list") scroller.scrollTop = 0;
+    if (!phone.matches) return;
+    mapview.style.setProperty("--sheet-space", visibleFor(s === "list" ? (userPicked ? "room" : "rest") : s) + "px");
+    springTo(yFor(s), v0);
+  }
+  /* Out of the way while the camera flies in; back where it was when the room closes. */
+  function sheetAway() {
+    if (!phone.matches) return;
+    parked = state; away = true;
+    springTo(sheetMax() + 40, 0);
+  }
+  function sheetBack() {
+    if (!phone.matches || !away) return;
+    away = false;
+    setState(parked === "list" ? "room" : parked);
+  }
+
+  /* Dragging */
+  var drag = null;
+  function onDown(e) {
+    if (!phone.matches || e.button > 0 || away) return;
+    /* In the list, only the grip drags; the rest scrolls. Buttons still get their taps. */
+    if (state === "list" && !grip.contains(e.target) && scroller.scrollTop > 0) return;
+    cancelAnimationFrame(springRaf);             /* catch the panel mid-flight */
+    drag = { id: e.pointerId, startY: e.clientY, startPos: y, hist: [[e.timeStamp, e.clientY]], live: false, target: e.target };
+  }
+  function onMove(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var dy = e.clientY - drag.startY;
+    if (!drag.live) {
+      if (Math.abs(dy) < 8) return;              /* small hysteresis so taps stay taps */
+      drag.live = true;
+      sheet.setPointerCapture(e.pointerId);
+      sheet.classList.add("is-dragging");
     }
-    if (show === !peek.hidden) return;
-    peek.hidden = !show;
+    var top = 0, raw = drag.startPos + dy;
+    /* Past the top it resists, like reaching the end of a scroll. */
+    y = raw < top ? top - rubber(top - raw, window.innerHeight) : raw;
+    drag.hist.push([e.timeStamp, e.clientY]);
+    if (drag.hist.length > 6) drag.hist.shift();
+    apply();
+    e.preventDefault();
   }
-  function userPick(id) { select(id); userPicked = true; peekOff = false; setHint("again"); paintPeek(); }
-  peek.querySelector("[data-peek-close]").addEventListener("click", function () { peekOff = true; paintPeek(); });
-  peek.querySelector("[data-peek-enter]").addEventListener("click", function () { open(selected, true); });
-  if ("IntersectionObserver" in window) {
-    new IntersectionObserver(function (entries) {
-      cardSeen = entries[0].isIntersecting;
-      paintPeek();
-    }, { threshold: 1 }).observe(card.querySelector("[data-enter]"));  /* only when its Enter button is fully on screen */
+  function rubber(over, dim) { var c = 0.55; return (over * dim * c) / (dim + c * over); }
+  function onUp(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var d = drag; drag = null;
+    sheet.classList.remove("is-dragging");
+    if (!d.live) return;                          /* it was a tap */
+    var h = d.hist, a = h[0], b = h[h.length - 1];
+    var v = (b[1] - a[1]) / Math.max(1, b[0] - a[0]) * 1000;   /* px/s, positive = down */
+    /* Apple's momentum projection: where the panel would come to rest if released freely. */
+    var projected = y + (v / 1000) * 0.998 / (1 - 0.998);
+    var up = v < -400, down = v > 400;
+    var swallow = function (ev) { ev.stopPropagation(); ev.preventDefault(); sheet.removeEventListener("click", swallow, true); };
+    sheet.addEventListener("click", swallow, true);
+    setTimeout(function () { sheet.removeEventListener("click", swallow, true); }, 0);
+    if (state === "room") {
+      if (up || projected < yFor("room") - window.innerHeight * 0.2) { springTo(yFor("room"), v); open(selected, true); return; }
+      if (down || projected > yFor("room") + 60) { dismiss(v); return; }
+      return setState("room", v);
+    }
+    if (state === "rest") {
+      return setState(up || projected < yFor("rest") - 80 ? "list" : "rest", v);
+    }
+    /* list */
+    if (down || projected > yFor("list") + window.innerHeight * 0.18) return setState(userPicked ? "room" : "rest", v);
+    setState("list", v);
   }
+  function dismiss(v) {
+    userPicked = false;
+    if (selected) { byId[selected].el.classList.remove("is-selected"); if (byId[selected].noEl) byId[selected].noEl.classList.remove("is-selected"); }
+    sheet.classList.remove("has-room");
+    setState("rest", v);
+    setHint("off");
+  }
+  sheet.addEventListener("pointerdown", onDown);
+  window.addEventListener("pointermove", onMove, { passive: false });
+  window.addEventListener("pointerup", onUp);
+  window.addEventListener("pointercancel", onUp);
+  /* Tapping the grip toggles between the room (or the start) and the list. */
+  grip.addEventListener("click", function (e) {
+    if (e.target.closest("[data-sheet-all]")) return;
+    if (!phone.matches) return;
+    setState(state === "list" ? (userPicked ? "room" : "rest") : userPicked && state === "rest" ? "room" : "list");
+  });
+  allBtn.addEventListener("click", function () {
+    if (!phone.matches) { sheet.querySelector(".roomlist").scrollIntoView({ behavior: calm.matches ? "auto" : "smooth", block: "start" }); return; }
+    setState(state === "list" ? (userPicked ? "room" : "rest") : "list");
+  });
+  function userPick(id) {
+    select(id);
+    userPicked = true;
+    sheet.classList.add("has-room");
+    setHint("again");
+    requestAnimationFrame(function () { setState("room"); reveal(id); });
+  }
+  /* Like Maps: keep the chosen room in view, centred in the space above the panel. */
+  function reveal(id) {
+    if (!phone.matches) return;
+    var r = byId[id].el.querySelector(".m-floor").getBoundingClientRect();
+    var barH = 56, free = window.innerHeight - visibleFor("room");
+    var want = barH + (free - barH) / 2;
+    var delta = (r.top + r.height / 2) - want;
+    if (Math.abs(delta) < 24) return;
+    window.scrollBy({ top: delta, behavior: calm.matches ? "auto" : "smooth" });
+  }
+  function layoutSheet() {
+    if (!phone.matches) { cancelAnimationFrame(springRaf); sheet.style.transform = ""; mapview.style.removeProperty("--sheet-space"); return; }
+    sheet.style.setProperty("--sheet-h", sheetMax() + "px");
+    y = yFor(state); apply();
+    setState(state);
+  }
+  phone.addEventListener("change", layoutSheet);
 
   card.querySelectorAll("[data-card-step]").forEach(function (b) {
     b.addEventListener("click", function () {
@@ -527,6 +706,17 @@
     }
     return null;
   }
+  var pressed = null;
+  maq.addEventListener("pointerdown", function (e) {
+    var t = e.target.closest("[data-room]");
+    var id = t ? t.dataset.room : roomAt(e.clientX, e.clientY);
+    if (!id) return;
+    pressed = byId[id].el;
+    pressed.classList.add("is-pressed");
+  });
+  ["pointerup", "pointercancel", "pointerleave"].forEach(function (t) {
+    maq.addEventListener(t, function () { if (pressed) { var p = pressed; pressed = null; setTimeout(function () { p.classList.remove("is-pressed"); }, 90); } });
+  });
   maq.addEventListener("click", function (e) {
     var t = e.target.closest("[data-room]");
     var id = t ? t.dataset.room : roomAt(e.clientX, e.clientY);
@@ -556,7 +746,7 @@
     if (ORDER.indexOf(id) !== -1) {
       select(id);
       if (dialog.open) { if (id !== current) render(id); } else open(id, false);
-    } else if (dialog.open) {
+    } else if (dialog.open || phase === "entering") {
       closeNow();
     }
   });
@@ -569,7 +759,7 @@
     paintNames();
     paintVisits();
     paintCard();
-    if (dialog.open && current && !busy) render(current);
+    if (dialog.open && current && !phase) render(current);
   });
 
   /* ---------- Start ---------- */
@@ -578,7 +768,8 @@
   fit();
   if (document.fonts) document.fonts.ready.then(pinTags);
   var resizeTimer;
-  window.addEventListener("resize", function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(fit, 120); });
+  window.addEventListener("resize", function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(function () { fit(); if (!away) layoutSheet(); }, 120); });
+  layoutSheet();
 
   /* Hooks for the landing (intro.js). */
   window.DRMap = {
@@ -600,12 +791,17 @@
     here = start;
     placeHere();
     select(start);
-    busy = true;
+    var my = ++gen;
+    phase = "entering";
+    entries++;
+    sheetAway();
     show(start);
     curtain.classList.add("is-on");
     curtainIn(start, 10).then(function () {
+      live(my);
       dialog.classList.remove("is-entering");
-      return wait(calm.matches ? 0 : 700);
-    }).then(function () { revealRoom(); return curtainOut(750); }).then(function () { busy = false; paintPeek(); });
+      return wait(calm.matches ? 0 : 500);
+    }).then(function () { live(my); revealRoom(); return curtainOut(500); })
+      .then(function () { live(my); phase = null; }).catch(quiet);
   }
 })();

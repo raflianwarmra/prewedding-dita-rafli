@@ -88,10 +88,19 @@ p { margin: 0 0 1em; }
   height: var(--bar-h);
   display: flex; align-items: center; gap: 12px;
   padding: 0 max(12px, env(safe-area-inset-left)) 0 max(16px, env(safe-area-inset-left));
-  background: color-mix(in oklch, var(--wall) 97%, transparent);
-  border-bottom: 1px solid var(--line);
+  background: color-mix(in oklch, var(--wall) 72%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6); backdrop-filter: blur(20px) saturate(1.6);
+  border-bottom: 1px solid color-mix(in oklch, var(--ink) 8%, transparent);
   transition: background-color .6s var(--ease-out);
 }
+@media (prefers-reduced-transparency: reduce) {
+  .bar { background: var(--wall); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* Press feedback: every control answers the moment a finger lands (Apple: respond on press, not release). */
+:where(button, .cta, .continue, .directory a, .mapview__how) { transition: scale .16s var(--ease-out); }
+:where(button, .cta, .continue, .directory a, .mapview__how):active { scale: .97; }
+:where(.m-floor):active { scale: 1; }
 .bar__home { display: flex; align-items: center; gap: 10px; text-decoration: none; min-height: 44px; color: var(--accent); }
 .bar__home svg { width: 30px; height: 30px; }
 .bar__names { font-size: var(--fs-sm); letter-spacing: .08em; color: var(--ink); }
@@ -230,7 +239,7 @@ p { margin: 0 0 1em; }
 .directory a span:first-child { font-variant-numeric: lining-nums tabular-nums; color: var(--gold-bright); font-size: var(--fs-sm); width: 1.6em; flex: none; }
 .directory a .lead { flex: 1; border-bottom: 1px dotted oklch(100% 0 0 / .22); transform: translateY(-5px); }
 .directory a em { color: var(--board-soft); font-size: var(--fs-sm); white-space: nowrap; }
-.directory a:hover .name { color: var(--gold-bright); }
+@media (hover: hover) and (pointer: fine) { .directory a:hover .name { color: var(--gold-bright); } }
 .directory a .name { transition: color .2s; }
 
 /* ---------- Doors between wings ---------- */
@@ -352,8 +361,8 @@ p { margin: 0 0 1em; }
   transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out), filter .25s;
 }
 .cta svg { width: 14px; height: 14px; transition: transform .3s var(--ease-out); }
-.cta:hover { filter: brightness(1.08); box-shadow: 0 18px 32px -14px color-mix(in oklch, var(--room-accent) 85%, transparent); }
-.cta:hover svg { transform: translate(3px, -3px); }
+@media (hover: hover) and (pointer: fine) { .cta:hover { filter: brightness(1.08); box-shadow: 0 18px 32px -14px color-mix(in oklch, var(--room-accent) 85%, transparent); } }
+@media (hover: hover) and (pointer: fine) { .cta:hover svg { transform: translate(3px, -3px); } }
 .cta:active { transform: translateY(1px); }
 @media (min-width: 700px) { .cta { display: inline-flex; width: auto; } }
 
@@ -381,8 +390,8 @@ p { margin: 0 0 1em; }
   transition: transform .35s var(--ease-out), background-color .25s, color .25s;
 }
 .continue__arrow svg { width: 16px; height: 16px; }
-.continue:hover { filter: brightness(1.06); }
-.continue:hover .continue__arrow, .continue:focus-visible .continue__arrow { transform: translate(4px, -4px); background: var(--room-bg); color: var(--room-accent); }
+@media (hover: hover) and (pointer: fine) { .continue:hover { filter: brightness(1.06); } }
+@media (hover: hover) and (pointer: fine) { .continue:hover .continue__arrow, .continue:focus-visible .continue__arrow { transform: translate(4px, -4px); background: var(--room-bg); color: var(--room-accent); } }
 .continue.reveal.is-in .continue__arrow { animation: nudge 1.6s var(--ease-out) .6s 2; }
 @keyframes nudge { 0%, 100% { transform: none; } 45% { transform: translate(5px, -5px); } }
 

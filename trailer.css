@@ -24,10 +24,10 @@
   font: inherit; font-size: var(--fs-sm); cursor: pointer; touch-action: manipulation;
   transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
 }
-.trailer__play:hover { transform: translateX(-50%) translateY(-2px); }
+@media (hover: hover) and (pointer: fine) { .trailer__play:hover { transform: translateX(-50%) translateY(-2px); } }
 /* On the landscape poster the pill sits in the empty space under the headline, clear of the phone. */
 .trailer--landscape .trailer__play { left: 7%; bottom: 9%; transform: none; }
-.trailer--landscape .trailer__play:hover { transform: translateY(-2px); }
+@media (hover: hover) and (pointer: fine) { .trailer--landscape .trailer__play:hover { transform: translateY(-2px); } }
 .trailer__play:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
 .trailer__icon {
   display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%;
@@ -68,7 +68,7 @@
   background: oklch(24% 0.02 20 / .72); color: inherit; font: inherit; font-size: var(--fs-sm);
   cursor: pointer; touch-action: manipulation;
 }
-.player__btn:hover { background: oklch(32% 0.03 20 / .85); }
+@media (hover: hover) and (pointer: fine) { .player__btn:hover { background: oklch(32% 0.03 20 / .85); } }
 .player__btn:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
 .player__btn svg { width: 16px; height: 16px; flex: none; }
 .player__btn--icon { padding: 0; width: 44px; }

@@ -106,7 +106,7 @@
           <img src="assets/photos/jawa-3-360.webp" alt="" width="360" height="450">
           <img src="assets/photos/jawa-2-360.webp" alt="" width="360" height="450">
         </div>
-        <span class="intro__card-line"></span><span class="intro__card-line is-short"></span>
+        <p class="intro__card-text" data-i18n="intro.card.text">Busana Jawa dari garis keluarga ibu Dita.</p>
         <span class="intro__card-cta" data-i18n="intro.card.cta">Lihat semua foto <svg viewBox="0 0 14 14"><path d="M3 11 11 3M5 3h6v6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></span>
       </div>
     </div>
@@ -192,27 +192,26 @@
       </div>
     </div>
 
-    <div class="peek" data-peek hidden>
-      <img class="peek__img" data-peek-img src="assets/photos/bugis-1-360.webp" alt="" width="360" height="450">
-      <div class="peek__body">
-        <p class="peek__no" data-peek-no></p>
-        <p class="peek__name" data-peek-name></p>
-        <p class="peek__desc" data-peek-desc></p>
+    <section class="sheet" data-sheet aria-label="Ruang terpilih" data-i18n-attr="aria-label:card.label">
+      <div class="sheet__grip" data-sheet-grip>
+        <span class="sheet__handle" aria-hidden="true"></span>
+        <div class="sheet__head">
+          <p class="sheet__prompt" data-i18n="sheet.prompt">Ketuk ruangan di maket</p>
+          <button class="sheet__all" type="button" data-sheet-all aria-expanded="false"><span data-i18n="sheet.all">Semua ruang</span> <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 9l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+        </div>
       </div>
-      <button class="peek__close" type="button" data-peek-close aria-label="Tutup pratinjau" data-i18n-attr="aria-label:peek.close"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
-      <button class="peek__enter" type="button" data-peek-enter><span data-peek-label>Enter the room</span> <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8M8 3l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
-    </div>
-
-    <section class="maqcard" data-card aria-label="Ruang terpilih" data-i18n-attr="aria-label:card.label">
+      <div class="sheet__scroll" data-sheet-scroll>
+    <div class="maqcard" data-card>
       <p class="maqcard__wing" data-card-wing></p>
       <div class="maqcard__row">
         <button class="maqcard__step" type="button" data-card-step="-1" aria-label="Ruang sebelumnya" data-i18n-attr="aria-label:card.prev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
         <h2 class="maqcard__name" aria-live="polite"><span data-card-no></span><b data-card-name></b><em data-card-sub></em></h2>
         <button class="maqcard__step" type="button" data-card-step="1" aria-label="Ruang berikutnya" data-i18n-attr="aria-label:card.next"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M5 2l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
       </div>
+      <p class="maqcard__desc" data-card-desc></p>
       <div class="maqcard__prints" data-card-prints aria-hidden="true"></div>
       <button class="maqcard__enter" type="button" data-enter><span data-enter-label>Enter the room</span> <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8M8 3l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
-    </section>
+    </div>
 
     <nav class="roomlist" aria-label="Semua ruang" data-i18n-attr="aria-label:rooms.label">
       <div class="roomlist__wing">
@@ -235,6 +234,8 @@
         </ol>
       </div>
     </nav>
+      </div>
+    </section>
   </section>
 
   <div class="sky" aria-hidden="true">

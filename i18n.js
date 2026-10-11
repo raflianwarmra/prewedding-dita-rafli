@@ -4,6 +4,9 @@
   "use strict";
   var root = document.documentElement;
   var EN_HTML = {
+ "sheet.prompt": "Tap a room on the model",
+ "sheet.all": "All rooms",
+ "intro.card.text": "Javanese dress from Dita's mother's side.",
  "skip": "Skip to the exhibition",
  "bar.home": "Back to the start",
  "views.label": "View",
